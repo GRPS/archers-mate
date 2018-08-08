@@ -1,14 +1,28 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank 7
-    </ion-title>
-  </ion-navbar>
+
+	<ion-navbar color="archers-heading">
+		<ion-title>Archers Mate</ion-title>
+	</ion-navbar>
+
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content class="page-home" no-bounce>
+ 
+    <ion-grid text-center>
+ 
+		<ion-row justify-content-center align-items-center>
+			<ion-col class="score"><button ion-button round color="archers-light-blue" (click)="gotoScore()">Score Sheet</button></ion-col>
+		</ion-row>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col class="history"><button ion-button round color="archers-light-blue" (click)="gotoHistory()">History</button></ion-col>
+		</ion-row>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col class="settings"><button ion-button round color="archers-light-blue" (click)="gotoSettings()">Settings</button></ion-col>
+		</ion-row>
+ 
+    </ion-grid>
+ 
 </ion-content>
+
