@@ -2,22 +2,23 @@ import { Component } from '@angular/core';
 import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 
 import { Const } from '../../providers/constants';
+import { BowService } from '../../providers/bow-service';
+import { Global } from '../../providers/globals';
 
 @IonicPage()
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html',
+  templateUrl: 'home.html'
 })
 export class HomePage {
 
 	loading;
-	haveLoadedRounds: boolean = false;
-	haveLoadedBows: boolean = false;
 
 	constructor(
 				public navCtrl: NavController, 
 				public loadingCtrl: LoadingController,
-				public navParams: NavParams
+				public navParams: NavParams,
+				public bowService: BowService,
 				) {
 
 		this.loading = this.loadingCtrl.create({
@@ -30,6 +31,8 @@ export class HomePage {
 	ionViewDidLoad() {
 		Const.MISC.CURRENT_PAGE = 'HomePage';
 		console.log( Const.MISC.CURRENT_PAGE + ': ionViewWillEnter' );
+
+		this.bowService.LoadAll().subscribe( bows => Global.bows = bows );
 	}
 
 	//Do before page becomes active.
