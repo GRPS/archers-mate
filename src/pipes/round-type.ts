@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from 'underscore';
 
 @Pipe({
-  name: 'roundType',
+	name: 'roundType',
 })
 export class RoundTypePipe implements PipeTransform {
 	transform( items: any[] ) {    

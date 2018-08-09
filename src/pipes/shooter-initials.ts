@@ -4,10 +4,10 @@ import { ShooterClass } from '../models/shooter-class';
 import * as _ from 'underscore';
 
 @Pipe({
-  name: 'shooterInitials',
+	name: 'shooterInitials',
 })
 export class ShooterInitialsPipe implements PipeTransform {
-  transform(items: ShooterClass[]) {
-    return _.pluck( items, 'initials' )
-  }
+	transform(items: ShooterClass[]) {
+		return _.pluck( items, 'initials' )
+	}
 }

@@ -13,17 +13,17 @@ import { BowClass } from '../models/bow-class';
 @Injectable()
 export class BowService {
 
-  constructor(
-              public http: HttpClient,
-              public common: CommonProvider
-            ) {
-    console.log( 'BowService loaded' );
-  }
+	constructor(
+				public http: HttpClient,
+				public common: CommonProvider
+			) {
+		console.log( 'BowService loaded' );
+	}
 
-  LoadAll(): Observable<BowClass[]>  {
+  	LoadAll(): Observable<BowClass[]>  {
 		return this.http.get( Const.URL.BOWS )
 			.do( this.common.HttpLogResponse )
-      .map( bow => { return new BowClass( bow ); } )
+			.map( bow => { return new BowClass( bow ); } )
 			.catch( this.common.HttpCatchError );
 	}
 
