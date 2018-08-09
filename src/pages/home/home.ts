@@ -4,7 +4,7 @@ import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-an
 import { Const } from '../../providers/constants';
 import { BowService } from '../../providers/bow-service';
 import { RoundService } from '../../providers/round-service';
-import { ShooterService } from '../../providers/shooter-service/shooter-service';
+import { ShooterService } from '../../providers/shooter-service';
 import { Global } from '../../providers/globals';
 
 @IonicPage()

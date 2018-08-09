@@ -10,7 +10,7 @@ import { MyApp } from './app.component';
 import { BowService } from '../providers/bow-service';
 import { RoundService } from '../providers/round-service';
 import { CommonProvider } from '../providers/common-provider';
-import { ShooterService } from '../providers/shooter-service/shooter-service';
+import { ShooterService } from '../providers/shooter-service';
 
 @NgModule({
   declarations: [
