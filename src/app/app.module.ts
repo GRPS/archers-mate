@@ -10,6 +10,7 @@ import { MyApp } from './app.component';
 import { BowService } from '../providers/bow-service';
 import { RoundService } from '../providers/round-service';
 import { CommonProvider } from '../providers/common-provider';
+import { ShooterService } from '../providers/shooter-service/shooter-service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { CommonProvider } from '../providers/common-provider';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CommonProvider,
     BowService,
-    RoundService
+    RoundService,
+    ShooterService
   ]
 })
 export class AppModule {}

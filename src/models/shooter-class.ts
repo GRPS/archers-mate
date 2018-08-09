@@ -7,4 +7,9 @@ export class ShooterClass {
 	age:		number;
 	isDefault:	boolean;
 	bows:       BowClass[] = [];
+
+	constructor( values: Object = {} ) {
+		Object.assign(this, values);		
+	}
+	
 }

@@ -4,7 +4,8 @@ export const Const = {
 	
 	URL: {
 		BOWS: './assets/files/bows.json',
-		ROUNDS: './assets/files/rounds.json'
+		ROUNDS: './assets/files/rounds.json',
+		SHOOTER: './assets/files/shooters.json',
 	},
 
 	MISC: {

@@ -4,6 +4,7 @@ import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-an
 import { Const } from '../../providers/constants';
 import { BowService } from '../../providers/bow-service';
 import { RoundService } from '../../providers/round-service';
+import { ShooterService } from '../../providers/shooter-service/shooter-service';
 import { Global } from '../../providers/globals';
 
 @IonicPage()
@@ -16,6 +17,7 @@ export class HomePage {
   	loading;
 	haveLoadedBows: boolean = false;
 	haveLoadedRounds: boolean = false;
+	haveLoadedShooters: boolean = false;
 
 	constructor(
 				public navCtrl: NavController, 
@@ -23,6 +25,7 @@ export class HomePage {
 				public navParams: NavParams,
 				public bowService: BowService,
 				public roundService: RoundService,
+				public shooterService: ShooterService,
 				) {
 
 		this.loading = this.loadingCtrl.create({
@@ -72,10 +75,19 @@ export class HomePage {
 				this.CheckIfReadyNow();
 			}),
 			err => console.warn( err );
+
+		this.shooterService.LoadAll()
+			.subscribe( (shooters) => {
+				Global.shooters = shooters;
+				this.haveLoadedShooters = true;
+				this.CheckIfReadyNow();
+			}),
+			err => console.warn( err );
+
 	}
 
 	CheckIfReadyNow() {
-		if( this.haveLoadedRounds && this.haveLoadedBows ) {
+		if( this.haveLoadedRounds && this.haveLoadedBows && this.haveLoadedShooters ) {
 			this.loading.dismiss();
 			console.log( Global );      
 		}
