@@ -3,36 +3,39 @@ import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-an
 
 import { Const } from '../../providers/constants';
 import { BowService } from '../../providers/bow-service';
+import { RoundService } from '../../providers/round-service';
 import { Global } from '../../providers/globals';
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+	selector: 'page-home',
+	templateUrl: 'home.html',
 })
 export class HomePage {
 
-	loading;
+  	loading;
+	haveLoadedBows: boolean = false;
+	haveLoadedRounds: boolean = false;
 
 	constructor(
 				public navCtrl: NavController, 
 				public loadingCtrl: LoadingController,
 				public navParams: NavParams,
 				public bowService: BowService,
+				public roundService: RoundService,
 				) {
 
 		this.loading = this.loadingCtrl.create({
-			content: 'Please data ...'
+			content: 'Initializing ...'
 		});
 		
 	}
 
-	//Do once when page first loads.
+  	//Do once when page first loads.
 	ionViewDidLoad() {
 		Const.MISC.CURRENT_PAGE = 'HomePage';
 		console.log( Const.MISC.CURRENT_PAGE + ': ionViewWillEnter' );
-
-		this.bowService.LoadAll().subscribe( bows => Global.bows = bows );
+		this.Init();
 	}
 
 	//Do before page becomes active.
@@ -49,6 +52,34 @@ export class HomePage {
 
 	//Do when page completely removed.
 	ionViewWillUnload() {}
+	
+	Init() {
+
+		this.loading.present();
+
+		this.bowService.LoadAll()
+			.subscribe( (bows) => {
+				Global.bows = bows;
+				this.haveLoadedBows = true;
+				this.CheckIfReadyNow();
+			}),
+			err => console.warn( err );
+
+		this.roundService.LoadAll()
+			.subscribe( (rounds) => {
+				Global.rounds = rounds;
+				this.haveLoadedRounds = true;
+				this.CheckIfReadyNow();
+			}),
+			err => console.warn( err );
+	}
+
+	CheckIfReadyNow() {
+		if( this.haveLoadedRounds && this.haveLoadedBows ) {
+			this.loading.dismiss();
+			console.log( Global );      
+		}
+	}
 
 	gotoScore() {
 		// this.navCtrl.push( ScorePage );

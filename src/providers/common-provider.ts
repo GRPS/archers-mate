@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Const } from '../providers/constants';
+import { Const } from './constants';
 
 @Injectable()
 export class CommonProvider {

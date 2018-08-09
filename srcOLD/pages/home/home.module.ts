@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
+import { IonicPageModule } from 'ionic-angular/umd';
 import { HomePage } from './home';
 
 @NgModule({
@@ -7,10 +7,10 @@ import { HomePage } from './home';
     HomePage,
   ],
   imports: [
-    IonicPageModule.forChild(HomePage),
+    IonicPageModule.forChild( HomePage ),
   ],
   exports: [
-    HomePage,
+    HomePage
   ]
 })
 export class HomePageModule {}

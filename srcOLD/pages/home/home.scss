@@ -1,0 +1,29 @@
+page-home {
+
+	scroll-content {
+        height: 100%; 
+        display: flex;  
+    }
+ 
+    ion-grid {
+        padding: 0 !important;
+        height: 100%;
+        background-image: url('../assets/photos/target.jpg');
+        background-size: cover;
+    }
+ 
+    ion-row {
+        flex: 1;
+    }
+
+    ion-col {
+        font-weight: bold;
+        margin: 0;
+
+        &.score {}
+        &.history {}
+        &.settings {}
+
+	}
+	
+}

@@ -1,6 +1,7 @@
 import { TargetClass } from './target-class';
 
 export class RoundClass {
+	
 	type:			string;
     organisation:	string;
     name:			string;
@@ -13,4 +14,8 @@ export class RoundClass {
 	totalArrows:	number;
 	maxScore:		number;
 	minmaxScore:	number[];
+
+	constructor( values: Object = {} ) {
+		Object.assign(this, values);		
+	}
 }
