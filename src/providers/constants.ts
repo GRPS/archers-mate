@@ -13,7 +13,8 @@ export const Const = {
 	},
 
 	PAGES: {
-		HOME: 'HomePage'
+		HOME: 'HomePage',
+		SETTINGS: 'SettingsPage',
 	}
 
 }

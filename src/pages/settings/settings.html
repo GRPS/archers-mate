@@ -1,0 +1,24 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>Settings</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+<ion-content no-bounce>
+ 
+	<ion-list no-lines>
+
+		<ion-item-divider color="archers-light-blue">My Profile</ion-item-divider>
+
+		<ion-item>{{ shooter?.name }}</ion-item>
+
+	</ion-list>
+ 
+</ion-content>

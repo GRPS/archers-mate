@@ -2,6 +2,7 @@ import { SightMarkClass } from './sightmark-class';
 
 export class BowClass {
 
+	id: 		number;
 	name:		string;
 	sightMarks:	SightMarkClass[];
 

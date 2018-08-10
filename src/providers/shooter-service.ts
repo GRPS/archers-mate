@@ -10,21 +10,28 @@ import { Const } from './constants';
 import { CommonProvider } from './common-provider';
 import { ShooterClass } from '../models/shooter-class';
 
+import * as _ from 'underscore';
+
 @Injectable()
 export class ShooterService {
 
-  constructor(
-    public http: HttpClient,
-    public common: CommonProvider
-  ) {
-console.log( 'BowService loaded' );
+	constructor(
+				public http: HttpClient,
+				public common: CommonProvider
+				) {
+	this.common.AddLog( 'ShooterService loaded' );
 }
 
-LoadAll(): Observable<ShooterClass[]>  {
-return this.http.get( Const.URL.SHOOTERS )
-  .do( this.common.HttpLogResponse )
-  .map( shooter => { return new ShooterClass( shooter ); } )
-  .catch( this.common.HttpCatchError );
-}
+	LoadAll(): Observable<ShooterClass[]>  {
+		return this.http.get( Const.URL.SHOOTERS )
+		// .do( this.common.HttpLogResponse )
+		.map( shooter => { return new ShooterClass( shooter ); } )
+		.catch( this.common.HttpCatchError );
+	}
+
+	GetDefault( shooters: ShooterClass[] ): ShooterClass {
+		let shooter: ShooterClass = _.where( shooters, { isDefault: true } );
+		return shooter[0];
+	}
 
 }

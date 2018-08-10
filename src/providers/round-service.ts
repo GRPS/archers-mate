@@ -17,12 +17,12 @@ export class RoundService {
 				public http: HttpClient,
 				public common: CommonProvider
 			) {
-		console.log( 'RoundService loaded' );
+		this.common.AddLog( 'RoundService loaded' );
 	}
 
   	LoadAll(): Observable<RoundClass[]>  {
 		return this.http.get( Const.URL.ROUNDS )
-			.do( this.common.HttpLogResponse )
+			// .do( this.common.HttpLogResponse )
 			.map( bow => { return new RoundClass( bow ); } )
 			.catch( this.common.HttpCatchError );
 	}

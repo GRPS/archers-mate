@@ -17,12 +17,12 @@ export class BowService {
 				public http: HttpClient,
 				public common: CommonProvider
 			) {
-		console.log( 'BowService loaded' );
+		this.common.AddLog( 'BowService loaded' );
 	}
 
   	LoadAll(): Observable<BowClass[]>  {
 		return this.http.get( Const.URL.BOWS )
-			.do( this.common.HttpLogResponse )
+			// .do( this.common.HttpLogResponse )
 			.map( bow => { return new BowClass( bow ); } )
 			.catch( this.common.HttpCatchError );
 	}
