@@ -5,19 +5,21 @@ import { RoundTypePipe } from './round-type';
 import { RoundSeasonPipe } from './round-season';
 import { RoundOrganisationPipe } from './round-organisation';
 import { NumberIncPipe } from './number-inc';
+import { ShooterNotDefaultPipe } from './shooter-not-default';
+
+export const pipes = [
+	ShooterInitialsPipe,
+    RoundPipe,
+    RoundTypePipe,
+    RoundSeasonPipe,
+    RoundOrganisationPipe,
+    NumberIncPipe,
+    ShooterNotDefaultPipe
+];
+
 @NgModule({
-	declarations: [ShooterInitialsPipe,
-    RoundPipe,
-    RoundTypePipe,
-    RoundSeasonPipe,
-    RoundOrganisationPipe,
-    NumberIncPipe],
+	declarations: [ pipes ],
 	imports: [],
-	exports: [ShooterInitialsPipe,
-    RoundPipe,
-    RoundTypePipe,
-    RoundSeasonPipe,
-    RoundOrganisationPipe,
-    NumberIncPipe]
+	exports: [ pipes ]
 })
 export class PipesModule {}

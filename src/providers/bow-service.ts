@@ -21,10 +21,9 @@ export class BowService {
 	}
 
   	LoadAll(): Observable<BowClass[]>  {
-		return this.http.get( Const.URL.BOWS )
-			// .do( this.common.HttpLogResponse )
-			.map( bow => { return new BowClass( bow ); } )
-			.catch( this.common.HttpCatchError );
+		return this.http.get <BowClass[]> ( Const.URL.BOWS )
+		// .do( this.common.HttpLogResponse )
+		.catch( this.common.HttpCatchError );
 	}
 
 }

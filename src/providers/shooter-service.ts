@@ -23,9 +23,8 @@ export class ShooterService {
 }
 
 	LoadAll(): Observable<ShooterClass[]>  {
-		return this.http.get( Const.URL.SHOOTERS )
+		return this.http.get <ShooterClass[]> ( Const.URL.SHOOTERS )
 		// .do( this.common.HttpLogResponse )
-		.map( shooter => { return new ShooterClass( shooter ); } )
 		.catch( this.common.HttpCatchError );
 	}
 
@@ -33,5 +32,6 @@ export class ShooterService {
 		let shooter: ShooterClass = _.where( shooters, { isDefault: true } );
 		return shooter[0];
 	}
+
 
 }

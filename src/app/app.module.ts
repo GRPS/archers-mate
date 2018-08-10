@@ -9,34 +9,36 @@ import { MyApp } from './app.component';
 
 import { BowService } from '../providers/bow-service';
 import { RoundService } from '../providers/round-service';
-import { CommonProvider } from '../providers/common-provider';
 import { ShooterService } from '../providers/shooter-service';
+import { CommonProvider } from '../providers/common-provider';
 
 @NgModule({
-  declarations: [
-    MyApp
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp, {
-      mode: 'md',
-      spinner: 'ios',
-      swipeBackEnabled: true
-    }),
-    HttpClientModule
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    CommonProvider,
-    BowService,
-    RoundService,
-    ShooterService
-  ]
+	declarations: [
+		MyApp
+	],
+	imports: [
+		BrowserModule,
+		IonicModule.forRoot(MyApp, {
+			mode: 'md',
+			spinner: 'ios',
+			swipeBackEnabled: true
+		}),
+		HttpClientModule
+	],
+	bootstrap: [
+		IonicApp
+	],
+	entryComponents: [
+		MyApp
+	],
+	providers: [
+		StatusBar,
+		SplashScreen,
+		{provide: ErrorHandler, useClass: IonicErrorHandler},
+		CommonProvider,
+		BowService,
+		RoundService,
+		ShooterService
+	]
 })
 export class AppModule {}

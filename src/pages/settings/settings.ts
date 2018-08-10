@@ -13,6 +13,7 @@ import { ShooterClass } from '../../models/shooter-class';
 })
 export class SettingsPage {
 
+	shooters: ShooterClass[];
 	shooter: ShooterClass;
 
 	constructor(
@@ -27,7 +28,9 @@ export class SettingsPage {
 		Const.MISC.CURRENT_PAGE = 'SettingsPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 
+		this.shooters = Global.shooters;
 		this.shooter = Global.shooter;
+
 		this.Init();
 	}
 
@@ -35,6 +38,15 @@ export class SettingsPage {
 
 	Back() {
 		this.common.Back( Const.PAGES.HOME );
+	}
+
+	editShooter( shooter: ShooterClass) {
+		console.log( shooter);
+	}
+
+	addShooter() {
+		console.log('add shooter');
+		
 	}
 
 }

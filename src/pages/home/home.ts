@@ -88,6 +88,7 @@ export class HomePage {
 			if( Global.shooters == null ) {
 				this.shooterService.LoadAll()
 					.subscribe( (shooters) => {
+
 						Global.shooters = shooters;
 						Global.shooter = this.shooterService.GetDefault( shooters );
 						
