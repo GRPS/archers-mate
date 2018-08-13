@@ -30,11 +30,14 @@
 			<note [message]="'None available'"></note>
 		</ion-item>
 
-		<div *ngFor="let shooter of shooters">
+		<ion-item-sliding #slidingItem *ngFor="let shooter of shooters">
 			<button ion-item (click)="UpdateShooter(shooter)" *ngIf="!shooter.isDefault">        
 				<shooter [shooter]="shooter"></shooter>
 			</button>
-		</div>
+			<ion-item-options side="right">
+				<button ion-button color="danger" (click)="DeleteShooter(slidingItem, shooter)">Delete</button>
+			</ion-item-options> 
+		</ion-item-sliding>
 
 	</ion-list>
  

@@ -52,7 +52,11 @@ export class ShooterService {
 	}
 
 	Delete( shooter: ShooterClass ) {
-		console.log( 'Delete shooter' );		
+		return new Promise( resolve => {
+			let newCodes = Global.shooters.filter( obj => obj !== shooter );
+    		Global.shooters = newCodes;
+			resolve( true );	
+		});	
 	}	
 
 	Save( shooter: ShooterClass, isNew: boolean ): Promise<boolean> {

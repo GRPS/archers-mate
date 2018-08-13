@@ -52,4 +52,14 @@ export class SettingsPage {
 		this.shooterService.Update( shooter );
 	}
 
+	DeleteShooter( slidingItem, shooter: ShooterClass) {
+		this.shooterService.Delete( shooter )
+			.then( () => {
+				slidingItem.close(); 
+				this.Init();
+				console.log(Global);
+								
+			});
+	}
+
 }
