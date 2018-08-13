@@ -22,7 +22,7 @@
 		</button>
 
 		<ion-item-divider color="archers-light-blue">
-			Other Shooters
+			Other Shooters <ion-badge color="archers-heading">{{ shooters?.length - 1 }}</ion-badge>
 			<button ion-button item-right clear color="dark" (click)="CreateShooter()">Add</button>
 		</ion-item-divider>
 
@@ -30,9 +30,11 @@
 			<note [message]="'None available'"></note>
 		</ion-item>
 
-		<button ion-item (click)="UpdateShooter(shooter)" *ngFor="let shooter of shooters | ShooterNotDefault">        
-			<shooter [shooter]="shooter"></shooter>
-		</button>
+		<div *ngFor="let shooter of shooters">
+			<button ion-item (click)="UpdateShooter(shooter)" *ngIf="!shooter.isDefault">        
+				<shooter [shooter]="shooter"></shooter>
+			</button>
+		</div>
 
 	</ion-list>
  

@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
 import { Const } from './constants';
+import { Global } from './globals';
 import { CommonProvider } from './common-provider';
 import { ShooterClass } from '../models/shooter-class';
 
@@ -29,6 +30,7 @@ export class ShooterService {
 	LoadAll(): Observable<ShooterClass[]>  {
 		return this.http.get <ShooterClass[]> ( Const.URL.SHOOTERS )
 		// .do( this.common.HttpLogResponse )
+		.map(shooters => { return shooters.map( shooter => new ShooterClass( shooter ) ); })
 		.catch( this.common.HttpCatchError );
 	}
 
@@ -53,9 +55,23 @@ export class ShooterService {
 		console.log( 'Delete shooter' );		
 	}	
 
-	Save( shooter: ShooterClass ): Promise<boolean> {
+	Save( shooter: ShooterClass, isNew: boolean ): Promise<boolean> {
 		return new Promise( resolve => {
 			console.log( shooter );	
+
+			if( isNew ) {
+				shooter.id = this.common.GetRandomNumber();
+				Global.shooters.push( shooter );
+			} else {
+				let index: number = _.findIndex( Global.shooters, { id: shooter.id } );
+				Global.shooters[ index ] = shooter;
+				if( shooter.isDefault ) {
+					Global.shooter = shooter;
+				}
+			}
+
+			console.log(Global);
+			
 			if( 1 == 1 ) {
 				resolve( true ); //Code has worked and we want to return a success to the caller.
 			} else {

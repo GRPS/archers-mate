@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Const } from '../../providers/constants';
@@ -18,6 +18,7 @@ export class SettingsPage {
 	shooter: ShooterClass;
 
 	constructor(
+				private cdr: ChangeDetectorRef,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
 				public common: CommonProvider,
@@ -30,13 +31,14 @@ export class SettingsPage {
 		Const.MISC.CURRENT_PAGE = 'SettingsPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 
-		this.shooters = Global.shooters;
-		this.shooter = Global.shooter;
-
 		this.Init();
 	}
 
-	Init() {}
+	Init() {
+		this.shooters = Global.shooters;
+		this.shooter = Global.shooter;
+		this.cdr.detectChanges();
+	}
 
 	Back() {
 		this.common.Back( Const.PAGES.HOME );

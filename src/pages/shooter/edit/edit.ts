@@ -49,7 +49,7 @@ export class ShooterEditPage {
 
 	Save() {
 		if( this.form.valid ) {
-			this.shooterService.Save( this.shooter )
+			this.shooterService.Save( this.shooter, this.isNew )
 				.then( () => {
 					this.navCtrl.pop();	
 					this.common.ShowToastSuccess( 'Saved!' );			

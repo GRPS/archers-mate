@@ -23,6 +23,7 @@ export class RoundService {
   	LoadAll(): Observable<RoundClass[]>  {
 		return this.http.get <RoundClass[]> ( Const.URL.ROUNDS )
 			// .do( this.common.HttpLogResponse )
+			.map(rounds => { return rounds.map( round => new RoundClass( round ) ); })
 			.catch( this.common.HttpCatchError );
 	}
 
