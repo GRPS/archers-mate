@@ -16,6 +16,11 @@ export const Const = {
 		HOME: 'HomePage',
 		SETTINGS: 'SettingsPage',
 		SHOOTER_EDIT: 'ShooterEditPage',
+	},
+
+	TOAST: {
+		SUCCESS: 'toast-success',
+		FAIL: 'toast-fail'
 	}
 
 }

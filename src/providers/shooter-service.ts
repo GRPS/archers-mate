@@ -53,4 +53,15 @@ export class ShooterService {
 		console.log( 'Delete shooter' );		
 	}	
 
+	Save( shooter: ShooterClass ): Promise<boolean> {
+		return new Promise( resolve => {
+			console.log( shooter );	
+			if( 1 == 1 ) {
+				resolve( true ); //Code has worked and we want to return a success to the caller.
+			} else {
+				resolve( false ); //Code has worked, but we want to return a fail to the caller.
+			}
+		});		
+	}
+
 }

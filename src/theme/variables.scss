@@ -47,6 +47,8 @@ $colors: (
   archers-light-blue: (base: #93b4d2, contrast: #414141 ),
   archers-faint-blue: (base: #f1f6fb, contrast: #414141 ),
   archers-note: (base: green, contrast: red ),
+  archers-help: (base: rgb(207, 207, 207), contrast: red ),
+  archers-text: (base: #4a4a4a, contrast: red ),
 
 );
 
@@ -63,7 +65,7 @@ $colors: (
 // Material Design only Sass variables can go here
 
 $item-md-detail-push-show: true;
-
+$text-input-md-show-focus-highlight: false;
 
 // App Windows Variables
 // --------------------------------------------------

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { App, NavController } from 'ionic-angular';
+import { App, NavController, ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { Const } from './constants';
@@ -10,7 +10,8 @@ export class CommonProvider {
 	navCtrl: NavController;
 
 	constructor(
-				app: App
+				app: App,
+				private toastCtrl: ToastController,
 				) {
 		this.AddLog( 'CommonProvider loaded' );
 		this.navCtrl = app.getActiveNavs()[0];
@@ -52,5 +53,28 @@ export class CommonProvider {
 			this.navCtrl.setRoot( rootPage );
 		}
 	}
-  
+
+	ShowToastSuccess( message: string ) {
+		this.ShowToast( message, Const.TOAST.SUCCESS, 1000, false, '', 'bottom' );
+	}
+
+	ShowToastFail( message: string ) {
+		this.ShowToast( message, Const.TOAST.FAIL );
+	}
+
+	private ShowToast( message: string, cssClass: string = Const.TOAST.SUCCESS, duration: number = 3000, showCloseButton: boolean = true, closeButtonLabel: string = 'OK', position: string = 'middle' ) {
+		let toast = this.toastCtrl.create({
+		  message: message,
+		  cssClass: cssClass,
+		  duration: duration,
+		  position: position,
+		  showCloseButton: showCloseButton,
+		  closeButtonText: closeButtonLabel
+		});
+	  
+		toast.onDidDismiss(() => {});
+	  
+		toast.present();
+	}
+	
 }

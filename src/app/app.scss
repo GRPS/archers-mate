@@ -24,3 +24,78 @@ ion-title {
     width: 70%;
     text-align: center;
 }
+
+ion-label {
+    color: color( $colors, archers-text ) !important;
+}
+
+// Make forms looks the same.
+form {
+
+    ion-item {
+        margin: 5px auto !important;
+    }
+
+    ion-label {
+        -webkit-flex: 0 0 100px !important;
+        -ms-flex: 0 0 100px !important;
+        flex: 0 0 100px !important;
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+
+    ion-input, ion-select {
+        background-color: #ececec;
+        border: 1px solid #ececec;
+        border-radius: 8px;
+    }
+
+    .validator-error {
+        border-color: color( $colors, danger );
+    }
+
+}
+
+// Override: Remove border from last item in ion-list. Used by shooter\edit
+.list-md .item-input:last-child {
+    border-bottom: 0;
+}
+
+.toast-success {
+    
+    .toast-wrapper {
+        
+        .toast-container {
+            background-color: rgb(74, 253, 134);
+
+            .toast-message {
+                color: color( $colors, dark ) !important;
+            }
+            .toast-button {
+                color: color( $colors, dark );
+            }
+        }
+    }
+}
+
+.toast-fail {
+
+    background-color: rgba(51,51,51,0.8);
+
+    .toast-wrapper {
+        width: 90%;
+        margin-bottom: 20px;
+        
+        .toast-container {
+            background-color: rgb(253, 74, 74);
+
+            .toast-message {
+                color: color( $colors, light ) !important;
+            }
+            .toast-button {
+                color: color( $colors, light );
+            }
+        }
+    }
+}
