@@ -5,6 +5,7 @@ import { Const } from '../../providers/constants';
 import { Global } from '../../providers/globals';
 import { CommonProvider } from '../../providers/common-provider';
 import { ShooterClass } from '../../models/shooter-class';
+import { ShooterService } from '../../providers/shooter-service';
 
 @IonicPage()
 @Component({
@@ -19,7 +20,8 @@ export class SettingsPage {
 	constructor(
 				public navCtrl: NavController, 
 				public navParams: NavParams,
-				public common: CommonProvider
+				public common: CommonProvider,
+				public shooterService: ShooterService
 				) {
 	}
 
@@ -40,13 +42,12 @@ export class SettingsPage {
 		this.common.Back( Const.PAGES.HOME );
 	}
 
-	editShooter( shooter: ShooterClass) {
-		console.log( shooter);
+	CreateShooter() {
+		this.shooterService.Create();
 	}
 
-	addShooter() {
-		console.log('add shooter');
-		
+	UpdateShooter( shooter: ShooterClass) {
+		this.shooterService.Update( shooter );
 	}
 
 }

@@ -1,0 +1,60 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{ isNew ? 'Add' : 'Edit' }} Shooter</ion-title>
+		<ion-buttons right>
+			<button ion-button (click)="Save()" [disabled]="!form.valid">Save</button>
+		</ion-buttons>
+	</ion-navbar>
+  
+  </ion-header>
+
+
+<ion-content>
+
+	<ion-list>
+		
+		<form [formGroup]="form">
+
+			<ion-item>
+				<ion-label fixed>Name</ion-label>
+				<ion-input [formControl]="form.controls['name']" type="text" [(ngModel)]="shooter.name" [disabled]="!isNew" placeholder="Shooter full name"></ion-input>				
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Initials</ion-label>
+				<ion-input [formControl]="form.controls['initials']" type="text" [(ngModel)]="shooter.initials" [disabled]="!isNew" placeholder="Shooter intitals"></ion-input>				
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Gender</ion-label>
+				<ion-select [(ngModel)]="shooter.gender" [disabled]="!isNew" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="" selected></ion-option>
+					<ion-option value="male">Male</ion-option>
+					<ion-option value="female">Female</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Age</ion-label>
+				<ion-input [formControl]="form.controls['age']" type="number" [(ngModel)]="shooter.age" [disabled]="!isNew" placeholder="Shooter age"></ion-input>				
+			</ion-item>
+		</form>
+
+		<ion-item>
+			<div *ngIf="!form.controls.name.valid && form.controls.name.dirty" class="validator-error">
+				Name must be minimum of 2 characters.
+			</div>
+			<div *ngIf="!form.controls.initials.valid && form.controls.initials.dirty" class="validator-error">
+				Initials must be 2 characters.
+			</div>
+		</ion-item>
+
+	</ion-list>
+
+</ion-content>

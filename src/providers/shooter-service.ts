@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { App, NavController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -15,11 +15,15 @@ import * as _ from 'underscore';
 @Injectable()
 export class ShooterService {
 
+	navCtrl: NavController;
+
 	constructor(
+				public app: App,
 				public http: HttpClient,
 				public common: CommonProvider
 				) {
-	this.common.AddLog( 'ShooterService loaded' );
+		this.common.AddLog( 'ShooterService loaded' );
+		this.navCtrl = app.getActiveNavs()[0];
 }
 
 	LoadAll(): Observable<ShooterClass[]>  {
@@ -33,5 +37,20 @@ export class ShooterService {
 		return shooter[0];
 	}
 
+	Create() {
+		this.navCtrl.push( Const.PAGES.SHOOTER_EDIT );
+	}
+
+	Read( shooter: ShooterClass ) {
+		console.log( 'Read shooter' );	
+	}
+
+	Update( shooter: ShooterClass ) {
+		this.navCtrl.push( Const.PAGES.SHOOTER_EDIT, { shooter: shooter } );	
+	}
+
+	Delete( shooter: ShooterClass ) {
+		console.log( 'Delete shooter' );		
+	}	
 
 }

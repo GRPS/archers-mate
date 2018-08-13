@@ -17,20 +17,20 @@
 
 		<ion-item-divider color="archers-light-blue">My Profile</ion-item-divider>
 
-		<button ion-item (click)="editShooter(shooter)">        
+		<button ion-item (click)="UpdateShooter(shooter)">        
 			<shooter [shooter]="shooter"></shooter>
 		</button>
 
 		<ion-item-divider color="archers-light-blue">
 			Other Shooters
-			<button ion-button item-right clear color="dark" (click)="addShooter()">Add</button>
+			<button ion-button item-right clear color="dark" (click)="CreateShooter()">Add</button>
 		</ion-item-divider>
 
 		<ion-item *ngIf="shooters?.length==1">
 			<note [message]="'None available'"></note>
 		</ion-item>
 
-		<button ion-item (click)="editShooter(shooter)" *ngFor="let shooter of shooters | ShooterNotDefault">        
+		<button ion-item (click)="UpdateShooter(shooter)" *ngFor="let shooter of shooters | ShooterNotDefault">        
 			<shooter [shooter]="shooter"></shooter>
 		</button>
 

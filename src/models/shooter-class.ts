@@ -10,4 +10,8 @@ export class ShooterClass {
 	isDefault:	boolean;
 	bows:       BowClass[] = [];
 
+	constructor(values: Object = {}) {
+        Object.assign(this, values);
+   }
+
 }
