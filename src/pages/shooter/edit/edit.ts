@@ -70,6 +70,11 @@ export class ShooterEditPage {
 		this.isEditMode = !this.isEditMode;
 	}
 
+	CreateShooterBow() {
+		console.log( 'create shooter bow' );
+		
+	}
+
 	private GetPassedShooter() {
 		if( this.navParams.get('shooter') != undefined ) {
 			this.shooter = new ShooterClass( this.navParams.data.shooter );		

@@ -6,7 +6,7 @@
 				<ion-icon name="ios-arrow-back"></ion-icon>
 			</button>
 		</ion-buttons>
-		<ion-title>{{ isNew ? 'Add' : 'Edit' }} Shooter</ion-title>
+		<ion-title>{{ isNew ? 'Add ' : '' }}Shooter</ion-title>
 		<ion-buttons right>
 			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
 			<button ion-button *ngIf="!isEditMode" (click)="Edit()">Edit</button>
@@ -22,6 +22,12 @@
 		<field [label]="'Initials'" [value]="shooter.initials"></field>
 		<field [label]="'Gender'" [value]="shooter.gender"></field>
 		<field [label]="'Age'" [value]="shooter.age"></field>		
+
+		<ion-item-divider color="archers-light-blue">
+			Shooter's Bows <ion-badge color="archers-heading">{{ shooter.bows?.length - 1 }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="CreateShooterBow()">Add</button>
+		</ion-item-divider>
+
 	</ion-list>
 
 	<ion-list no-lines *ngIf="isEditMode">
