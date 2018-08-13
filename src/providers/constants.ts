@@ -15,7 +15,7 @@ export const Const = {
 	PAGES: {
 		HOME: 'HomePage',
 		SETTINGS: 'SettingsPage',
-		SHOOTER_EDIT: 'ShooterEditPage',
+		SHOOTER_EDIT: 'ShooterPage',
 	},
 
 	TOAST: {
