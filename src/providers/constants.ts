@@ -14,7 +14,12 @@ export const Const = {
 
 	PAGES: {
 		HOME: 'HomePage',
-		SETTINGS: 'SettingsPage',
+		SETTINGS: {
+			GENERAL: 'GeneralPage',
+			SHOOTERS: 'ShootersPage',
+			BOWS: 'BowsPage',
+			ROUNDS: 'RoundsPage',
+		},
 		SHOOTER_EDIT: 'ShooterPage',
 	},
 

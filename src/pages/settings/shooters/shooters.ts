@@ -1,18 +1,18 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Const } from '../../providers/constants';
-import { Global } from '../../providers/globals';
-import { CommonProvider } from '../../providers/common-provider';
-import { ShooterClass } from '../../models/shooter-class';
-import { ShooterService } from '../../providers/shooter-service';
+import { Const } from '../../../providers/constants';
+import { Global } from '../../../providers/globals';
+import { CommonProvider } from '../../../providers/common-provider';
+import { ShooterClass } from '../../../models/shooter-class';
+import { ShooterService } from '../../../providers/shooter-service';
 
 @IonicPage()
 @Component({
-	selector: 'page-settings',
-	templateUrl: 'settings.html',
+	selector: 'page-shooters',
+	templateUrl: 'shooters.html',
 })
-export class SettingsPage {
+export class ShootersPage {
 
 	shooters: ShooterClass[];
 	shooter: ShooterClass;
@@ -28,7 +28,7 @@ export class SettingsPage {
 
 	//Do before page becomes active.
 	ionViewWillEnter() {
-		Const.MISC.CURRENT_PAGE = 'SettingsPage';
+		Const.MISC.CURRENT_PAGE = 'ShootersPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 
 		this.Init();
@@ -41,7 +41,7 @@ export class SettingsPage {
 	}
 
 	Back() {
-		this.common.Back( Const.PAGES.HOME );
+		this.common.Back( Const.PAGES.HOME, true );
 	}
 
 	CreateShooter() {

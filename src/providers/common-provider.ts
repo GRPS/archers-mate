@@ -46,8 +46,8 @@ export class CommonProvider {
 		return dt.getTime();
 	}
 		
-	Back( rootPage ) {
-		if( this.navCtrl.canGoBack() ) {
+	Back( rootPage, forceBack: boolean = false ) {
+		if( this.navCtrl.canGoBack() && !forceBack ) {
 			this.navCtrl.pop();
 		} else {
 			this.navCtrl.setRoot( rootPage );

@@ -118,7 +118,7 @@ export class HomePage {
 	}
 
 	gotoSettings() {
-		this.navCtrl.push( Const.PAGES.SETTINGS );
+		this.navCtrl.push( Const.PAGES.SETTINGS.GENERAL );
 	}
 
 }
