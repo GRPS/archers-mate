@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.archers.mate" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>archers-mate</name>
+    <name>Archers Mate</name>
     <description>An awesome archery app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
@@ -86,6 +86,6 @@
         <variable name="CHANNEL_NAME" value="Master" />
         <variable name="UPDATE_METHOD" value="background" />
     </plugin>
-    <engine name="android" spec="~7.0.0" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.11.1" />
+    <engine name="android" spec="~7.0.0" />
 </widget>

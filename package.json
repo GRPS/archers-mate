@@ -1,5 +1,5 @@
 {
-  "name": "archers-mate",
+  "name": "Archers Mate",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "http://ionicframework.com/",
@@ -39,7 +39,8 @@
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "underscore": "^1.9.1",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "cordova-android": "~7.0.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.11",
