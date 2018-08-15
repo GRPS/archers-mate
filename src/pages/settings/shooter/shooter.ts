@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Const } from '../../providers/constants';
-import { CommonProvider } from '../../providers/common-provider';
-import { ShooterClass } from '../../models/shooter-class';
-import { ShooterService } from '../../providers/shooter-service';
+import { Const } from '../../../providers/constants';
+import { CommonProvider } from '../../../providers/common-provider';
+import { ShooterClass } from '../../../models/shooter-class';
+import { ShooterService } from '../../../providers/shooter-service';
 
 @IonicPage()
 @Component({
