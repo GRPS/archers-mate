@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Const } from '../../../providers/constants';
-import { Global } from '../../../providers/globals';
-import { CommonProvider } from '../../../providers/common-provider';
-import { ShooterClass } from '../../../models/shooter-class';
-import { ShooterService } from '../../../providers/shooter-service';
+import { Const } from '../../../../providers/constants';
+import { Global } from '../../../../providers/globals';
+import { CommonProvider } from '../../../../providers/common-provider';
+import { ShooterClass } from '../../../../models/shooter-class';
+import { ShooterService } from '../../../../providers/shooter-service';
 
 @IonicPage()
 @Component({

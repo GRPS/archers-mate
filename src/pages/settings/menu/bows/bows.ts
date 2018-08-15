@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Const } from '../../../providers/constants';
-import { CommonProvider } from '../../../providers/common-provider';
+import { Const } from '../../../../providers/constants';
+import { CommonProvider } from '../../../../providers/common-provider';
 
 @IonicPage()
 @Component({
-	selector: 'page-general',
-	templateUrl: 'general.html',
+	selector: 'page-bows',
+	templateUrl: 'bows.html',
 })
-export class GeneralPage {
+export class BowsPage {
 
 	constructor(
 				public navCtrl: NavController, 
@@ -21,7 +21,7 @@ export class GeneralPage {
 
 	//Do before page becomes active.
 	ionViewWillEnter() {
-		Const.MISC.CURRENT_PAGE = 'GeneralPage';
+		Const.MISC.CURRENT_PAGE = 'BowsPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 	}
 

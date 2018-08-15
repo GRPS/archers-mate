@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Const } from '../../../providers/constants';
-import { CommonProvider } from '../../../providers/common-provider';
+import { Const } from '../../../../providers/constants';
+import { CommonProvider } from '../../../../providers/common-provider';
 
 @IonicPage()
 @Component({
