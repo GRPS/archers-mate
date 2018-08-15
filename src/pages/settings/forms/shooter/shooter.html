@@ -1,0 +1,67 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{ isNew ? 'Add ' : '' }}Shooter</ion-title>
+		<ion-buttons right>
+			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
+			<button ion-button *ngIf="!isEditMode" (click)="Edit()">Edit</button>
+		</ion-buttons>
+	</ion-navbar>
+  
+  </ion-header>
+
+<ion-content>
+
+	<ion-list no-lines *ngIf="!isEditMode">
+		<field [label]="'Name'" [value]="shooter.name"></field>
+		<field [label]="'Initials'" [value]="shooter.initials"></field>
+		<field [label]="'Gender'" [value]="shooter.gender"></field>
+		<field [label]="'Age'" [value]="shooter.age"></field>		
+
+		<ion-item-divider color="archers-light-blue">
+			Shooter's Bows 
+			<ion-badge color="archers-heading">{{ shooter.bows?.length == 0 ? 0 : shooter.bows?.length - 1 }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="CreateShooterBow()">Add</button>
+		</ion-item-divider>
+
+	</ion-list>
+
+	<ion-list no-lines *ngIf="isEditMode">
+		
+		<form [formGroup]="form">
+
+			<ion-item>
+				<ion-label fixed>Name</ion-label>
+				<ion-input [formControl]="form.controls['name']" type="text" maxlength="30" [(ngModel)]="shooter.name" placeholder="Joe Public" [ngClass]="{'validator-error': !form.controls.name.valid && form.controls.name.dirty}"></ion-input>
+			</ion-item>
+			<help text="Between 2 and 30 characters."></help>
+			
+			<ion-item>
+				<ion-label fixed>Initials</ion-label>
+				<ion-input [formControl]="form.controls['initials']" type="text" maxlength="3" [(ngModel)]="shooter.initials" placeholder="JP1" [ngClass]="{'validator-error': !form.controls.initials.valid && form.controls.initials.dirty}"></ion-input>				
+			</ion-item>
+			<help text="Between 2 and 3 characters."></help>
+
+			<ion-item>
+				<ion-label fixed>Gender</ion-label>
+				<ion-select [(ngModel)]="shooter.gender" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="male" selected>Male</ion-option>
+					<ion-option value="female">Female</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Age</ion-label>
+				<ion-input [formControl]="form.controls['age']" type="number" maxlength="2" [(ngModel)]="shooter.age" placeholder="25" [ngClass]="{'validator-error': !form.controls.age.valid && form.controls.age.dirty}"></ion-input>				
+			</ion-item>
+
+		</form>
+
+	</ion-list>
+
+</ion-content>
