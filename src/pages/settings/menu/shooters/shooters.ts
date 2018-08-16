@@ -41,7 +41,7 @@ export class ShootersPage {
 	}
 
 	Back() {
-		this.common.Back( Const.PAGES.HOME, true );
+		this.common.Back( Const.PAGES.HOME );
 	}
 
 	CreateShooter() {

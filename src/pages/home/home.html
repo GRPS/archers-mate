@@ -8,21 +8,42 @@
 
 <ion-content class="page-home" no-bounce>
  
-    <ion-grid text-center>
+    <ion-grid text-center class="content">
  
-		<ion-row justify-content-center align-items-center>
-			<ion-col class="score"><button ion-button round color="archers-light-blue" (click)="gotoScore()">Score Sheet</button></ion-col>
+		<ion-row justify-content-center align-items-center class="score">
+			<ion-col>
+				<button ion-button class="menu" (click)="gotoScore()">Score Sheet</button>
+			</ion-col>
 		</ion-row>
 
-		<ion-row justify-content-center align-items-center>
-			<ion-col class="history"><button ion-button round color="archers-light-blue" (click)="gotoHistory()">History</button></ion-col>
+		<ion-row justify-content-center align-items-center class="history">
+			<ion-col>
+				<button ion-button class="menu" (click)="gotoHistory()">History</button>
+			</ion-col>
 		</ion-row>
 
-		<ion-row justify-content-center align-items-center>
-			<ion-col class="settings"><button ion-button round color="archers-light-blue" (click)="gotoSettings()">Settings</button></ion-col>
-		</ion-row>
- 
     </ion-grid>
  
 </ion-content>
+
+<ion-footer>
+	<ion-grid>
+		<ion-row class="settings">
+			<ion-col>
+				<button ion-button full clear (click)="GotoSettings('general')">General</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full clear (click)="GotoSettings('shooters')">Shooters</button>
+			</ion-col>
+		</ion-row>
+		<ion-row class="settings">
+			<ion-col>
+				<button ion-button full clear (click)="GotoSettings('bows')">Bows</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full clear (click)="GotoSettings('rounds')">Rounds</button>
+			</ion-col>
+		</ion-row>
+	</ion-grid>	
+</ion-footer>
 

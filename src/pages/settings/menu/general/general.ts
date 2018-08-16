@@ -26,7 +26,7 @@ export class GeneralPage {
 	}
 
 	Back() {
-		this.common.Back( Const.PAGES.HOME, true );
+		this.common.Back( Const.PAGES.HOME );
 	}
 
 }

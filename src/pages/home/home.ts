@@ -109,16 +109,29 @@ export class HomePage {
 		}
 	}
 
-	gotoScore() {
+	GotoScore() {
 		// this.navCtrl.push( ScorePage );
 	}
 
-	gotoHistory() {
+	GotoHistory() {
 		// this.navCtrl.push( HistoryPage );
 	}
 
-	gotoSettings() {
-		this.navCtrl.push( Const.PAGES.SETTINGS.GENERAL );
+	GotoSettings( page: string ) {
+		switch( page ) {
+			case "general":
+				this.navCtrl.push( Const.PAGES.SETTINGS.GENERAL );
+				break;
+			case "shooters":
+				this.navCtrl.push( Const.PAGES.SETTINGS.SHOOTERS );
+				break;
+			case "bows":
+				this.navCtrl.push( Const.PAGES.SETTINGS.BOWS );
+				break;
+			case "rounds":
+				this.navCtrl.push( Const.PAGES.SETTINGS.ROUNDS );
+				break;
+		}
 	}
 
 }

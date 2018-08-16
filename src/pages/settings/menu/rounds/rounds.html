@@ -13,8 +13,26 @@
 
 <ion-content no-bounce>
  
+		<ion-list no-lines>
+
+			<ion-item-divider color="archers-light-blue">
+				Rounds <ion-badge color="archers-heading">{{ rounds?.length }}</ion-badge>
+				<button ion-button item-right clear color="dark" (click)="CreateRound()">Add</button>
+			</ion-item-divider>
 	
+			<ion-item *ngIf="rounds?.length==1">
+				<note [message]="'None available'"></note>
+			</ion-item>
+	
+			<ion-item-sliding #slidingItem *ngFor="let round of rounds">
+				<button ion-item (click)="UpdateRound(round)">        
+					{{round?.name}}
+				</button>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="DeleteRound(slidingItem, round)">Delete</button>
+				</ion-item-options> 
+			</ion-item-sliding>
+			
+		</ion-list>
  
 </ion-content>
-
-<setting-footer [active]="rounds"></setting-footer>

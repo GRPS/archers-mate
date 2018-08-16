@@ -5,7 +5,7 @@ page-home {
         display: flex;  
     }
  
-    ion-grid {
+    ion-grid.content {
         padding: 0 !important;
         height: 100%;
         background-image: url('../assets/photos/target.jpg');
@@ -13,17 +13,35 @@ page-home {
     }
  
     ion-row {
-        flex: 1;
+        flex: 5;
+
+        &.score {}
+        &.history {}
+        &.settings {
+            button {
+                color: color( $colors, light );
+            }
+        }
     }
 
     ion-col {
-        font-weight: bold;
-        margin: 0;
 
         &.score {}
         &.history {}
         &.settings {}
 
-	}
+        button.menu {
+            background-color: color( $colors, archers-heading );
+            width:50% !important;
+            font-weight: bold;
+            color: color( $colors, light );
+            height: 50px;
+        }
+
+    }
+    
+    ion-footer {
+        background-color: color( $colors, archers-heading );
+    }
 	
 }

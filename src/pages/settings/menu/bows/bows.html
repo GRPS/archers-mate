@@ -13,8 +13,26 @@
 
 <ion-content no-bounce>
  
-	
+	<ion-list no-lines>
+
+		<ion-item-divider color="archers-light-blue">
+			Bows <ion-badge color="archers-heading">{{ bows?.length }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="CreateBow()">Add</button>
+		</ion-item-divider>
+
+		<ion-item *ngIf="bows?.length==1">
+			<note [message]="'None available'"></note>
+		</ion-item>
+
+		<ion-item-sliding #slidingItem *ngFor="let bow of bows">
+			<button ion-item (click)="UpdateBow(bow)">        
+				{{bow?.name}}
+			</button>
+			<ion-item-options side="right">
+				<button ion-button color="danger" (click)="DeleteBow(slidingItem, bow)">Delete</button>
+			</ion-item-options> 
+		</ion-item-sliding>
+		
+	</ion-list>
  
 </ion-content>
-
-<setting-footer [active]="bows"></setting-footer>

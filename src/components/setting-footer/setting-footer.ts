@@ -22,16 +22,16 @@ export class SettingFooterComponent {
 	GotoPage( page: string ) {
 		switch( page ) {
 			case "general":
-				this.navCtrl.setRoot( Const.PAGES.SETTINGS.GENERAL );
+				this.navCtrl.push( Const.PAGES.SETTINGS.GENERAL );
 				break;
 			case "shooters":
-				this.navCtrl.setRoot( Const.PAGES.SETTINGS.SHOOTERS );
+				this.navCtrl.push( Const.PAGES.SETTINGS.SHOOTERS );
 				break;
 			case "bows":
-				this.navCtrl.setRoot( Const.PAGES.SETTINGS.BOWS );
+				this.navCtrl.push( Const.PAGES.SETTINGS.BOWS );
 				break;
 			case "rounds":
-				this.navCtrl.setRoot( Const.PAGES.SETTINGS.ROUNDS );
+				this.navCtrl.push( Const.PAGES.SETTINGS.ROUNDS );
 				break;
 		}
 	}
