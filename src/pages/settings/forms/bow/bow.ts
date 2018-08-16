@@ -4,20 +4,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Const } from '../../../../providers/constants';
 import { CommonProvider } from '../../../../providers/common-provider';
-import { ShooterClass } from '../../../../models/shooter-class';
-import { ShooterService } from '../../../../providers/shooter-service';
+import { BowClass } from '../../../../models/bow-class';
+import { BowService } from '../../../../providers/bow-service';
 
 @IonicPage()
 @Component({
-	selector: 'page-shooter',
-	templateUrl: 'shooter.html',
+	selector: 'page-bow',
+	templateUrl: 'bow.html',
 })
-export class ShooterPage {
+export class BowPage {
 
 	title: string;
 	isEditMode: boolean = false;
 	isNew: boolean = false;
-	shooter: ShooterClass;
+	bow: BowClass;
 	form: FormGroup;
 
 	constructor(
@@ -25,10 +25,10 @@ export class ShooterPage {
 				public navCtrl: NavController, 
 				public navParams: NavParams,
 				public common: CommonProvider,
-				public shooterService: ShooterService
+				public bowService: BowService
 			) {
 
-		this.GetPassedShooter();
+		this.GetPassedBow();
 
 		this.SetupForm();
 				
@@ -36,7 +36,7 @@ export class ShooterPage {
 
   	//Do before page becomes active.
 	ionViewWillEnter() {
-		Const.MISC.CURRENT_PAGE = 'ShooterEditPage';
+		Const.MISC.CURRENT_PAGE = 'BowEditPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 		this.Init();
 	}
@@ -44,12 +44,12 @@ export class ShooterPage {
 	Init() {}
 
 	Back() {
-		this.common.Back( Const.PAGES.SETTINGS.SHOOTERS );
+		this.common.Back( Const.PAGES.SETTINGS.BOWS );
 	}
 
 	Save() {
 		if( this.form.valid ) {
-			this.shooterService.Save( this.shooter, this.isNew )
+			this.bowService.Save( this.bow, this.isNew )
 				.then( () => {
 					this.navCtrl.pop();	
 					this.common.ShowToastSuccess( 'Saved!' );			
@@ -70,26 +70,24 @@ export class ShooterPage {
 		this.isEditMode = !this.isEditMode;
 	}
 
-	CreateShooterBow() {
-		console.log( 'create shooter bow' );
+	CreateBow() {
+		console.log( 'create bow' );
 		
 	}
 
-	private GetPassedShooter() {
-		if( this.navParams.get('shooter') != undefined ) {
-			this.shooter = new ShooterClass( this.navParams.data.shooter );		
+	private GetPassedBow() {
+		if( this.navParams.get('bow') != undefined ) {
+			this.bow = new BowClass( this.navParams.data.bow );		
 		} else {			
 			this.isNew = true;
 			this.isEditMode = true;
-			this.shooter = new ShooterClass();
+			this.bow = new BowClass();
 		}
 	}
 
 	private SetupForm() {
 		this.form = this.formBuilder.group({
-			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ],
-			initials: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ],
-			age: [ '', Validators.compose( [ Validators.required ] ) ]
+			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ]
 		});
 	}
 

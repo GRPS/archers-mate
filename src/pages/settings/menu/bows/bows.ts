@@ -42,4 +42,22 @@ export class BowsPage {
 		this.common.Back( Const.PAGES.HOME );
 	}
 
+	CreateBow() {
+		this.bowService.Create();
+	}
+
+	UpdateBow( bow: BowClass) {
+		this.bowService.Update( bow );
+	}
+
+	DeleteBow( slidingItem, bow: BowClass) {
+		this.bowService.Delete( bow )
+			.then( () => {
+				slidingItem.close(); 
+				this.Init();
+				console.log(Global);
+								
+			});
+	}
+
 }

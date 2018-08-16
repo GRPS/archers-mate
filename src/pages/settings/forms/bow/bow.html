@@ -1,0 +1,38 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{ isNew ? 'Add ' : '' }}Bow</ion-title>
+		<ion-buttons right>
+			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
+			<button ion-button *ngIf="!isEditMode" (click)="Edit()">Edit</button>
+		</ion-buttons>
+	</ion-navbar>
+  
+  </ion-header>
+
+<ion-content>
+
+	<ion-list no-lines *ngIf="!isEditMode">
+		<field [label]="'Name'" [value]="bow.name"></field>
+	</ion-list>
+
+	<ion-list no-lines *ngIf="isEditMode">
+		
+		<form [formGroup]="form">
+
+			<ion-item>
+				<ion-label fixed>Name</ion-label>
+				<ion-input [formControl]="form.controls['name']" type="text" maxlength="30" [(ngModel)]="bow.name" placeholder="Recurve" [ngClass]="{'validator-error': !form.controls.name.valid && form.controls.name.dirty}"></ion-input>
+			</ion-item>
+			<help text="Between 2 and 30 characters."></help>
+
+		</form>
+
+	</ion-list>
+
+</ion-content>

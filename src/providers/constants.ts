@@ -21,6 +21,7 @@ export const Const = {
 			ROUNDS: 'RoundsPage',
 		},
 		SHOOTER_EDIT: 'ShooterPage',
+		BOW_EDIT: 'BowPage'
 	},
 
 	TOAST: {
