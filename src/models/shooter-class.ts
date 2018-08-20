@@ -12,6 +12,6 @@ export class ShooterClass {
 
 	constructor(values: Object = {}) {
         Object.assign(this, values);
-   }
+   	}
 
 }

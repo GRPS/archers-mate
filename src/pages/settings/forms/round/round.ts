@@ -84,6 +84,8 @@ export class RoundPage {
 			this.isEditMode = true;
 			this.round = new RoundClass();
 		}
+		console.log(this.round);
+		
 	}
 
 	private SetupForm() {

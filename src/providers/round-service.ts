@@ -10,6 +10,7 @@ import { Const } from './constants';
 import { Global } from './globals';
 import { CommonProvider } from './common-provider';
 import { RoundClass } from '../models/round-class';
+import { TargetClass } from '../models/target-class';
 
 import * as _ from 'underscore';
 
@@ -31,7 +32,19 @@ export class RoundService {
   	LoadAll(): Observable<RoundClass[]>  {
 		return this.http.get <RoundClass[]> ( Const.URL.ROUNDS )
 			// .do( this.common.HttpLogResponse )
-			.map(rounds => { return rounds.map( round => new RoundClass( round ) ); })
+			.map( rounds => { return rounds.map( round => new RoundClass( round ) ); })
+			.map( rounds => {
+				let mewRounds: RoundClass[] = [];
+				for( let round of rounds ) {
+					let newTargets: TargetClass[] = [];
+					for( let target of round.targets ) {
+						newTargets.push( new TargetClass( target ) );
+					}
+					round.targets = newTargets;
+					mewRounds.push( round );
+				}				
+				return mewRounds; 
+			})
 			.catch( this.common.HttpCatchError );
 	}
 

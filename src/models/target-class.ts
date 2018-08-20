@@ -4,4 +4,9 @@ export class TargetClass {
 	ends:         number;
 	totalArrows:  number;
 	maxScore:     number;
+
+	constructor(values: Object = {}) {
+        Object.assign(this, values);
+   	}
+
 }
