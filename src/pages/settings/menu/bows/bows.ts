@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { Const } from '../../../../providers/constants';
 import { Global } from '../../../../providers/globals';
@@ -17,9 +17,9 @@ export class BowsPage {
 	bows: BowClass[];
 
 	constructor(
-				private cdr: ChangeDetectorRef,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
+				public viewCtrl: ViewController,
 				public common: CommonProvider,
 				public bowService: BowService
 				) {
@@ -35,11 +35,10 @@ export class BowsPage {
 
 	Init() {
 		this.bows = Global.bows;
-		this.cdr.detectChanges();
 	}
 
 	Back() {
-		this.common.Back( Const.PAGES.HOME );
+		this.viewCtrl.dismiss();
 	}
 
 	CreateBow() {
@@ -54,9 +53,7 @@ export class BowsPage {
 		this.bowService.Delete( bow )
 			.then( () => {
 				slidingItem.close(); 
-				this.Init();
-				console.log(Global);
-								
+				this.Init();						
 			});
 	}
 

@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { Const } from '../../../../providers/constants';
 import { Global } from '../../../../providers/globals';
@@ -17,9 +17,9 @@ export class RoundsPage {
 	rounds: RoundClass[];
 
 	constructor(
-				private cdr: ChangeDetectorRef,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
+				public viewCtrl: ViewController,
 				public common: CommonProvider,
 				public roundService: RoundService
 				) {
@@ -35,11 +35,26 @@ export class RoundsPage {
 
 	Init() {
 		this.rounds = Global.rounds;
-		this.cdr.detectChanges();
 	}
 
 	Back() {
-		this.common.Back( Const.PAGES.HOME );
+		this.viewCtrl.dismiss();
+	}
+
+	CreateRound() {
+		this.roundService.Create();
+	}
+
+	UpdateRound( round: RoundClass) {
+		this.roundService.Update( round );
+	}
+
+	DeleteRound( slidingItem, round: RoundClass) {
+		this.roundService.Delete( round )
+			.then( () => {
+				slidingItem.close(); 
+				this.Init();								
+			});
 	}
 
 }

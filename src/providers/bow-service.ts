@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { App, NavController } from 'ionic-angular';
+import { App, ModalController, NavController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -21,6 +21,7 @@ export class BowService {
 	constructor(
 				public app: App,
 				public http: HttpClient,
+				private modalCtrl: ModalController,
 				public common: CommonProvider
 			) {
 		this.common.AddLog( 'BowService loaded' );
@@ -43,7 +44,15 @@ export class BowService {
 	}
 
 	Update( bow: BowClass ) {
-		this.navCtrl.push( Const.PAGES.BOW_EDIT, { bow: bow } );	
+		let modal = this.modalCtrl.create( Const.PAGES.BOW_EDIT, { bow: bow } );
+		modal.onDidDismiss( bow => {
+			if( !bow ) {
+				console.log('cancel');				
+			} else {
+				console.log(bow);				
+			}
+		});
+		modal.present();	
 	}
 
 	Delete( bow: BowClass ) {

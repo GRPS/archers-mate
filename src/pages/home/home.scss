@@ -13,14 +13,12 @@ page-home {
     }
  
     ion-row {
-        flex: 5;
+        flex: 1;
 
         &.score {}
         &.history {}
         &.settings {
-            button {
-                color: color( $colors, light );
-            }
+            
         }
     }
 
@@ -39,9 +37,5 @@ page-home {
         }
 
     }
-    
-    ion-footer {
-        background-color: color( $colors, archers-heading );
-    }
-	
+
 }

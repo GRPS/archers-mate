@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { Const } from '../../../../providers/constants';
 import { Global } from '../../../../providers/globals';
@@ -18,9 +18,9 @@ export class ShootersPage {
 	shooter: ShooterClass;
 
 	constructor(
-				private cdr: ChangeDetectorRef,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
+				public viewCtrl: ViewController,
 				public common: CommonProvider,
 				public shooterService: ShooterService
 				) {
@@ -30,18 +30,16 @@ export class ShootersPage {
 	ionViewWillEnter() {
 		Const.MISC.CURRENT_PAGE = 'ShootersPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
-
 		this.Init();
 	}
 
 	Init() {
 		this.shooters = Global.shooters;
 		this.shooter = Global.shooter;
-		this.cdr.detectChanges();
 	}
 
 	Back() {
-		this.common.Back( Const.PAGES.HOME );
+		this.viewCtrl.dismiss();
 	}
 
 	CreateShooter() {
@@ -57,8 +55,6 @@ export class ShootersPage {
 			.then( () => {
 				slidingItem.close(); 
 				this.Init();
-				console.log(Global);
-								
 			});
 	}
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Const } from '../../../../providers/constants';
@@ -24,14 +24,11 @@ export class ShooterPage {
 				private formBuilder: FormBuilder,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
+				public viewCtrl: ViewController,
 				public common: CommonProvider,
 				public shooterService: ShooterService
 			) {
-
 		this.GetPassedShooter();
-
-		this.SetupForm();
-				
 	}
 
   	//Do before page becomes active.
@@ -41,10 +38,22 @@ export class ShooterPage {
 		this.Init();
 	}
 
-	Init() {}
+	Init() {	
+		this.SetupForm();
+	}
+
+	GetPassedShooter() {
+		if( this.navParams.get('shooter') != undefined ) {
+			this.shooter = new ShooterClass( this.navParams.data.shooter );		
+		} else {			
+			this.isNew = true;
+			this.isEditMode = true;
+			this.shooter = new ShooterClass();
+		}
+	}
 
 	Back() {
-		this.common.Back( Const.PAGES.SETTINGS.SHOOTERS );
+		this.viewCtrl.dismiss( { 'shooter': this.shooter } );
 	}
 
 	Save() {
@@ -71,18 +80,7 @@ export class ShooterPage {
 	}
 
 	CreateShooterBow() {
-		console.log( 'create shooter bow' );
-		
-	}
-
-	private GetPassedShooter() {
-		if( this.navParams.get('shooter') != undefined ) {
-			this.shooter = new ShooterClass( this.navParams.data.shooter );		
-		} else {			
-			this.isNew = true;
-			this.isEditMode = true;
-			this.shooter = new ShooterClass();
-		}
+		console.log( 'create shooter bow' );		
 	}
 
 	private SetupForm() {

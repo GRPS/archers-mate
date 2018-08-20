@@ -4,20 +4,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Const } from '../../../../providers/constants';
 import { CommonProvider } from '../../../../providers/common-provider';
-import { BowClass } from '../../../../models/bow-class';
-import { BowService } from '../../../../providers/bow-service';
+import { RoundClass } from '../../../../models/round-class';
+import { RoundService } from '../../../../providers/round-service';
 
 @IonicPage()
 @Component({
-	selector: 'page-bow',
-	templateUrl: 'bow.html',
+	selector: 'page-round',
+	templateUrl: 'round.html',
 })
-export class BowPage {
+export class RoundPage {
 
 	title: string;
 	isEditMode: boolean = false;
 	isNew: boolean = false;
-	bow: BowClass;
+	round: RoundClass;
 	form: FormGroup;
 
 	constructor(
@@ -26,14 +26,15 @@ export class BowPage {
 				public navParams: NavParams,
 				public viewCtrl: ViewController,
 				public common: CommonProvider,
-				public bowService: BowService
+				public roundService: RoundService
 			) {
-		this.GetPassedBow();
+
+		this.GetPassedRound();
 	}
 
   	//Do before page becomes active.
 	ionViewWillEnter() {
-		Const.MISC.CURRENT_PAGE = 'BowEditPage';
+		Const.MISC.CURRENT_PAGE = 'RoundEditPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 		this.Init();
 	}
@@ -43,12 +44,12 @@ export class BowPage {
 	}
 
 	Back() {
-		this.viewCtrl.dismiss( { 'bow': this.bow } );
+		this.viewCtrl.dismiss( { 'round': this.round } );
 	}
 
 	Save() {
 		if( this.form.valid ) {
-			this.bowService.Save( this.bow, this.isNew )
+			this.roundService.Save( this.round, this.isNew )
 				.then( () => {
 					this.navCtrl.pop();	
 					this.common.ShowToastSuccess( 'Saved!' );			
@@ -66,27 +67,35 @@ export class BowPage {
 	}
 
 	Edit() {
+		console.log(this.round);
 		this.isEditMode = !this.isEditMode;
 	}
 
-	CreateBow() {
-		console.log( 'create bow' );
+	CreateRoundTarget() {
+		console.log( 'create round target' );
 		
 	}
 
-	private GetPassedBow() {
-		if( this.navParams.get('bow') != undefined ) {
-			this.bow = new BowClass( this.navParams.data.bow );		
+	private GetPassedRound() {
+		if( this.navParams.get('round') != undefined ) {
+			this.round = new RoundClass( this.navParams.data.round );		
 		} else {			
 			this.isNew = true;
 			this.isEditMode = true;
-			this.bow = new BowClass();
+			this.round = new RoundClass();
 		}
 	}
 
 	private SetupForm() {
 		this.form = this.formBuilder.group({
-			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ]
+			type: [ '', Validators.compose( [ Validators.required ] ) ],
+			organistion: [ '', Validators.compose( [ Validators.required ] ) ],
+			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ],
+			season: [ '', Validators.compose( [ Validators.required ] ) ],
+			distance: [ '', Validators.compose( [ Validators.required ] ) ],
+			unit: [ '', Validators.compose( [ Validators.required ] ) ],
+			scoring: [ '', Validators.compose( [ Validators.required ] ) ],
+			arrows: [ '', Validators.compose( [ Validators.required ] ) ],
 		});
 	}
 

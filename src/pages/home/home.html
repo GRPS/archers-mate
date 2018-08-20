@@ -2,6 +2,11 @@
 
 	<ion-navbar color="archers-heading">
 		<ion-title>Archers Mate</ion-title>
+		<ion-buttons right>
+			<button ion-button (click)="GotoSettings()">
+				Settings
+			</button>
+		</ion-buttons>
 	</ion-navbar>
 
 </ion-header>
@@ -25,25 +30,3 @@
     </ion-grid>
  
 </ion-content>
-
-<ion-footer>
-	<ion-grid>
-		<ion-row class="settings">
-			<ion-col>
-				<button ion-button full clear (click)="GotoSettings('general')">General</button>
-			</ion-col>
-			<ion-col>
-				<button ion-button full clear (click)="GotoSettings('shooters')">Shooters</button>
-			</ion-col>
-		</ion-row>
-		<ion-row class="settings">
-			<ion-col>
-				<button ion-button full clear (click)="GotoSettings('bows')">Bows</button>
-			</ion-col>
-			<ion-col>
-				<button ion-button full clear (click)="GotoSettings('rounds')">Rounds</button>
-			</ion-col>
-		</ion-row>
-	</ion-grid>	
-</ion-footer>
-

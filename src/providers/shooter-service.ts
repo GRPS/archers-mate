@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { App, NavController } from 'ionic-angular';
+import { App, ModalController, NavController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -21,6 +21,7 @@ export class ShooterService {
 	constructor(
 				public app: App,
 				public http: HttpClient,
+				private modalCtrl: ModalController,
 				public common: CommonProvider
 				) {
 		this.common.AddLog( 'ShooterService loaded' );
@@ -48,7 +49,15 @@ export class ShooterService {
 	}
 
 	Update( shooter: ShooterClass ) {
-		this.navCtrl.push( Const.PAGES.SHOOTER_EDIT, { shooter: shooter } );	
+		let modal = this.modalCtrl.create( Const.PAGES.SHOOTER_EDIT, { shooter: shooter } );
+		modal.onDidDismiss( shooter => {
+			if( !shooter ) {
+				console.log('cancel');				
+			} else {
+				console.log(shooter);				
+			}
+		});
+		modal.present();	
 	}
 
 	Delete( shooter: ShooterClass ) {

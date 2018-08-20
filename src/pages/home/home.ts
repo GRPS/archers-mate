@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { ActionSheetController , IonicPage, LoadingController, ModalController, NavController, NavParams } from 'ionic-angular';
 
 import { Const } from '../../providers/constants';
 import { Global } from '../../providers/globals';
@@ -21,8 +21,10 @@ export class HomePage {
 	haveLoadedShooters: boolean = false;
 
 	constructor(
+				private actionCtrl: ActionSheetController,
 				public navCtrl: NavController, 
 				public loadingCtrl: LoadingController,
+				private modalCtrl: ModalController,
 				public navParams: NavParams,
 				public common: CommonProvider,
 				public bowService: BowService,
@@ -117,21 +119,56 @@ export class HomePage {
 		// this.navCtrl.push( HistoryPage );
 	}
 
-	GotoSettings( page: string ) {
-		switch( page ) {
-			case "general":
-				this.navCtrl.push( Const.PAGES.SETTINGS.GENERAL );
-				break;
-			case "shooters":
-				this.navCtrl.push( Const.PAGES.SETTINGS.SHOOTERS );
-				break;
-			case "bows":
-				this.navCtrl.push( Const.PAGES.SETTINGS.BOWS );
-				break;
-			case "rounds":
-				this.navCtrl.push( Const.PAGES.SETTINGS.ROUNDS );
-				break;
-		}
+	GotoSettings() {
+		this.actionCtrl.create({
+			title: "Settings",
+			buttons: [
+			  {
+				text: 'General',
+				handler: () => {
+				  this.LoadSettings( Const.PAGES.SETTINGS.GENERAL );
+				}
+			  },
+			  {
+				text: 'Shooters',
+				handler: () => {
+				  this.LoadSettings( Const.PAGES.SETTINGS.SHOOTERS );
+				}
+			  },
+			  {
+				text: 'Bows',
+				handler: () => {
+				  this.LoadSettings( Const.PAGES.SETTINGS.BOWS );
+				}
+			  },
+			  {
+				text: 'Rounds',
+				handler: () => {
+				  this.LoadSettings( Const.PAGES.SETTINGS.ROUNDS );
+				}
+			  },
+			  {
+				text: 'Cancel',
+				role: 'cancel',
+				handler: () => {
+				  // console.log('Cancel clicked');
+				}
+			  }
+			]
+		  }).present();
+	}
+
+	LoadSettings( page: string ) {
+		let settingsModal = this.modalCtrl.create( page );
+		settingsModal.onDidDismiss(data => {
+			if( !data ) {
+				console.log('LoadSettings cancel');				
+			} else {			
+				console.log('LoadSettings saved');
+				console.log( Global );						
+			}
+		});
+		settingsModal.present();
 	}
 
 }

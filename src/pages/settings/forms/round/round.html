@@ -1,0 +1,114 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{ isNew ? 'Add ' : '' }}Round</ion-title>
+		<ion-buttons right>
+			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
+			<button ion-button *ngIf="!isEditMode" (click)="Edit()">Edit</button>
+		</ion-buttons>
+	</ion-navbar>
+  
+  </ion-header>
+
+<ion-content>
+
+	<ion-list no-lines *ngIf="!isEditMode">
+		<field [label]="'Name'" [value]="round.name"></field>	
+		<field [label]="'Type'" [value]="round.type"></field>
+		<field [label]="'Organisation'" [value]="round.organisation"></field>
+		<field [label]="'Season'" [value]="round.season"></field>
+		<field [label]="'Distance'" [value]="round.distance"></field>
+		<field [label]="'Target Size'" [value]="round.unit"></field>	
+		<field [label]="'Scoring'" [value]="round.scoring"></field>
+		<field [label]="'Arrows'" [value]="round.arrows"></field>
+
+		<ion-item-divider color="archers-light-blue">
+			Targets
+			<ion-badge color="archers-heading">{{ round.taregts?.length == 0 ? 0 : round.targets?.length - 1 }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="CreateRoundTarget()">Add</button>
+		</ion-item-divider>
+
+	</ion-list>
+
+	<ion-list no-lines *ngIf="isEditMode">
+		
+		<form [formGroup]="form">
+
+			<ion-item>
+				<ion-label fixed>Name</ion-label>
+				<ion-input [formControl]="form.controls['name']" type="text" maxlength="30" [(ngModel)]="round.name" placeholder="Joe Public" [ngClass]="{'validator-error': !form.controls.name.valid && form.controls.name.dirty}"></ion-input>
+			</ion-item>
+			<help text="Between 2 and 30 characters."></help>
+
+			<ion-item>
+				<ion-label fixed>Type</ion-label>
+				<ion-select [(ngModel)]="round.type" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="custom" selected>Custom</ion-option>
+					<ion-option value="standard">Standard</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Organistion</ion-label>
+				<ion-select [(ngModel)]="round.organisation" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="fita" selected>FITA</ion-option>
+					<ion-option value="gnas">GNAS</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Season</ion-label>
+				<ion-select [(ngModel)]="round.season" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="indoor" selected>Indoor</ion-option>
+					<ion-option value="outdoor">Outdoor</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Distance</ion-label>
+				<ion-select [(ngModel)]="round.distance" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="meter" selected>Meter</ion-option>
+					<ion-option value="yard">Yard</ion-option>
+				</ion-select>
+			</ion-item>
+			
+			<ion-item>
+				<ion-label fixed>Target Size</ion-label>
+				<ion-select [(ngModel)]="round.unit" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="cm" selected>cm</ion-option>
+					<ion-option value="inch">Inch</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Scoring</ion-label>
+				<ion-select [(ngModel)]="round.scoring" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="10,9,8,7,6,5,4,3,2,1" selected>10, 9, 8, 7, 6, 5, 4, 3, 2, 1</ion-option>
+					<ion-option value="10,9,8,7,6" >10, 9, 8, 7, 6</ion-option>
+					<ion-option value="5,4,3,2,1" >5, 4, 3, 2, 1</ion-option>
+					<ion-option value="9,7,5,3,1" >9, 7, 5, 3, 1</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Arrows</ion-label>
+				<ion-select [(ngModel)]="round.arrows" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="1">1</ion-option>
+					<ion-option value="2">2</ion-option>
+					<ion-option value="3">3</ion-option>
+					<ion-option value="4">4</ion-option>
+					<ion-option value="5">5</ion-option>
+					<ion-option value="6" selected>6</ion-option>
+				</ion-select>
+			</ion-item>
+
+		</form>
+
+	</ion-list>
+
+</ion-content>
