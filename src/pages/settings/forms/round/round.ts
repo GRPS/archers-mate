@@ -3,9 +3,12 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Const } from '../../../../providers/constants';
+import { Global } from '../../../../providers/globals';
 import { CommonProvider } from '../../../../providers/common-provider';
 import { RoundClass } from '../../../../models/round-class';
 import { RoundService } from '../../../../providers/round-service';
+import { TargetClass } from '../../../../models/target-class';
+import { TargetService } from '../../../../providers/target-service';
 
 @IonicPage()
 @Component({
@@ -18,7 +21,7 @@ export class RoundPage {
 	isEditMode: boolean = false;
 	isNew: boolean = false;
 	round: RoundClass;
-	form: FormGroup;
+	formValidation: FormGroup;
 
 	constructor(
 				private formBuilder: FormBuilder,
@@ -26,29 +29,65 @@ export class RoundPage {
 				public navParams: NavParams,
 				public viewCtrl: ViewController,
 				public common: CommonProvider,
-				public roundService: RoundService
+				public roundService: RoundService,
+				public targetService: TargetService
 			) {
-
 		this.GetPassedRound();
+		this.SetupForm();
 	}
 
   	//Do before page becomes active.
 	ionViewWillEnter() {
 		Const.MISC.CURRENT_PAGE = 'RoundEditPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
-		this.Init();
 	}
 
-	Init() {
-		this.SetupForm();
+	private GetPassedRound() {
+		if( this.navParams.get('round') != undefined ) {
+			this.round = new RoundClass( this.navParams.data.round );		
+		} else {			
+			this.isNew = true;
+			this.isEditMode = true;
+			this.round = new RoundClass();
+			this.round.type = 'custom';
+			this.round.organisation = 'fita';
+			this.round.season = 'outdoor';
+			this.round.distance = 'meter';
+			this.round.unit = 'cm';
+			this.round.scoring = '10,9,8,7,6,5,4,3,2,1';
+			this.round.arrows = 6;
+
+			let newTarget: TargetClass = new TargetClass({
+				id: this.common.GetRandomNumber(),
+				distance: 100,
+				size: 150,
+				ends: 1
+			});
+			newTarget = this.targetService.CalculateValues( this.round, newTarget );
+
+			this.round.targets = [];//[ newTarget ];
+
+			this.round = this.roundService.CalculateValues( this.round );
+
+		}		
+	}
+
+	private SetupForm() {
+		this.formValidation = this.formBuilder.group({
+			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ]
+		});
 	}
 
 	Back() {
-		this.viewCtrl.dismiss( { 'round': this.round } );
+		this.navCtrl.pop();
+	}
+
+	Edit() {
+		this.isEditMode = !this.isEditMode;
 	}
 
 	Save() {
-		if( this.form.valid ) {
+		if( this.formValidation.valid ) {
 			this.roundService.Save( this.round, this.isNew )
 				.then( () => {
 					this.navCtrl.pop();	
@@ -66,39 +105,36 @@ export class RoundPage {
 		}
 	}
 
-	Edit() {
-		console.log(this.round);
-		this.isEditMode = !this.isEditMode;
+	AddRoundTarget() {
+		this.navCtrl.push( Const.PAGES.TARGET_EDIT, { callBack: this.RefreshRoundTarget, targets: this.round.targets } );
 	}
 
-	CreateRoundTarget() {
-		console.log( 'create round target' );
-		
+	UpdateRoundTarget( target: TargetClass) {	
+		this.navCtrl.push( Const.PAGES.TARGET_EDIT, { callBack: this.RefreshRoundTarget, targets: this.round.targets, target: target } );
 	}
 
-	private GetPassedRound() {
-		if( this.navParams.get('round') != undefined ) {
-			this.round = new RoundClass( this.navParams.data.round );		
-		} else {			
-			this.isNew = true;
-			this.isEditMode = true;
-			this.round = new RoundClass();
-		}
-		console.log(this.round);
-		
+	DeleteRoundTarget( slidingItem, target: TargetClass ) {
+		this.targetService.Delete( this.round.targets, target )
+			.then( targets => {
+				slidingItem.close(); 
+				this.round.targets = targets;	
+				
+				let index: number = this.common.GetIndexOfObjectIdInArray( Global.rounds, this.round.id );
+				Global.rounds[ index ] = this.round;
+
+				this.common.ShowToastSuccess( 'Deleted!' );
+			});	
 	}
 
-	private SetupForm() {
-		this.form = this.formBuilder.group({
-			type: [ '', Validators.compose( [ Validators.required ] ) ],
-			organistion: [ '', Validators.compose( [ Validators.required ] ) ],
-			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ],
-			season: [ '', Validators.compose( [ Validators.required ] ) ],
-			distance: [ '', Validators.compose( [ Validators.required ] ) ],
-			unit: [ '', Validators.compose( [ Validators.required ] ) ],
-			scoring: [ '', Validators.compose( [ Validators.required ] ) ],
-			arrows: [ '', Validators.compose( [ Validators.required ] ) ],
+	RefreshRoundTarget = ( targets: TargetClass[] ) => {
+		return new Promise( resolve => {
+			this.round.targets = targets;	
+			resolve();
 		});
+	}
+
+	reorderItems( indexes ) {
+		this.round.targets = this.common.reorderItems( this.round.targets, indexes );
 	}
 
 }

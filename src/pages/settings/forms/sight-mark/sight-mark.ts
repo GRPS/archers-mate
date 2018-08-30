@@ -4,22 +4,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Const } from '../../../../providers/constants';
 import { CommonProvider } from '../../../../providers/common-provider';
-import { BowClass } from '../../../../models/bow-class';
-import { BowService } from '../../../../providers/bow-service';
 import { SightMarkClass } from '../../../../models/sight-mark-class';
+import { SightMarkService } from '../../../../providers/sight-mark-service';
 
 @IonicPage()
 @Component({
-	selector: 'page-bow',
-	templateUrl: 'bow.html',
+	selector: 'page-sight-mark',
+	templateUrl: 'sight-mark.html',
 })
-export class BowPage {
+export class SightMarkPage {
 
 	title: string;
 	isEditMode: boolean = false;
 	isNew: boolean = false;
-	bow: BowClass;
-	bows: BowClass[];
+	sightMark: SightMarkClass;
+	sightMarks: SightMarkClass[];
 	callBack: any;
 	formValidation: FormGroup;
 
@@ -29,42 +28,32 @@ export class BowPage {
 				public navParams: NavParams,
 				public viewCtrl: ViewController,
 				public common: CommonProvider,
-				public bowService: BowService
+				public sightMarkService: SightMarkService
 			) {
-		this.GetPassedBow();
+		this.GetPassedTarget();
 		this.SetupForm();
 	}
 
   	//Do before page becomes active.
 	ionViewWillEnter() {
-		Const.MISC.CURRENT_PAGE = 'BowEditPage';
+		Const.MISC.CURRENT_PAGE = 'SightMarkEditPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 	}
 
-	private GetPassedBow() {
-
-		if( this.navParams.get('bows') != undefined ) {		
-			this.bows = this.navParams.data.bows;
+	private GetPassedTarget() {
+		if( this.navParams.get('sightMarks') != undefined ) {		
+			this.sightMarks = this.navParams.data.sightMarks;
 		} else {
-			this.bows = [];
+			this.sightMarks = [];
 		}
 
-		if( this.navParams.get('bow') != undefined ) {
-			this.bow = new BowClass( this.navParams.data.bow );		
+		if( this.navParams.get('sightMark') != undefined ) {
+			this.sightMark = new SightMarkClass( this.navParams.data.sightMark );		
 		} else {			
 			this.isNew = true;
 			this.isEditMode = true;
-			this.bow = new BowClass({
-				id: this.common.GetRandomNumber(),
-				name: '',
-				SightMarks: new SightMarkClass({
-					// distance: '',
-					unit: 'meter',
-					// notch: '',
-					// position: '',
-					// note: ''
-				})
-			});
+			this.sightMark = new SightMarkClass();
+			this.sightMark.unit = "meter";
 		}
 
 		if( this.navParams.get('callBack') != undefined ) {
@@ -75,12 +64,12 @@ export class BowPage {
 
 	private SetupForm() {
 		this.formValidation = this.formBuilder.group({
-			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ]
-		});		
+			distance: [ '', Validators.compose( [ Validators.required ] ) ]
+		});
 	}
 
 	Back() {
-		this.common.Back();
+		this.navCtrl.pop();
 	}
 
 	Edit() {
@@ -89,15 +78,18 @@ export class BowPage {
 
 	Save() {
 		if( this.formValidation.valid ) {
-			this.bowService.Save( this.bow, this.isNew )
-				.then( () => {
-					this.navCtrl.pop();	
-					this.common.ShowToastSuccess( 'Saved!' );			
+			this.sightMarkService.Save( this.sightMarks, this.sightMark, this.isNew )
+				.then( sightMarks => {
+					this.callBack( sightMarks )
+						.then( () => {
+							this.common.ShowToastSuccess( 'Saved!' );
+							this.navCtrl.pop();
+						});						
 				},
 				( error ) => {
 					this.common.ShowToastFail( 'Failed to save form!' );
 				})
-				.catch( ( error ) => {
+				.catch( (error) => {
 					this.common.ShowToastFail( JSON.stringify( error ) );
 				});
 

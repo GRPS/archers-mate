@@ -39,23 +39,29 @@ export class ShootersPage {
 	}
 
 	Back() {
-		this.viewCtrl.dismiss();
+		this.navCtrl.pop();
 	}
 
 	CreateShooter() {
 		this.shooterService.Create();
 	}
 
-	UpdateShooter( shooter: ShooterClass) {
+	UpdateShooter( shooter: ShooterClass ) {
 		this.shooterService.Update( shooter );
 	}
 
-	DeleteShooter( slidingItem, shooter: ShooterClass) {
+	DeleteShooter( slidingItem, shooter: ShooterClass ) {
 		this.shooterService.Delete( shooter )
 			.then( () => {
 				slidingItem.close(); 
 				this.Init();
+
+				this.common.ShowToastSuccess( 'Deleted!' );
 			});
+	}
+
+	reorderItems( indexes ) {
+		this.shooters = this.common.reorderItems( this.shooters, indexes );
 	}
 
 }

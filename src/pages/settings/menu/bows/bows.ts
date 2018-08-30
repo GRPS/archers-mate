@@ -38,7 +38,7 @@ export class BowsPage {
 	}
 
 	Back() {
-		this.viewCtrl.dismiss();
+		this.navCtrl.pop();
 	}
 
 	CreateBow() {
@@ -53,8 +53,14 @@ export class BowsPage {
 		this.bowService.Delete( bow )
 			.then( () => {
 				slidingItem.close(); 
-				this.Init();						
+				this.Init();	
+				
+				this.common.ShowToastSuccess( 'Deleted!' );
 			});
+	}
+
+	reorderItems( indexes ) {
+		this.bows = this.common.reorderItems( this.bows, indexes );
 	}
 
 }

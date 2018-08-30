@@ -22,7 +22,10 @@ export const Const = {
 		},
 		SHOOTER_EDIT: 'ShooterPage',
 		BOW_EDIT: 'BowPage',
-		ROUND_EDIT: 'RoundPage'
+		ROUND_EDIT: 'RoundPage',
+		TARGET_EDIT: 'TargetPage',
+		SIGHT_MARK_EDIT: 'SightMarkPage',
+		SHOOTER_BOW_EDIT: 'ShooterBowPage',
 	},
 
 	TOAST: {

@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { RoundsPage } from './rounds';
+import { SightMarkPage } from './sight-mark';
 
 import { ComponentsModule } from '../../../../components/components.module';
 
 @NgModule({
   declarations: [
-    RoundsPage,
+    SightMarkPage,
   ],
   imports: [
-    IonicPageModule.forChild(RoundsPage),
+    IonicPageModule.forChild(SightMarkPage),
     ComponentsModule
   ],
   exports: [
-    RoundsPage,
+    SightMarkPage,
   ]
 })
-export class RoundsPageModule {}
+export class SightMarkPageModule {}

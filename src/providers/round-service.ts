@@ -11,8 +11,7 @@ import { Global } from './globals';
 import { CommonProvider } from './common-provider';
 import { RoundClass } from '../models/round-class';
 import { TargetClass } from '../models/target-class';
-
-import * as _ from 'underscore';
+import { TargetService } from './target-service';
 
 @Injectable()
 export class RoundService {
@@ -23,7 +22,8 @@ export class RoundService {
 				public app: App,
 				public http: HttpClient,
 				private modalCtrl: ModalController,
-				public common: CommonProvider
+				public common: CommonProvider,
+				public targetService: TargetService
 			) {
 		this.common.AddLog( 'RoundService loaded' );
 		this.navCtrl = app.getActiveNavs()[0];
@@ -84,7 +84,7 @@ export class RoundService {
 				round.id = this.common.GetRandomNumber();
 				Global.rounds.push( round );
 			} else {
-				let index: number = _.findIndex( Global.rounds, { id: round.id } );
+				let index: number = this.common.GetIndexOfObjectIdInArray( Global.rounds, round.id );
 				Global.rounds[ index ] = round;
 			}
 
@@ -94,6 +94,19 @@ export class RoundService {
 				resolve( false ); //Code has worked, but we want to return a fail to the caller.
 			}
 		});		
+	}
+
+	CalculateValues( round: RoundClass ) {
+		let maxScore = 0;
+		let targets: TargetClass[] = [];
+		for( let target of round.targets ) {
+			target = this.targetService.CalculateValues( round, target );
+			targets.push( target );
+			maxScore += target.maxScore;
+		}
+		round.targets = targets;
+		round.maxScore = maxScore;
+		return round;
 	}
 
 }

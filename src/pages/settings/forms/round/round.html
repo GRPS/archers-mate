@@ -26,84 +26,101 @@
 		<field [label]="'Target Size'" [value]="round.unit"></field>	
 		<field [label]="'Scoring'" [value]="round.scoring"></field>
 		<field [label]="'Arrows'" [value]="round.arrows"></field>
+		<field [label]="'Max Score'" [value]="round.maxScore"></field>
 
 		<ion-item-divider color="archers-light-blue">
 			Targets
-			<ion-badge color="archers-heading">{{ round.taregts?.length == 0 ? 0 : round.targets?.length - 1 }}</ion-badge>
-			<button ion-button item-right clear color="dark" (click)="CreateRoundTarget()">Add</button>
+			<ion-badge color="archers-heading">{{ round.taregts?.length == 0 ? 0 : round.targets?.length }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="AddRoundTarget()">Add</button>
 		</ion-item-divider>
+
+		<ion-item *ngIf="round.targets?.length==0">
+			<note [message]="'None available'"></note>
+		</ion-item>
+
+		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+			<ion-item-sliding #slidingItem *ngFor="let target of round.targets">
+				<button ion-item (click)="UpdateRoundTarget(target)">
+					<p>Distance: {{ target?.distance }} {{ round?.distance }}s, Size: {{ target?.size }} {{ round.unit }}</p>
+					<p>Ends: {{ target?.ends }}, Arrows: {{ target?.totalArrows }}, Max Score: {{ target?.maxScore }}</p>
+				</button>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="DeleteRoundTarget(slidingItem, target)">Delete</button>
+				</ion-item-options> 
+			</ion-item-sliding>
+		</ion-item-group>
 
 	</ion-list>
 
 	<ion-list no-lines *ngIf="isEditMode">
 		
-		<form [formGroup]="form">
+		<form [formGroup]="formValidation">
 
 			<ion-item>
 				<ion-label fixed>Name</ion-label>
-				<ion-input [formControl]="form.controls['name']" type="text" maxlength="30" [(ngModel)]="round.name" placeholder="Joe Public" [ngClass]="{'validator-error': !form.controls.name.valid && form.controls.name.dirty}"></ion-input>
+				<ion-input type="text" maxlength="30" [(ngModel)]="round.name" placeholder="General Shoot" [formControl]="formValidation.controls['name']" [ngClass]="{'validator-error': !formValidation.controls.name.valid && formValidation.controls.name.dirty}"></ion-input>
 			</ion-item>
 			<help text="Between 2 and 30 characters."></help>
 
 			<ion-item>
 				<ion-label fixed>Type</ion-label>
-				<ion-select [(ngModel)]="round.type" [ngModelOptions]="{standalone: true}" interface="popover">
-					<ion-option value="custom" selected>Custom</ion-option>
+				<ion-select name="type" [(ngModel)]="round.type" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="custom">Custom</ion-option>
 					<ion-option value="standard">Standard</ion-option>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label fixed>Organistion</ion-label>
-				<ion-select [(ngModel)]="round.organisation" [ngModelOptions]="{standalone: true}" interface="popover">
-					<ion-option value="fita" selected>FITA</ion-option>
+				<ion-select name="organisation" [(ngModel)]="round.organisation" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="fita">FITA</ion-option>
 					<ion-option value="gnas">GNAS</ion-option>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label fixed>Season</ion-label>
-				<ion-select [(ngModel)]="round.season" [ngModelOptions]="{standalone: true}" interface="popover">
-					<ion-option value="indoor" selected>Indoor</ion-option>
+				<ion-select name="season" [(ngModel)]="round.season" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="indoor">Indoor</ion-option>
 					<ion-option value="outdoor">Outdoor</ion-option>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label fixed>Distance</ion-label>
-				<ion-select [(ngModel)]="round.distance" [ngModelOptions]="{standalone: true}" interface="popover">
-					<ion-option value="meter" selected>Meter</ion-option>
-					<ion-option value="yard">Yard</ion-option>
+				<ion-select name="distance" [(ngModel)]="round.distance" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="meter">meter</ion-option>
+					<ion-option value="yard">yard</ion-option>
 				</ion-select>
 			</ion-item>
 			
 			<ion-item>
 				<ion-label fixed>Target Size</ion-label>
-				<ion-select [(ngModel)]="round.unit" [ngModelOptions]="{standalone: true}" interface="popover">
-					<ion-option value="cm" selected>cm</ion-option>
-					<ion-option value="inch">Inch</ion-option>
+				<ion-select name="unit" [(ngModel)]="round.unit" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="cm">cm</ion-option>
+					<ion-option value="inch">inch</ion-option>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label fixed>Scoring</ion-label>
-				<ion-select [(ngModel)]="round.scoring" [ngModelOptions]="{standalone: true}" interface="popover">
-					<ion-option value="10,9,8,7,6,5,4,3,2,1" selected>10, 9, 8, 7, 6, 5, 4, 3, 2, 1</ion-option>
-					<ion-option value="10,9,8,7,6" >10, 9, 8, 7, 6</ion-option>
-					<ion-option value="5,4,3,2,1" >5, 4, 3, 2, 1</ion-option>
-					<ion-option value="9,7,5,3,1" >9, 7, 5, 3, 1</ion-option>
+				<ion-select name="scoring" [(ngModel)]="round.scoring" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="10,9,8,7,6,5,4,3,2,1">10, 9, 8, 7, 6, 5, 4, 3, 2, 1</ion-option>
+					<ion-option value="10,9,8,7,6">10, 9, 8, 7, 6</ion-option>
+					<ion-option value="5,4,3,2,1">5, 4, 3, 2, 1</ion-option>
+					<ion-option value="9,7,5,3,1">9, 7, 5, 3, 1</ion-option>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label fixed>Arrows</ion-label>
-				<ion-select [(ngModel)]="round.arrows" [ngModelOptions]="{standalone: true}" interface="popover">
+				<ion-select name="arrows" [(ngModel)]="round.arrows" [ngModelOptions]="{standalone: true}" interface="popover">
 					<ion-option value="1">1</ion-option>
 					<ion-option value="2">2</ion-option>
 					<ion-option value="3">3</ion-option>
 					<ion-option value="4">4</ion-option>
 					<ion-option value="5">5</ion-option>
-					<ion-option value="6" selected>6</ion-option>
+					<ion-option value="6">6</ion-option>
 				</ion-select>
 			</ion-item>
 

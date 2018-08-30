@@ -24,14 +24,17 @@
 				<note [message]="'None available'"></note>
 			</ion-item>
 	
-			<ion-item-sliding #slidingItem *ngFor="let round of rounds">
-				<button ion-item (click)="UpdateRound(round)">        
-					{{round?.name}}
-				</button>
-				<ion-item-options side="right">
-					<button ion-button color="danger" (click)="DeleteRound(slidingItem, round)">Delete</button>
-				</ion-item-options> 
-			</ion-item-sliding>
+			<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+				<ion-item-sliding #slidingItem *ngFor="let round of rounds">
+					<button ion-item (click)="UpdateRound(round)" color="{{round?.targets.length == 0?'archers-danger':''}}">        
+						{{round?.name}}
+						<p *ngIf="round?.targets.length == 0"><b><small>Not usable until targets added!</small></b></p>
+					</button>
+					<ion-item-options side="right">
+						<button ion-button color="danger" (click)="DeleteRound(slidingItem, round)">Delete</button>
+					</ion-item-options> 
+				</ion-item-sliding>
+			</ion-item-group>
 			
 		</ion-list>
  

@@ -4,22 +4,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Const } from '../../../../providers/constants';
 import { CommonProvider } from '../../../../providers/common-provider';
-import { BowClass } from '../../../../models/bow-class';
-import { BowService } from '../../../../providers/bow-service';
-import { SightMarkClass } from '../../../../models/sight-mark-class';
+import { TargetClass } from '../../../../models/target-class';
+import { TargetService } from '../../../../providers/target-service';
 
 @IonicPage()
 @Component({
-	selector: 'page-bow',
-	templateUrl: 'bow.html',
+	selector: 'page-target',
+	templateUrl: 'target.html',
 })
-export class BowPage {
+export class TargetPage {
 
 	title: string;
 	isEditMode: boolean = false;
 	isNew: boolean = false;
-	bow: BowClass;
-	bows: BowClass[];
+	target: TargetClass;
+	targets: TargetClass[];
 	callBack: any;
 	formValidation: FormGroup;
 
@@ -29,43 +28,32 @@ export class BowPage {
 				public navParams: NavParams,
 				public viewCtrl: ViewController,
 				public common: CommonProvider,
-				public bowService: BowService
+				public targetService: TargetService
 			) {
-		this.GetPassedBow();
+		this.GetPassedTarget();
 		this.SetupForm();
 	}
 
   	//Do before page becomes active.
 	ionViewWillEnter() {
-		Const.MISC.CURRENT_PAGE = 'BowEditPage';
+		Const.MISC.CURRENT_PAGE = 'TargetEditPage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 	}
 
-	private GetPassedBow() {
-
-		if( this.navParams.get('bows') != undefined ) {		
-			this.bows = this.navParams.data.bows;
+	private GetPassedTarget() {
+		if( this.navParams.get('targets') != undefined ) {		
+			this.targets = this.navParams.data.targets;
 		} else {
-			this.bows = [];
+			this.targets = [];
 		}
 
-		if( this.navParams.get('bow') != undefined ) {
-			this.bow = new BowClass( this.navParams.data.bow );		
+		if( this.navParams.get('target') != undefined ) {
+			this.target = new TargetClass( this.navParams.data.target );		
 		} else {			
 			this.isNew = true;
 			this.isEditMode = true;
-			this.bow = new BowClass({
-				id: this.common.GetRandomNumber(),
-				name: '',
-				SightMarks: new SightMarkClass({
-					// distance: '',
-					unit: 'meter',
-					// notch: '',
-					// position: '',
-					// note: ''
-				})
-			});
-		}
+			this.target = new TargetClass();
+		}		
 
 		if( this.navParams.get('callBack') != undefined ) {
 			this.callBack = this.navParams.data.callBack;	
@@ -75,35 +63,40 @@ export class BowPage {
 
 	private SetupForm() {
 		this.formValidation = this.formBuilder.group({
-			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ]
-		});		
+			distance: [ '', Validators.compose( [ Validators.required ] ) ],
+			size: [ '', Validators.compose( [ Validators.required ] ) ],
+			ends: [ '', Validators.compose( [ Validators.required ] ) ],
+		});
 	}
 
 	Back() {
-		this.common.Back();
-	}
-
-	Edit() {
-		this.isEditMode = !this.isEditMode;
+		this.navCtrl.pop();
 	}
 
 	Save() {
 		if( this.formValidation.valid ) {
-			this.bowService.Save( this.bow, this.isNew )
-				.then( () => {
-					this.navCtrl.pop();	
-					this.common.ShowToastSuccess( 'Saved!' );			
+			this.targetService.Save( this.targets, this.target, this.isNew )
+				.then( targets => {
+					this.callBack( targets )
+						.then( () => {
+							this.common.ShowToastSuccess( 'Saved!' );
+							this.navCtrl.pop();
+						});						
 				},
 				( error ) => {
 					this.common.ShowToastFail( 'Failed to save form!' );
 				})
-				.catch( ( error ) => {
+				.catch( (error) => {
 					this.common.ShowToastFail( JSON.stringify( error ) );
 				});
 
 		} else{
 			this.common.ShowToastFail( 'Cannot save form with errors!' );
 		}
+	}
+
+	Edit() {
+		this.isEditMode = !this.isEditMode;
 	}
 
 }

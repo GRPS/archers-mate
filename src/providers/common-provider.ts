@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { Const } from './constants';
 
+import * as _ from 'underscore';
+
 @Injectable()
 export class CommonProvider {
 
@@ -46,8 +48,9 @@ export class CommonProvider {
 		return dt.getTime();
 	}
 		
-	Back( rootPage, forceBack: boolean = false ) {
-		if( this.navCtrl.canGoBack() && !forceBack ) {
+	Back( rootPage: string = '', forceBack: boolean = false ) {
+		// if( this.navCtrl.canGoBack() && !forceBack ) {
+		if( !forceBack ) { 
 			this.navCtrl.pop();
 		} else {
 			this.navCtrl.setRoot( rootPage );
@@ -75,6 +78,17 @@ export class CommonProvider {
 		toast.onDidDismiss(() => {});
 	  
 		toast.present();
+	}
+
+	GetIndexOfObjectIdInArray( arr, id ) {
+		return _.findIndex( arr, { id: id } );
+	}
+
+	reorderItems( items: any, indexes ) {
+		let item = items[ indexes.from ];
+		items.splice( indexes.from, 1);
+		items.splice( indexes.to, 0, item);
+		return items;
 	}
 	
 }

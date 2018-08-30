@@ -38,7 +38,7 @@ export class RoundsPage {
 	}
 
 	Back() {
-		this.viewCtrl.dismiss();
+		this.navCtrl.pop();
 	}
 
 	CreateRound() {
@@ -49,12 +49,18 @@ export class RoundsPage {
 		this.roundService.Update( round );
 	}
 
-	DeleteRound( slidingItem, round: RoundClass) {
+	DeleteRound( slidingItem, round: RoundClass ) {
 		this.roundService.Delete( round )
 			.then( () => {
 				slidingItem.close(); 
-				this.Init();								
+				this.Init();	
+				
+				this.common.ShowToastSuccess( 'Deleted!' );
 			});
+	}
+
+	reorderItems( indexes ) {
+		this.rounds = this.common.reorderItems( this.rounds, indexes ); 
 	}
 
 }

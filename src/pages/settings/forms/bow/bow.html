@@ -22,12 +22,11 @@
 	</ion-list>
 
 	<ion-list no-lines *ngIf="isEditMode">
-		
-		<form [formGroup]="form">
+		<form [formGroup]="formValidation">
 
 			<ion-item>
 				<ion-label fixed>Name</ion-label>
-				<ion-input [formControl]="form.controls['name']" type="text" maxlength="30" [(ngModel)]="bow.name" placeholder="Recurve" [ngClass]="{'validator-error': !form.controls.name.valid && form.controls.name.dirty}"></ion-input>
+				<ion-input type="text" [(ngModel)]="bow.name" maxlength="30" placeholder=""  [formControl]="formValidation.controls['name']" [ngClass]="{'validator-error': !formValidation.controls.name.valid && formValidation.controls.name.dirty}"></ion-input>
 			</ion-item>
 			<help text="Between 2 and 30 characters."></help>
 

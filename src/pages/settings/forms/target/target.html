@@ -1,0 +1,52 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{ isNew ? 'Add ' : '' }}Target</ion-title>
+		<ion-buttons right>
+			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
+			<button ion-button *ngIf="!isEditMode" (click)="Edit()">Edit</button>
+		</ion-buttons>
+	</ion-navbar>
+  
+  </ion-header>
+
+<ion-content>
+
+	<ion-list no-lines *ngIf="!isEditMode">
+		<field [label]="'Distance'" [value]="target.distance"></field>	
+		<field [label]="'Size'" [value]="target.size"></field>
+		<field [label]="'Ends'" [value]="target.ends"></field>
+	</ion-list>
+
+	<ion-list no-lines *ngIf="isEditMode">
+		
+		<form [formGroup]="formValidation">
+
+			<ion-item>
+				<ion-label fixed>Distance</ion-label>
+				<ion-input type="number" [(ngModel)]="target.distance" placeholder="80" [formControl]="formValidation.controls['distance']" [ngClass]="{'validator-error': !formValidation.controls.distance.valid && formValidation.controls.distance.dirty}"></ion-input>
+			</ion-item>
+			<help text="Requires a number"></help>
+
+			<ion-item>
+				<ion-label fixed>Size</ion-label>
+				<ion-input type="number" [(ngModel)]="target.size" placeholder="80" [formControl]="formValidation.controls['size']" [ngClass]="{'validator-error': !formValidation.controls.size.valid && formValidation.controls.size.dirty}"></ion-input>
+			</ion-item>
+			<help text="Requires a number"></help>
+
+			<ion-item>
+				<ion-label fixed>Ends</ion-label>
+				<ion-input type="number" [(ngModel)]="target.ends" placeholder="6" [formControl]="formValidation.controls['ends']" [ngClass]="{'validator-error': !formValidation.controls.ends.valid && formValidation.controls.ends.dirty}"></ion-input>
+			</ion-item>
+			<help text="Requires a number"></help>
+
+		</form>
+
+	</ion-list>
+
+</ion-content>

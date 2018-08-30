@@ -24,14 +24,16 @@
 			<note [message]="'None available'"></note>
 		</ion-item>
 
-		<ion-item-sliding #slidingItem *ngFor="let bow of bows">
-			<button ion-item (click)="UpdateBow(bow)">        
-				{{bow?.name}}
-			</button>
-			<ion-item-options side="right">
-				<button ion-button color="danger" (click)="DeleteBow(slidingItem, bow)">Delete</button>
-			</ion-item-options> 
-		</ion-item-sliding>
+		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+			<ion-item-sliding #slidingItem *ngFor="let bow of bows">
+				<button ion-item (click)="UpdateBow(bow)">        
+					{{bow?.name}}
+				</button>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="DeleteBow(slidingItem, bow)">Delete</button>
+				</ion-item-options> 
+			</ion-item-sliding>
+		</ion-item-group>
 		
 	</ion-list>
  

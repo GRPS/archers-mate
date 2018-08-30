@@ -1,0 +1,65 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>{{ isNew ? 'Add ' : '' }}Sight Mark</ion-title>
+		<ion-buttons right>
+			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
+			<button ion-button *ngIf="!isEditMode" (click)="Edit()">Edit</button>
+		</ion-buttons>
+	</ion-navbar>
+  
+  </ion-header>
+
+<ion-content>
+
+	<ion-list no-lines *ngIf="!isEditMode">
+		<field [label]="'Distance'" [value]="sightMark.distance"></field>	
+		<field [label]="'Unit'" [value]="sightMark.unit"></field>
+		<field [label]="'Notch'" [value]="sightMark.notch"></field>
+		<field [label]="'Position'" [value]="sightMark.position"></field>
+		<field [label]="'Notes'" [value]="sightMark.note"></field>
+	</ion-list>
+
+	<ion-list no-lines *ngIf="isEditMode">
+		
+		<form [formGroup]="formValidation">
+
+			<ion-item>
+				<ion-label fixed>Distance</ion-label>
+				<ion-input type="number" [(ngModel)]="sightMark.distance" placeholder="80" [formControl]="formValidation.controls['distance']" [ngClass]="{'validator-error': !formValidation.controls.distance.valid && formValidation.controls.distance.dirty}"></ion-input>
+			</ion-item>
+			<help text="Requires a number"></help>
+
+			<ion-item>
+				<ion-label fixed>Unit</ion-label>
+				<ion-select name="unit" [(ngModel)]="sightMark.unit" [ngModelOptions]="{standalone: true}" interface="popover">
+					<ion-option value="meter">meter</ion-option>
+					<ion-option value="yard">yard</ion-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Notch</ion-label>
+				<ion-input type="text" [(ngModel)]="sightMark.notch" placeholder="4" [ngModelOptions]="{standalone: true}"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Position</ion-label>
+				<ion-input type="text" [(ngModel)]="sightMark.position" placeholder="2" [ngModelOptions]="{standalone: true}"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label fixed>Notes</ion-label>
+				<ion-input type="text" [(ngModel)]="sightMark.note" placeholder="Remember to ..." [ngModelOptions]="{standalone: true}"></ion-input>
+			</ion-item>
+			
+		</form>
+
+	</ion-list>
+
+</ion-content>

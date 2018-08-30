@@ -24,26 +24,41 @@
 		<field [label]="'Age'" [value]="shooter.age"></field>		
 
 		<ion-item-divider color="archers-light-blue">
-			Shooter's Bows 
-			<ion-badge color="archers-heading">{{ shooter.bows?.length == 0 ? 0 : shooter.bows?.length - 1 }}</ion-badge>
-			<button ion-button item-right clear color="dark" (click)="CreateShooterBow()">Add</button>
+			Shooter Bows 
+			<ion-badge color="archers-heading">{{ shooter.bows?.length == 0 ? 0 : shooter.bows?.length }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="AddShooterBow()" *ngIf="showButtonAdd">Add</button>
 		</ion-item-divider>
+
+		<ion-item *ngIf="shooter.bows?.length==0">
+			<note [message]="'None available'"></note>
+		</ion-item>
+
+		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+			<ion-item-sliding #slidingItem *ngFor="let bow of shooter.bows">
+				<button ion-item (click)="UpdateShooterBow(bow);">
+						{{ bow.name }}<p><small>Sight Marks {{ bow.sightMarks?.length }}</small></p>
+				</button>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="DeleteShooterBow(slidingItem, bow)">Delete</button>
+				</ion-item-options> 
+			</ion-item-sliding>
+		</ion-item-group>
 
 	</ion-list>
 
 	<ion-list no-lines *ngIf="isEditMode">
 		
-		<form [formGroup]="form">
+		<form [formGroup]="formValidation">
 
 			<ion-item>
 				<ion-label fixed>Name</ion-label>
-				<ion-input [formControl]="form.controls['name']" type="text" maxlength="30" [(ngModel)]="shooter.name" placeholder="Joe Public" [ngClass]="{'validator-error': !form.controls.name.valid && form.controls.name.dirty}"></ion-input>
+				<ion-input type="text" maxlength="30" [(ngModel)]="shooter.name" placeholder="Joe Public" [formControl]="formValidation.controls['name']" [ngClass]="{'validator-error': !formValidation.controls.name.valid && formValidation.controls.name.dirty}"></ion-input>
 			</ion-item>
 			<help text="Between 2 and 30 characters."></help>
 			
 			<ion-item>
 				<ion-label fixed>Initials</ion-label>
-				<ion-input [formControl]="form.controls['initials']" type="text" maxlength="3" [(ngModel)]="shooter.initials" placeholder="JP1" [ngClass]="{'validator-error': !form.controls.initials.valid && form.controls.initials.dirty}"></ion-input>				
+				<ion-input type="text" maxlength="3" [(ngModel)]="shooter.initials" placeholder="JP1" [formControl]="formValidation.controls['initials']" [ngClass]="{'validator-error': !formValidation.controls.initials.valid && formValidation.controls.initials.dirty}"></ion-input>				
 			</ion-item>
 			<help text="Between 2 and 3 characters."></help>
 
@@ -57,7 +72,7 @@
 
 			<ion-item>
 				<ion-label fixed>Age</ion-label>
-				<ion-input [formControl]="form.controls['age']" type="number" maxlength="2" [(ngModel)]="shooter.age" placeholder="25" [ngClass]="{'validator-error': !form.controls.age.valid && form.controls.age.dirty}"></ion-input>				
+				<ion-input type="number" [(ngModel)]="shooter.age" maxlength="2" placeholder="25" [formControl]="formValidation.controls['age']" [ngClass]="{'validator-error': !formValidation.controls.age.valid && formValidation.controls.age.dirty}"></ion-input>				
 			</ion-item>
 
 		</form>

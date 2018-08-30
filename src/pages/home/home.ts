@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActionSheetController , IonicPage, LoadingController, ModalController, NavController, NavParams } from 'ionic-angular';
+import { ActionSheetController , IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 
 import { Const } from '../../providers/constants';
 import { Global } from '../../providers/globals';
@@ -7,6 +7,7 @@ import { CommonProvider } from '../../providers/common-provider';
 import { BowService } from '../../providers/bow-service';
 import { RoundService } from '../../providers/round-service';
 import { ShooterService } from '../../providers/shooter-service';
+import { RoundClass } from '../../models/round-class';
 
 @IonicPage()
 @Component({
@@ -24,7 +25,6 @@ export class HomePage {
 				private actionCtrl: ActionSheetController,
 				public navCtrl: NavController, 
 				public loadingCtrl: LoadingController,
-				private modalCtrl: ModalController,
 				public navParams: NavParams,
 				public common: CommonProvider,
 				public bowService: BowService,
@@ -80,7 +80,11 @@ export class HomePage {
 			if( Global.rounds == null ) {
 				this.roundService.LoadAll()
 					.subscribe( (rounds) => {
-						Global.rounds = rounds;
+						let newRounds: RoundClass[] = [];
+						for( let round of rounds ) {
+							newRounds.push( this.roundService.CalculateValues( round ) );
+						}
+						Global.rounds = newRounds;
 						this.haveLoadedRounds = true;
 						this.CheckIfReadyNow();
 					}),
@@ -100,6 +104,9 @@ export class HomePage {
 					err => this.common.AddWarning( err );
 			}
 
+		} else {
+			console.log( Global );
+			
 		}
 
 	}
@@ -159,16 +166,7 @@ export class HomePage {
 	}
 
 	LoadSettings( page: string ) {
-		let settingsModal = this.modalCtrl.create( page );
-		settingsModal.onDidDismiss(data => {
-			if( !data ) {
-				console.log('LoadSettings cancel');				
-			} else {			
-				console.log('LoadSettings saved');
-				console.log( Global );						
-			}
-		});
-		settingsModal.present();
+		this.navCtrl.push( page );
 	}
 
 }

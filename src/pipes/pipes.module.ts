@@ -4,17 +4,13 @@ import { RoundPipe } from './round';
 import { RoundTypePipe } from './round-type';
 import { RoundSeasonPipe } from './round-season';
 import { RoundOrganisationPipe } from './round-organisation';
-import { NumberIncPipe } from './number-inc';
-import { ShooterNotDefaultPipe } from './shooter-not-default';
 
 export const pipes = [
 	ShooterInitialsPipe,
     RoundPipe,
     RoundTypePipe,
     RoundSeasonPipe,
-    RoundOrganisationPipe,
-    NumberIncPipe,
-    ShooterNotDefaultPipe
+    RoundOrganisationPipe
 ];
 
 @NgModule({

@@ -1,0 +1,45 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>Bow</ion-title>
+	</ion-navbar>
+  
+  </ion-header>
+
+<ion-content>
+
+	<ion-list no-lines>
+
+		<field [label]="'Name'" [value]="bow.name"></field>
+
+		<ion-item-divider color="archers-light-blue">
+			Bow Sight Marks 
+			<ion-badge color="archers-heading">{{ bow.sightMarks?.length == 0 ? 0 : bow.sightMarks?.length }}</ion-badge>
+			<button ion-button item-right clear color="dark" (click)="AddBowSightMark()">Add</button>
+		</ion-item-divider>
+
+		<ion-item *ngIf="bow.sightMarks?.length==0">
+			<note [message]="'None available'"></note>
+		</ion-item>
+
+		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
+			<ion-item-sliding #slidingItem *ngFor="let sightmark of bow.sightMarks">
+				<button ion-item (click)="UpdateBowSightMark(sightmark)">
+						{{ sightmark.distance }} {{ sightmark.unit }}
+						<p><small>Notch: {{ sightmark.notch }}, Position: {{ sightmark.position }}</small></p>
+						<p><small>Notes: {{ sightmark.note }}</small></p>
+				</button>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="DeleteBowSightMark(slidingItem, sightmark)">Delete</button>
+				</ion-item-options> 
+			</ion-item-sliding>
+		</ion-item-group>
+		
+	</ion-list>
+
+</ion-content>

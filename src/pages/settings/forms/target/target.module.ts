@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { RoundsPage } from './rounds';
+import { TargetPage } from './target';
 
 import { ComponentsModule } from '../../../../components/components.module';
 
 @NgModule({
   declarations: [
-    RoundsPage,
+    TargetPage,
   ],
   imports: [
-    IonicPageModule.forChild(RoundsPage),
+    IonicPageModule.forChild(TargetPage),
     ComponentsModule
   ],
   exports: [
-    RoundsPage,
+    TargetPage,
   ]
 })
-export class RoundsPageModule {}
+export class TargetPageModule {}

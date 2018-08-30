@@ -1,4 +1,4 @@
-import { SightMarkClass } from './sightmark-class';
+import { SightMarkClass } from './sight-mark-class';
 
 export class BowClass {
 
