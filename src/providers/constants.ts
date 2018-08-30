@@ -1,6 +1,7 @@
 export const Const = {
 
 	LOGGING: true,
+	IS_CORDOVA: false,
 	
 	URL: {
 		BOWS: './assets/files/bows.json',
@@ -10,6 +11,7 @@ export const Const = {
 
 	MISC: {
 		CURRENT_PAGE: '',
+		CORDOVA: "cordova",
 	},
 
 	PAGES: {
@@ -19,6 +21,7 @@ export const Const = {
 			SHOOTERS: 'ShootersPage',
 			BOWS: 'BowsPage',
 			ROUNDS: 'RoundsPage',
+			ABOUT: 'AboutPage',
 		},
 		SHOOTER_EDIT: 'ShooterPage',
 		BOW_EDIT: 'BowPage',

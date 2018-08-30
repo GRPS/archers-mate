@@ -47,10 +47,6 @@ export class ShooterService {
 		this.navCtrl.push( Const.PAGES.SHOOTER_EDIT, { shooter: shooter } );
 	}
 
-	Read( shooter: ShooterClass ) {
-		console.log( 'Read shooter' );	
-	}
-
 	Delete( shooter: ShooterClass ) {
 		return new Promise( resolve => {
 			let newShooters = Global.shooters.filter( obj => obj !== shooter );
@@ -61,7 +57,6 @@ export class ShooterService {
 
 	Save( shooter: ShooterClass, isNew: boolean ): Promise<boolean> {
 		return new Promise( resolve => {
-			console.log( shooter );	
 
 			if( isNew ) {
 				shooter.id = this.common.GetRandomNumber();
@@ -74,13 +69,8 @@ export class ShooterService {
 				}
 			}
 
-			console.log(Global);
-			
-			if( 1 == 1 ) {
-				resolve( true ); //Code has worked and we want to return a success to the caller.
-			} else {
-				resolve( false ); //Code has worked, but we want to return a fail to the caller.
-			}
+			resolve();
+
 		});		
 	}
 	

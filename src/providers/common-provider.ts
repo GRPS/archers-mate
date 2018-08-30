@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { App, NavController, ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
+import { AppVersion } from '@ionic-native/app-version';
 
 import { Const } from './constants';
+import { AppClass } from '../models/app-class';
 
 import * as _ from 'underscore';
+// import { resolveDefinition } from '../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
 export class CommonProvider {
@@ -13,6 +16,7 @@ export class CommonProvider {
 
 	constructor(
 				app: App,
+				public appVersion: AppVersion,
 				private toastCtrl: ToastController,
 				) {
 		this.AddLog( 'CommonProvider loaded' );
@@ -91,4 +95,26 @@ export class CommonProvider {
 		return items;
 	}
 	
+	GetApp(): Promise<AppClass>  {
+
+		let app = new AppClass();
+	
+		//if cordova the do appVersion.something to get app details
+		if( Const.IS_CORDOVA ) {
+			return Promise.all( [
+				this.appVersion.getAppName().then( result => { app.appName = result; }),
+				this.appVersion.getVersionNumber().then( result => { app.versionNumber = result; }),
+			] ).then( value => {
+				return app;
+			} );
+		} else {
+			return new Promise( function( resolve, reject ){
+			app.appName = '';
+			app.versionNumber = '';
+			resolve( app );
+			});
+		}
+
+	}
+		
 }

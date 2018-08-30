@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { App, ModalController, NavController } from 'ionic-angular';
+import { App, NavController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -21,7 +21,6 @@ export class RoundService {
 	constructor(
 				public app: App,
 				public http: HttpClient,
-				private modalCtrl: ModalController,
 				public common: CommonProvider,
 				public targetService: TargetService
 			) {
@@ -52,20 +51,8 @@ export class RoundService {
 		this.navCtrl.push( Const.PAGES.ROUND_EDIT );
 	}
 
-	Read( round: RoundClass ) {
-		console.log( 'Read bow' );	
-	}
-
 	Update( round: RoundClass ) {
-		let modal = this.modalCtrl.create( Const.PAGES.ROUND_EDIT, { round: round } );
-		modal.onDidDismiss( round => {
-			if( !round ) {
-				console.log('cancel');				
-			} else {
-				console.log(round);				
-			}
-		});
-		modal.present();
+		this.navCtrl.push( Const.PAGES.ROUND_EDIT, { round: round } );
 	}
 
 	Delete( round: RoundClass ) {
@@ -78,7 +65,6 @@ export class RoundService {
 
 	Save( round: RoundClass, isNew: boolean ): Promise<boolean> {
 		return new Promise( resolve => {
-			console.log( round );	
 
 			if( isNew ) {
 				round.id = this.common.GetRandomNumber();
@@ -88,24 +74,28 @@ export class RoundService {
 				Global.rounds[ index ] = round;
 			}
 
-			if( 1 == 1 ) {
-				resolve( true ); //Code has worked and we want to return a success to the caller.
-			} else {
-				resolve( false ); //Code has worked, but we want to return a fail to the caller.
-			}
+			resolve();
+
 		});		
 	}
 
 	CalculateValues( round: RoundClass ) {
-		let maxScore = 0;
+		let maxScore: number = 0;
+		let maxEnds: number = 0;
+		let maxArrows: number = 0;
+
 		let targets: TargetClass[] = [];
 		for( let target of round.targets ) {
 			target = this.targetService.CalculateValues( round, target );
 			targets.push( target );
-			maxScore += target.maxScore;
+			maxScore += Number( target.maxScore );
+			maxEnds += Number( target.ends );
+			maxArrows += Number( target.totalArrows );
 		}
 		round.targets = targets;
 		round.maxScore = maxScore;
+		round.maxEnds = maxEnds;
+		round.maxArrows = maxArrows;
 		return round;
 	}
 

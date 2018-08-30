@@ -18,6 +18,7 @@
 <ion-content>
 
 	<ion-list no-lines *ngIf="!isEditMode">
+
 		<field [label]="'Name'" [value]="round.name"></field>	
 		<field [label]="'Type'" [value]="round.type"></field>
 		<field [label]="'Organisation'" [value]="round.organisation"></field>
@@ -25,12 +26,13 @@
 		<field [label]="'Distance'" [value]="round.distance"></field>
 		<field [label]="'Target Size'" [value]="round.unit"></field>	
 		<field [label]="'Scoring'" [value]="round.scoring"></field>
-		<field [label]="'Arrows'" [value]="round.arrows"></field>
-		<field [label]="'Max Score'" [value]="round.maxScore"></field>
+		<field [label]="'Arrows'" [value]="round.arrows"></field>		
 
 		<ion-item-divider color="archers-light-blue">
-			Targets
-			<ion-badge color="archers-heading">{{ round.taregts?.length == 0 ? 0 : round.targets?.length }}</ion-badge>
+			Targets <ion-badge color="archers-heading">{{ round.taregts?.length == 0 ? 0 : round.targets?.length }}</ion-badge>
+			Ends <ion-badge color="archers-heading">{{ round?.maxEnds }}</ion-badge>
+			Arrows <ion-badge color="archers-heading">{{ round?.maxArrows }}</ion-badge>
+			Score <ion-badge color="archers-heading">{{ round?.maxScore }}</ion-badge>
 			<button ion-button item-right clear color="dark" (click)="AddRoundTarget()">Add</button>
 		</ion-item-divider>
 
@@ -41,7 +43,7 @@
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
 			<ion-item-sliding #slidingItem *ngFor="let target of round.targets">
 				<button ion-item (click)="UpdateRoundTarget(target)">
-					<p>Distance: {{ target?.distance }} {{ round?.distance }}s, Size: {{ target?.size }} {{ round.unit }}</p>
+					<p>Distance: {{ target?.distance }} {{ round?.distance }}s, Size: {{ target?.size }} {{ round?.unit }}</p>
 					<p>Ends: {{ target?.ends }}, Arrows: {{ target?.totalArrows }}, Max Score: {{ target?.maxScore }}</p>
 				</button>
 				<ion-item-options side="right">
@@ -49,7 +51,7 @@
 				</ion-item-options> 
 			</ion-item-sliding>
 		</ion-item-group>
-
+		
 	</ion-list>
 
 	<ion-list no-lines *ngIf="isEditMode">

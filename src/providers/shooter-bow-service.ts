@@ -25,53 +25,7 @@ export class ShooterBowService {
 		this.common.AddLog( 'ShooterBowService loaded' );
 		this.navCtrl = app.getActiveNavs()[0];
 	}
-/*
-	Create( callBack: any,  bows: BowClass[] )  {
-		this.navCtrl.push( Const.PAGES.BOW_EDIT, { callBack: callBack, bows: bows } );
-	}
 
-	Read( bow: BowClass ) {
-		console.log( 'Read bow' );	
-	}
-
-	Update( bows: BowClass[], bow: BowClass ) : Promise<BowClass[]> {		
-		return new Promise( resolve => {
-			let modal = this.modalCtrl.create( Const.PAGES.BOW_EDIT, { bows: bows, bow: bow } );
-			modal.onDidDismiss( bow => {
-				if( !bow ) {
-					console.log('cancel');		// Return the passed in targets as nothing has changed.	
-					resolve( bows );		
-				} else {
-					console.log(bow);		//Find the passed target in the passed tasrgets and update it with our modified target.
-					let index: number = this.common.GetIndexOfObjectIdInArray( bows, bow.id );
-					bows[ index ] = bow;
-					resolve( bows );		
-				}
-			});
-			modal.present();	
-		});	
-	}
-
-	Delete( bows: BowClass[], bow: BowClass ): Promise<BowClass[]> {
-		return new Promise( resolve => {
-			resolve( bows.filter( obj => obj !== bow ) );
-		});	
-	}	
-
-	Save( bows: BowClass[], bow: BowClass, isNew: boolean ): Promise<BowClass[]> {
-		return new Promise( resolve => {
-			if( isNew ) {
-				bow.id = this.common.GetRandomNumber();
-				bows.push( bow );
-			} else {
-				let index: number = this.common.GetIndexOfObjectIdInArray( bows, bow.id );
-				bows[ index ] = bow;
-			}
-
-			resolve( bows );
-		});		
-	}
-*/
 	CreateShooterBow( bows: BowClass[] ): Promise<BowClass[]> {
 		return new Promise( resolve => {
 			resolve( bows );

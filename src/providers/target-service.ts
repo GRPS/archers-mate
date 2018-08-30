@@ -29,10 +29,6 @@ export class TargetService {
 		this.navCtrl.push( Const.PAGES.TARGET_EDIT, { callBack: callBack, targets: targets } );
 	}
 
-	Read( target: TargetClass ) {
-		console.log( 'Read target' );	
-	}
-
 	Delete( targets: TargetClass[], target: TargetClass ): Promise<TargetClass[]> {
 		return new Promise( resolve => {
 			resolve( targets.filter( obj => obj !== target ) );

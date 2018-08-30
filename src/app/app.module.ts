@@ -4,6 +4,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { AppVersion } from '@ionic-native/app-version';
+import { Clipboard } from '@ionic-native/clipboard';
 
 import { MyApp } from './app.component';
 
@@ -38,6 +40,8 @@ import { ShooterBowService } from '../providers/shooter-bow-service';
 		StatusBar,
 		SplashScreen,
 		{provide: ErrorHandler, useClass: IonicErrorHandler},
+		AppVersion,
+		Clipboard,
 		CommonProvider,
 		BowService,
 		RoundService,

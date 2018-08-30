@@ -1,0 +1,33 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>About</ion-title>
+	</ion-navbar>
+  
+  </ion-header>
+  
+  <ion-content no-bounce>
+   
+	<ion-list no-lines>
+
+		<ion-item-divider color="archers-light-blue">App</ion-item-divider>
+
+			<field [label]="'Name'" [value]="app?.appName"></field>
+			<field [label]="'Version'" [value]="app?.versionNumber"></field>
+
+			<ion-item-divider color="archers-light-blue">Global
+					<button ion-button item-right clear color="dark" (click)="CopyToClipboard()">Copy</button>
+			</ion-item-divider>
+
+			<ion-item text-wrap>
+				{{ global }}
+			</ion-item>
+
+	</ion-list>
+   
+  </ion-content>

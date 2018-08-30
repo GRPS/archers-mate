@@ -14,6 +14,8 @@ export class RoundClass {
 	targets: 		TargetClass[];
 	totalArrows:	number;
 	maxScore:		number;
+	maxEnds:		number;
+	maxArrows:		number;
 
 	constructor( values: Object = {} ) {
 		Object.assign(this, values);		

@@ -29,13 +29,13 @@
 
 			<ion-item>
 				<ion-label fixed>Distance</ion-label>
-				<ion-input type="number" [(ngModel)]="target.distance" placeholder="80" [formControl]="formValidation.controls['distance']" [ngClass]="{'validator-error': !formValidation.controls.distance.valid && formValidation.controls.distance.dirty}"></ion-input>
+				<ion-input type="number" [(ngModel)]="target.distance" placeholder="100" [formControl]="formValidation.controls['distance']" [ngClass]="{'validator-error': !formValidation.controls.distance.valid && formValidation.controls.distance.dirty}"></ion-input>
 			</ion-item>
 			<help text="Requires a number"></help>
 
 			<ion-item>
 				<ion-label fixed>Size</ion-label>
-				<ion-input type="number" [(ngModel)]="target.size" placeholder="80" [formControl]="formValidation.controls['size']" [ngClass]="{'validator-error': !formValidation.controls.size.valid && formValidation.controls.size.dirty}"></ion-input>
+				<ion-input type="number" [(ngModel)]="target.size" placeholder="122" [formControl]="formValidation.controls['size']" [ngClass]="{'validator-error': !formValidation.controls.size.valid && formValidation.controls.size.dirty}"></ion-input>
 			</ion-item>
 			<help text="Requires a number"></help>
 

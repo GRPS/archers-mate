@@ -16,7 +16,7 @@ import { RoundClass } from '../../models/round-class';
 })
 export class HomePage {
 
-  	loading;
+  loading;
 	haveLoadedBows: boolean = false;
 	haveLoadedRounds: boolean = false;
 	haveLoadedShooters: boolean = false;
@@ -105,10 +105,11 @@ export class HomePage {
 			}
 
 		} else {
-			console.log( Global );
-			
+						
 		}
 
+		console.log( JSON.stringify( Global ) ); 
+		
 	}
 
 	CheckIfReadyNow() {
@@ -152,6 +153,12 @@ export class HomePage {
 				text: 'Rounds',
 				handler: () => {
 				  this.LoadSettings( Const.PAGES.SETTINGS.ROUNDS );
+				}
+			  },
+			  {
+				text: 'About',
+				handler: () => {
+				  this.LoadSettings( Const.PAGES.SETTINGS.ABOUT );
 				}
 			  },
 			  {

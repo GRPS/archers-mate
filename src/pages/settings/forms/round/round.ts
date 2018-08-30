@@ -65,7 +65,7 @@ export class RoundPage {
 			});
 			newTarget = this.targetService.CalculateValues( this.round, newTarget );
 
-			this.round.targets = [];//[ newTarget ];
+			this.round.targets = [];
 
 			this.round = this.roundService.CalculateValues( this.round );
 
@@ -121,6 +121,7 @@ export class RoundPage {
 				
 				let index: number = this.common.GetIndexOfObjectIdInArray( Global.rounds, this.round.id );
 				Global.rounds[ index ] = this.round;
+				this.round = this.roundService.CalculateValues( this.round );
 
 				this.common.ShowToastSuccess( 'Deleted!' );
 			});	
@@ -129,6 +130,7 @@ export class RoundPage {
 	RefreshRoundTarget = ( targets: TargetClass[] ) => {
 		return new Promise( resolve => {
 			this.round.targets = targets;	
+			this.round = this.roundService.CalculateValues( this.round );
 			resolve();
 		});
 	}

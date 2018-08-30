@@ -40,10 +40,6 @@ export class BowService {
 		this.navCtrl.push( Const.PAGES.BOW_EDIT, { bow: bow } );
 	}
 
-	Read( bow: BowClass ) {
-		console.log( 'Read bow' );	
-	}
-
 	Delete( bow: BowClass ) {
 		return new Promise( resolve => {
 			let newBows = Global.bows.filter( obj => obj !== bow );
