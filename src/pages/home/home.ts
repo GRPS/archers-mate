@@ -10,6 +10,7 @@ import { ShooterService } from '../../providers/shooter-service';
 import { RoundClass } from '../../models/round-class';
 import { BowClass } from '../../models/bow-class';
 import { ShooterClass } from '../../models/shooter-class';
+import { SettingClass } from '../../models/setting-class';
 
 @IonicPage()
 @Component({
@@ -22,6 +23,8 @@ export class HomePage {
 	haveLoadedBows: boolean = false;
 	haveLoadedRounds: boolean = false;
 	haveLoadedShooters: boolean = false;
+	haveLoadedSettings: boolean = false;
+
 
 	constructor(
 				private actionCtrl: ActionSheetController,
@@ -143,16 +146,35 @@ export class HomePage {
 						}
 					});
 
+					this.common.GetFromStorage( Const.LABEL.SETTINGS )
+						.then( res => {
+							
+							if( res == null ) {
+
+								Global.setting = new SettingClass( {
+									showToastOnSave: true
+								});
+
+								this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting );
+								this.haveLoadedSettings = true;
+								this.CheckIfReadyNow();	
+
+							} else {
+								Global.setting = res;
+								this.haveLoadedSettings = true;
+								this.CheckIfReadyNow();	
+							}
+							
+						});
+
 		} else {
 						
 		}
 
-		console.log( JSON.stringify( Global ) ); 
-		
 	}
 
 	CheckIfReadyNow() {
-		if( this.haveLoadedRounds && this.haveLoadedBows && this.haveLoadedShooters ) {
+		if( this.haveLoadedRounds && this.haveLoadedBows && this.haveLoadedShooters && this.haveLoadedSettings ) {
 			this.loading.dismiss();
 			this.common.AddLog( Global );      
 		}

@@ -5,6 +5,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { Storage } from '@ionic/storage';
 
 import { Const } from './constants';
+import { Global } from './globals';
 import { AppClass } from '../models/app-class';
 
 import * as _ from 'underscore';
@@ -64,8 +65,10 @@ export class CommonProvider {
 		}
 	}
 
-	ShowToastSuccess( message: string ) {
-		this.ShowToast( message, Const.TOAST.SUCCESS, 1000, false, '', 'bottom' );
+	ShowToastSuccess( message: string, forceShow: boolean = false ) {
+		if( forceShow || Global.setting.showToastOnSave ) {
+			this.ShowToast( message, Const.TOAST.SUCCESS, 1000, false, '', 'bottom' );
+		}
 	}
 
 	ShowToastFail( message: string ) {

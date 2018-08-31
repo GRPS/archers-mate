@@ -4,5 +4,6 @@ export const Global: IGlobal = {
 	rounds: null, 
 	bows: null,
 	shooter: null,
-	shooters: null
+	shooters: null,
+	setting: null,
 };

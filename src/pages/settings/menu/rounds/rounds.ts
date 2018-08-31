@@ -63,6 +63,10 @@ export class RoundsPage {
 
 	reorderItems( indexes ) {
 		this.rounds = this.common.reorderItems( this.rounds, indexes ); 
+
+		this.common.SaveToStorage( Const.LABEL.ROUNDS, this.rounds );
+
+		this.common.ShowToastSuccess( 'Saved!' );
 	}
 
 }

@@ -17,7 +17,8 @@ export const Const = {
 	LABEL: {
 		SHOOTERS: 'shooters',
 		BOWS: 'bows',
-		ROUNDS: 'rounds'
+		ROUNDS: 'rounds',
+		SETTINGS: 'settings'
 	},
 
 	PAGES: {

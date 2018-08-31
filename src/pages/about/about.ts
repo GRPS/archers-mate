@@ -47,7 +47,7 @@ export class AboutPage {
   
 	ExportToClipboard() {
 		this.clipboard.copy( this.global );	
-		this.common.ShowToastSuccess( 'Clipboard updated.' );
+		this.common.ShowToastSuccess( 'Clipboard updated.', true );
 	}
 
 }

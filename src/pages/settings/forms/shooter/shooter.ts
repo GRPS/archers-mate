@@ -152,6 +152,7 @@ export class ShooterPage {
 
 	reorderItems( indexes ) {
 		this.shooter.bows = this.common.reorderItems( this.shooter.bows, indexes );
+		this.UpdateGlobal();
 	}
 
 }

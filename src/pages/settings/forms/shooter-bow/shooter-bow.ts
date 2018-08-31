@@ -99,6 +99,10 @@ export class ShooterBowPage {
 		let bow: BowClass = this.shooter.bows[ indexBow ];
 		this.shooter.bows[ indexBow ].sightMarks = this.common.reorderItems( bow.sightMarks, indexes );
 		Global.shooters[ indexShooter ] = this.shooter;
+
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
+
+		this.common.ShowToastSuccess( 'Saved!' );
 	}
 
 }

@@ -64,6 +64,10 @@ export class ShootersPage {
 
 	reorderItems( indexes ) {
 		this.shooters = this.common.reorderItems( this.shooters, indexes );
+
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, this.shooters );
+
+		this.common.ShowToastSuccess( 'Saved!' );
 	}
 
 }

@@ -63,6 +63,10 @@ export class BowsPage {
 
 	reorderItems( indexes ) {
 		this.bows = this.common.reorderItems( this.bows, indexes );
+
+		this.common.SaveToStorage( Const.LABEL.BOWS, this.bows );
+
+		this.common.ShowToastSuccess( 'Saved!' );
 	}
 
 }

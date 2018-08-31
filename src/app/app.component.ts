@@ -27,27 +27,6 @@ export class MyApp {
 			if( this.platform.is( Const.MISC.CORDOVA ) ) {
 				Const.IS_CORDOVA = true;
 			}
-console.log( Const.IS_CORDOVA );
-
-			// Handle Android back button
-			// platform.registerBackButtonAction( () => {
-
-			// 	let navCtrl = this.app.getActiveNavs()[0];
-			// 	let activePage = navCtrl.getActive();
-
-			// 	switch ( activePage.name ) {
-			// 		case Const.PAGES.SETTINGS.GENERAL :
-			// 		case Const.PAGES.SETTINGS.BOWS :
-			// 		case Const.PAGES.SETTINGS.SHOOTERS :
-			// 		case Const.PAGES.SETTINGS.ROUNDS :
-			// 			navCtrl.setRoot( Const.PAGES.HOME );
-			// 			break;
-			// 		default:
-			// 			navCtrl.pop();
-			// 			break;
-			// 	}
-
-			// });
 
     	});
 	}
