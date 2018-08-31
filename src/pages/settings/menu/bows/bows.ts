@@ -55,6 +55,8 @@ export class BowsPage {
 				slidingItem.close(); 
 				this.Init();	
 				
+				this.common.SaveToStorage( Const.LABEL.BOWS, this.bows );
+
 				this.common.ShowToastSuccess( 'Deleted!' );
 			});
 	}

@@ -69,13 +69,13 @@ export class HomePage {
 			
 			this.loading.present();
 
-			this.common.GetFromStorage( 'bows' )
+			this.common.GetFromStorage( Const.LABEL.BOWS )
 					.then( res => {
 						if( res == null ) {
 							this.bowService.LoadAll()
 								.subscribe( (bows) => {								
 									Global.bows = bows;
-									this.common.SaveToStorage( 'bows', Global.bows );
+									this.common.SaveToStorage( Const.LABEL.BOWS, Global.bows );
 									this.haveLoadedBows = true;
 									this.CheckIfReadyNow();
 								}),
@@ -91,7 +91,7 @@ export class HomePage {
 						}
 					});
 
-				this.common.GetFromStorage( 'rounds' )
+				this.common.GetFromStorage( Const.LABEL.ROUNDS )
 					.then( res => {
 						if( res == null ) {
 							this.roundService.LoadAll()
@@ -101,7 +101,7 @@ export class HomePage {
 										newRounds.push( this.roundService.CalculateValues( round ) );
 									}
 									Global.rounds = newRounds;
-									this.common.SaveToStorage( 'rounds', Global.rounds );
+									this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds );
 									this.haveLoadedRounds = true;
 									this.CheckIfReadyNow();
 								}),
@@ -117,7 +117,7 @@ export class HomePage {
 						}
 					});
 
-				this.common.GetFromStorage( 'shooters' )
+				this.common.GetFromStorage( Const.LABEL.SHOOTERS )
 					.then( res => {
 						if( res == null ) {
 							this.shooterService.LoadAll()
@@ -125,7 +125,7 @@ export class HomePage {
 									Global.shooters = shooters;
 									Global.shooter = this.shooterService.GetDefault( shooters );
 									
-									this.common.SaveToStorage( 'shooters', Global.shooters );
+									this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
 									this.haveLoadedShooters = true;
 									this.CheckIfReadyNow();				
 								}),

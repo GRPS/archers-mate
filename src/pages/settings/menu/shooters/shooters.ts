@@ -56,6 +56,8 @@ export class ShootersPage {
 				slidingItem.close(); 
 				this.Init();
 
+				this.common.SaveToStorage( Const.LABEL.SHOOTERS, this.shooters );
+
 				this.common.ShowToastSuccess( 'Deleted!' );
 			});
 	}

@@ -45,8 +45,9 @@ export class AboutPage {
 		this.navCtrl.pop();
 	}
   
-	CopyToClipboard() {
+	ExportToClipboard() {
 		this.clipboard.copy( this.global );	
 		this.common.ShowToastSuccess( 'Clipboard updated.' );
 	}
+
 }

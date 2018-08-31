@@ -14,6 +14,12 @@ export const Const = {
 		CORDOVA: "cordova",
 	},
 
+	LABEL: {
+		SHOOTERS: 'shooters',
+		BOWS: 'bows',
+		ROUNDS: 'rounds'
+	},
+
 	PAGES: {
 		HOME: 'HomePage',
 		SETTINGS: {

@@ -119,9 +119,7 @@ export class RoundPage {
 				slidingItem.close(); 
 				this.round.targets = targets;	
 				
-				let index: number = this.common.GetIndexOfObjectIdInArray( Global.rounds, this.round.id );
-				Global.rounds[ index ] = this.round;
-				this.round = this.roundService.CalculateValues( this.round );
+				this.UpdateGlobal();
 
 				this.common.ShowToastSuccess( 'Deleted!' );
 			});	
@@ -131,8 +129,21 @@ export class RoundPage {
 		return new Promise( resolve => {
 			this.round.targets = targets;	
 			this.round = this.roundService.CalculateValues( this.round );
+			this.UpdateGlobal();
+
+			this.common.ShowToastSuccess( 'Saved!' );
+
 			resolve();
 		});
+	}
+
+	UpdateGlobal() {
+		this.round = this.roundService.CalculateValues( this.round );
+		let index: number = this.common.GetIndexOfObjectIdInArray( Global.rounds, this.round.id );
+		Global.rounds[ index ] = this.round;
+
+		this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds );
+
 	}
 
 	reorderItems( indexes ) {

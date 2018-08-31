@@ -68,9 +68,7 @@ export class ShooterBowPage {
 			slidingItem.close(); 
 			this.bow.sightMarks = sightMarks;	
 			
-			let indexShooter: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, this.shooter.id );
-			let indexBow: number = this.common.GetIndexOfObjectIdInArray( Global.shooters[ indexShooter ].bows, this.bow.id );
-			Global.shooters[ indexShooter ].bows[ indexBow ].sightMarks = sightMarks;
+			this.UpdateGlobal( sightMarks );
 
 			this.common.ShowToastSuccess( 'Deleted!' );
 		});
@@ -79,8 +77,20 @@ export class ShooterBowPage {
 	RefreshBowSightMark = ( sightMarks: SightMarkClass[] ) => {
 		return new Promise( resolve => {		
 			this.bow.sightMarks = sightMarks;
+			this.UpdateGlobal( sightMarks );
+
+			this.common.ShowToastSuccess( 'Saved!' );
+
 			resolve();
 		});
+	}
+
+	UpdateGlobal( sightMarks: SightMarkClass[] ) {
+		let indexShooter: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, this.shooter.id );
+		let indexBow: number = this.common.GetIndexOfObjectIdInArray( Global.shooters[ indexShooter ].bows, this.bow.id );
+		Global.shooters[ indexShooter ].bows[ indexBow ].sightMarks = sightMarks;
+
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
 	}
 
 	reorderItems( indexes ) {

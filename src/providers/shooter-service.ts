@@ -69,7 +69,7 @@ export class ShooterService {
 				}
 			}
 
-			this.common.SaveToStorage( 'shooters', Global.shooters )
+			this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
 				.then( () => {
 					resolve();
 				});

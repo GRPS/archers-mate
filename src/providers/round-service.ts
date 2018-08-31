@@ -74,7 +74,7 @@ export class RoundService {
 				Global.rounds[ index ] = round;
 			}
 
-			this.common.SaveToStorage( 'rounds', Global.rounds )
+			this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds )
 				.then( () => {
 					resolve();
 				});

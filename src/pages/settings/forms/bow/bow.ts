@@ -43,7 +43,7 @@ export class BowPage {
 
 	private GetPassedBow() {
 
-		if( this.navParams.get('bows') != undefined ) {		
+		if( this.navParams.get(Const.LABEL.BOWS) != undefined ) {		
 			this.bows = this.navParams.data.bows;
 		} else {
 			this.bows = [];

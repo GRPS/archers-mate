@@ -59,7 +59,7 @@ export class BowService {
 				Global.bows[ index ] = bow;
 			}
 
-			this.common.SaveToStorage( 'bows', Global.bows )
+			this.common.SaveToStorage( Const.LABEL.BOWS, Global.bows )
 				.then( () => {
 					resolve();
 				});

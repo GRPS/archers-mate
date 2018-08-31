@@ -20,10 +20,21 @@
 			<field [label]="'Name'" [value]="app?.appName"></field>
 			<field [label]="'Version'" [value]="app?.versionNumber"></field>
 
-			<ion-item-divider color="archers-light-blue">Global
-					<button ion-button item-right clear color="dark" (click)="CopyToClipboard()">Copy</button>
-			</ion-item-divider>
+			<ion-item-divider color="archers-light-blue">Application Data</ion-item-divider>
 
+			<ion-item>
+				<ion-grid>
+					<ion-row>
+						<ion-col>
+							<button ion-button item-right block (click)="ExportToClipboard()">Export to Clipboard</button>
+						</ion-col>
+						<ion-col>
+							
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-item>
+			
 			<ion-item text-wrap>
 				{{ global }}
 			</ion-item>

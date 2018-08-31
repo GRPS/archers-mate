@@ -55,6 +55,8 @@ export class RoundsPage {
 				slidingItem.close(); 
 				this.Init();	
 				
+				this.common.SaveToStorage( Const.LABEL.ROUNDS, this.rounds );
+
 				this.common.ShowToastSuccess( 'Deleted!' );
 			});
 	}

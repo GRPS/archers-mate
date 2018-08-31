@@ -100,6 +100,10 @@ export class ShooterPage {
 			.then( ( bow: BowClass ) => {			
 				bow.sightMarks = [];
 				this.shooter.bows.push( bow ); 
+
+				this.UpdateGlobal();
+
+				this.common.ShowToastSuccess( 'Saved!' );
 			})
 			.catch(
 				err => {
@@ -117,6 +121,7 @@ export class ShooterPage {
 			.then( bows => {
 				slidingItem.close(); 
 				this.shooter.bows = bows;
+
 				this.UpdateGlobal();		
 
 				this.common.ShowToastSuccess( 'Deleted!' );
@@ -127,6 +132,9 @@ export class ShooterPage {
 		return new Promise( resolve => {
 			this.shooter.bows = bows;	
 			this.UpdateGlobal();
+
+			this.common.ShowToastSuccess( 'Saved!' );
+
 			resolve();
 		});
 	}
@@ -134,10 +142,12 @@ export class ShooterPage {
 	UpdateGlobal() {
 		if( this.shooter.isDefault ) {
 			Global.shooter = this.shooter;
+			Global.shooters[ 0 ] = this.shooter;
 		} else {
 			let index: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, this.shooter.id );
 			Global.shooters[ index ] = this.shooter;
 		}
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
 	}
 
 	reorderItems( indexes ) {

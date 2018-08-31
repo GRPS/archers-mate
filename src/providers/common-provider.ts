@@ -125,7 +125,8 @@ export class CommonProvider {
 			this.storage.remove( label )
 				.then( () => {
 					this.storage.set( label, data )
-						.then( () => {						
+						.then( () => {
+							console.log('SaveToStorage: ' + label);													
 							resolve();
 						});
 				});		
