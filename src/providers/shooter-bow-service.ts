@@ -57,7 +57,7 @@ export class ShooterBowService {
 				}
 			}
 			if( options.length == 0 ) {
-				reject( false );
+				reject();
 			} else {
 				let alert = this.alertCtrl.create({
 					title: title,
@@ -67,15 +67,16 @@ export class ShooterBowService {
 						text: 'Cancel',
 						role: 'cancel',
 						handler: data => {
-							reject( false );
+							reject();
 						}
 					},
 					{
 						text: 'Select',
 						handler: id => {
 							let index: number = this.common.GetIndexOfObjectIdInArray( Global.bows, id );
-							let a: BowClass = Global.bows[ index ];
-							resolve( a );
+
+							//Return a clone of the Global.bow else anything we do to it will effect the Global.bows too.
+							resolve( <BowClass> Object.assign( {}, Global.bows[ index ] ) );
 						}
 					}
 					]

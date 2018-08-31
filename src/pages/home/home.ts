@@ -8,6 +8,8 @@ import { BowService } from '../../providers/bow-service';
 import { RoundService } from '../../providers/round-service';
 import { ShooterService } from '../../providers/shooter-service';
 import { RoundClass } from '../../models/round-class';
+import { BowClass } from '../../models/bow-class';
+import { ShooterClass } from '../../models/shooter-class';
 
 @IonicPage()
 @Component({
@@ -67,42 +69,79 @@ export class HomePage {
 			
 			this.loading.present();
 
-			if( Global.bows == null ) {
-				this.bowService.LoadAll()
-					.subscribe( (bows) => {
-						Global.bows = bows;
-						this.haveLoadedBows = true;
-						this.CheckIfReadyNow();
-					}),
-					err => this.common.AddWarning( err );
-			}
-
-			if( Global.rounds == null ) {
-				this.roundService.LoadAll()
-					.subscribe( (rounds) => {
-						let newRounds: RoundClass[] = [];
-						for( let round of rounds ) {
-							newRounds.push( this.roundService.CalculateValues( round ) );
+			this.common.GetFromStorage( 'bows' )
+					.then( res => {
+						if( res == null ) {
+							this.bowService.LoadAll()
+								.subscribe( (bows) => {								
+									Global.bows = bows;
+									this.common.SaveToStorage( 'bows', Global.bows );
+									this.haveLoadedBows = true;
+									this.CheckIfReadyNow();
+								}),
+								err => this.common.AddWarning( err );
+						} else {							
+							let newBows: BowClass[] = [];
+							for( let bow of res ) {
+								newBows.push( new BowClass( bow ) );
+							}
+							Global.bows = newBows;		
+							this.haveLoadedBows = true;
+							this.CheckIfReadyNow();			
 						}
-						Global.rounds = newRounds;
-						this.haveLoadedRounds = true;
-						this.CheckIfReadyNow();
-					}),
-					err => this.common.AddWarning( err );
-			}
+					});
 
-			if( Global.shooters == null ) {
-				this.shooterService.LoadAll()
-					.subscribe( (shooters) => {
+				this.common.GetFromStorage( 'rounds' )
+					.then( res => {
+						if( res == null ) {
+							this.roundService.LoadAll()
+								.subscribe( (rounds) => {
+									let newRounds: RoundClass[] = [];
+									for( let round of rounds ) {
+										newRounds.push( this.roundService.CalculateValues( round ) );
+									}
+									Global.rounds = newRounds;
+									this.common.SaveToStorage( 'rounds', Global.rounds );
+									this.haveLoadedRounds = true;
+									this.CheckIfReadyNow();
+								}),
+								err => this.common.AddWarning( err );
+						} else {							
+							let newRounds: RoundClass[] = [];
+							for( let round of res ) {
+								newRounds.push( new RoundClass( round ) );
+							}
+							Global.rounds = newRounds;		
+							this.haveLoadedRounds = true;
+							this.CheckIfReadyNow();			
+						}
+					});
 
-						Global.shooters = shooters;
-						Global.shooter = this.shooterService.GetDefault( shooters );
-						
-						this.haveLoadedShooters = true;
-						this.CheckIfReadyNow();				
-					}),
-					err => this.common.AddWarning( err );
-			}
+				this.common.GetFromStorage( 'shooters' )
+					.then( res => {
+						if( res == null ) {
+							this.shooterService.LoadAll()
+								.subscribe( (shooters) => {
+									Global.shooters = shooters;
+									Global.shooter = this.shooterService.GetDefault( shooters );
+									
+									this.common.SaveToStorage( 'shooters', Global.shooters );
+									this.haveLoadedShooters = true;
+									this.CheckIfReadyNow();				
+								}),
+								err => this.common.AddWarning( err );
+						} else {								
+							let newShooters: ShooterClass[] = [];
+							for( let shooter of res ) {
+								newShooters.push( new ShooterClass( shooter ) );
+							}
+							Global.shooters = newShooters;		
+							Global.shooter = this.shooterService.GetDefault( Global.shooters );
+
+							this.haveLoadedShooters = true;
+							this.CheckIfReadyNow();			
+						}
+					});
 
 		} else {
 						

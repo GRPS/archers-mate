@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { AppVersion } from '@ionic-native/app-version';
 import { Clipboard } from '@ionic-native/clipboard';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 
@@ -27,6 +28,10 @@ import { ShooterBowService } from '../providers/shooter-bow-service';
 			mode: 'md',
 			spinner: 'ios',
 			swipeBackEnabled: true
+		}),
+		IonicStorageModule.forRoot({
+			name: '__archers-mate',
+			   driverOrder: ['indexeddb', 'sqlite', 'websql']
 		}),
 		HttpClientModule
 	],

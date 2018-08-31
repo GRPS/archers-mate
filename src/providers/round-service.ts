@@ -59,7 +59,7 @@ export class RoundService {
 		return new Promise( resolve => {
 			let newCodes = Global.rounds.filter( obj => obj !== round );
     		Global.rounds = newCodes;
-			resolve( true );	
+			resolve();	
 		});	
 	}	
 
@@ -74,7 +74,10 @@ export class RoundService {
 				Global.rounds[ index ] = round;
 			}
 
-			resolve();
+			this.common.SaveToStorage( 'rounds', Global.rounds )
+				.then( () => {
+					resolve();
+				});
 
 		});		
 	}

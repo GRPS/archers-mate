@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { App, NavController, ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { AppVersion } from '@ionic-native/app-version';
+import { Storage } from '@ionic/storage';
 
 import { Const } from './constants';
 import { AppClass } from '../models/app-class';
 
 import * as _ from 'underscore';
+// import { resolveDefinition } from '../../node_modules/@angular/core/src/view/util';
 // import { resolveDefinition } from '../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
@@ -17,6 +19,7 @@ export class CommonProvider {
 	constructor(
 				app: App,
 				public appVersion: AppVersion,
+				private storage: Storage,
 				private toastCtrl: ToastController,
 				) {
 		this.AddLog( 'CommonProvider loaded' );
@@ -116,5 +119,26 @@ export class CommonProvider {
 		}
 
 	}
-		
+
+	SaveToStorage( label: string, data: any ): Promise<any> {
+		return new Promise( resolve => {
+			this.storage.remove( label )
+				.then( () => {
+					this.storage.set( label, data )
+						.then( () => {						
+							resolve();
+						});
+				});		
+		});				
+	}
+	
+	GetFromStorage( label: string ): Promise<any> {
+		return new Promise( resolve => {
+			this.storage.get( label )
+				.then( res => {									
+					resolve( res );
+				});			
+		});
+	}
+
 }

@@ -77,7 +77,7 @@ export class ShooterBowPage {
 	}
 
 	RefreshBowSightMark = ( sightMarks: SightMarkClass[] ) => {
-		return new Promise( resolve => {
+		return new Promise( resolve => {		
 			this.bow.sightMarks = sightMarks;
 			resolve();
 		});

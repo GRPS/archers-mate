@@ -44,7 +44,7 @@ export class BowService {
 		return new Promise( resolve => {
 			let newBows = Global.bows.filter( obj => obj !== bow );
     		Global.bows = newBows;
-			resolve( true );	
+			resolve();	
 		});	
 	}	
 
@@ -59,13 +59,11 @@ export class BowService {
 				Global.bows[ index ] = bow;
 			}
 
-			resolve();
-			
-			// if( 1 == 1 ) {
-			// 	resolve( true ); //Code has worked and we want to return a success to the caller.
-			// } else {
-			// 	resolve( false ); //Code has worked, but we want to return a fail to the caller.
-			// }
+			this.common.SaveToStorage( 'bows', Global.bows )
+				.then( () => {
+					resolve();
+				});
+
 		});		
 	}
 	

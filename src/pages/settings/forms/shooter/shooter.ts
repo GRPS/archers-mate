@@ -97,9 +97,9 @@ export class ShooterPage {
 
 	AddShooterBow() {
 		this.shooterBowService.GetBowByAlert( 'Add Bow', this.shooter.bows )
-			.then( ( bow: BowClass ) => {
+			.then( ( bow: BowClass ) => {			
 				bow.sightMarks = [];
-				this.shooter.bows.push( bow );
+				this.shooter.bows.push( bow ); 
 			})
 			.catch(
 				err => {

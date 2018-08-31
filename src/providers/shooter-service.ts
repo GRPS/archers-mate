@@ -51,7 +51,7 @@ export class ShooterService {
 		return new Promise( resolve => {
 			let newShooters = Global.shooters.filter( obj => obj !== shooter );
     		Global.shooters = newShooters;
-			resolve( true );	
+			resolve();	
 		});	
 	}	
 
@@ -69,7 +69,10 @@ export class ShooterService {
 				}
 			}
 
-			resolve();
+			this.common.SaveToStorage( 'shooters', Global.shooters )
+				.then( () => {
+					resolve();
+				});
 
 		});		
 	}
