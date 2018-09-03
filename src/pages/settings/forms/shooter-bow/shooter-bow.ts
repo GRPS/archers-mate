@@ -64,33 +64,40 @@ export class ShooterBowPage {
 
 	DeleteBowSightMark( slidingItem, sightmark: SightMarkClass ) {
 		this.sightMarkService.Delete( this.bow.sightMarks, sightmark )
-		.then( sightMarks => {
-			slidingItem.close(); 
-			this.bow.sightMarks = sightMarks;	
-			
-			this.UpdateGlobal( sightMarks );
-
-			this.common.ShowToastSuccess( 'Deleted!' );
-		});
+			.then( sightMarks => {
+				slidingItem.close(); 
+				this.bow.sightMarks = sightMarks;	
+				
+				this.UpdateGlobal( sightMarks )
+					.then( () => {
+						this.common.ShowToastSuccess( 'Deleted!' );
+					});
+			});
 	}
 
 	RefreshBowSightMark = ( sightMarks: SightMarkClass[] ) => {
 		return new Promise( resolve => {		
 			this.bow.sightMarks = sightMarks;
-			this.UpdateGlobal( sightMarks );
-
-			this.common.ShowToastSuccess( 'Saved!' );
-
-			resolve();
+			this.UpdateGlobal( sightMarks )
+				.then( () => {
+					this.common.ShowToastSuccess( 'Saved!' );
+					resolve();
+				});
 		});
 	}
 
-	UpdateGlobal( sightMarks: SightMarkClass[] ) {
-		let indexShooter: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, this.shooter.id );
-		let indexBow: number = this.common.GetIndexOfObjectIdInArray( Global.shooters[ indexShooter ].bows, this.bow.id );
-		Global.shooters[ indexShooter ].bows[ indexBow ].sightMarks = sightMarks;
+	UpdateGlobal( sightMarks: SightMarkClass[] ): Promise<any> {
+		return new Promise( resolve => {
+			let indexShooter: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, this.shooter.id );
+			let indexBow: number = this.common.GetIndexOfObjectIdInArray( Global.shooters[ indexShooter ].bows, this.bow.id );
+			Global.shooters[ indexShooter ].bows[ indexBow ].sightMarks = sightMarks;
 
-		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
+			this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
+				.then( () => {
+					resolve();
+				});
+
+		});
 	}
 
 	reorderItems( indexes ) {
@@ -100,9 +107,11 @@ export class ShooterBowPage {
 		this.shooter.bows[ indexBow ].sightMarks = this.common.reorderItems( bow.sightMarks, indexes );
 		Global.shooters[ indexShooter ] = this.shooter;
 
-		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
+			.then( () => {
+				this.common.ShowToastSuccess( 'Saved!' );
+			});
 
-		this.common.ShowToastSuccess( 'Saved!' );
 	}
 
 }

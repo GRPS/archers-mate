@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { App, NavController, ToastController } from 'ionic-angular';
+import { AlertController, App, NavController, ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { AppVersion } from '@ionic-native/app-version';
 import { Storage } from '@ionic/storage';
@@ -18,6 +18,7 @@ export class CommonProvider {
 	navCtrl: NavController;
 
 	constructor(
+				public alertCtrl: AlertController,
 				app: App,
 				public appVersion: AppVersion,
 				private storage: Storage,
@@ -63,6 +64,15 @@ export class CommonProvider {
 		} else {
 			this.navCtrl.setRoot( rootPage );
 		}
+	}
+
+	ShowAlert( title: string, message: string ) {
+		let alert = this.alertCtrl.create({
+			title: title,
+			subTitle: message,
+			buttons: ['Dismiss']
+		  });
+		  alert.present();
 	}
 
 	ShowToastSuccess( message: string, forceShow: boolean = false ) {

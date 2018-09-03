@@ -16,6 +16,11 @@ export class RoundsPage {
 
 	rounds: RoundClass[];
 
+	selectedType: string = '';
+	selectedOrganisation: string = '';
+	  selectedSeason: string = '';
+	  rememberType: string = 'custom';
+
 	constructor(
 				public navCtrl: NavController, 
 				public navParams: NavParams,
@@ -35,14 +40,22 @@ export class RoundsPage {
 
 	Init() {
 		this.rounds = Global.rounds;
+		this.selectedType = this.rememberType;
 	}
 
 	Back() {
 		this.navCtrl.pop();
 	}
 
+	ShowSeason(organisation, season) {
+		this.selectedOrganisation = organisation;
+		this.selectedSeason = season;
+	}
+
 	CreateRound() {
-		this.roundService.Create();
+		this.rememberType = this.selectedType;
+		this.selectedType = '';
+		this.roundService.Create( this.Init );
 	}
 
 	UpdateRound( round: RoundClass) {
@@ -52,21 +65,30 @@ export class RoundsPage {
 	DeleteRound( slidingItem, round: RoundClass ) {
 		this.roundService.Delete( round )
 			.then( () => {
+				this.rememberType = this.selectedType;
 				slidingItem.close(); 
 				this.Init();	
 				
-				this.common.SaveToStorage( Const.LABEL.ROUNDS, this.rounds );
-
-				this.common.ShowToastSuccess( 'Deleted!' );
+				this.common.SaveToStorage( Const.LABEL.ROUNDS, this.rounds )
+					.then( () => {
+						this.common.ShowToastSuccess( 'Deleted!' );
+					});
 			});
 	}
 
 	reorderItems( indexes ) {
 		this.rounds = this.common.reorderItems( this.rounds, indexes ); 
 
-		this.common.SaveToStorage( Const.LABEL.ROUNDS, this.rounds );
+		this.common.SaveToStorage( Const.LABEL.ROUNDS, this.rounds )
+			.then( () => {
+				this.common.ShowToastSuccess( 'Saved!' );
+			});
+	}
 
-		this.common.ShowToastSuccess( 'Saved!' );
+	info( round: RoundClass ) {
+		if( round.targets.length == 0 ) { 
+			this.common.ShowAlert( 'Warning', 'A round with no targets, cannot be played.' );
+		}
 	}
 
 }

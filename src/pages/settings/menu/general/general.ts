@@ -31,7 +31,8 @@ export class GeneralPage {
 	}
 
 	ionViewWillLeave() {
-		this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting );	
+		this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )
+			.then( () => {});	
 	}
 
 	Back() {

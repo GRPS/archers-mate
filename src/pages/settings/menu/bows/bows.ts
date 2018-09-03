@@ -55,18 +55,22 @@ export class BowsPage {
 				slidingItem.close(); 
 				this.Init();	
 				
-				this.common.SaveToStorage( Const.LABEL.BOWS, this.bows );
+				this.common.SaveToStorage( Const.LABEL.BOWS, this.bows )
+					.then( () => {
+						this.common.ShowToastSuccess( 'Deleted!' );
+					});
 
-				this.common.ShowToastSuccess( 'Deleted!' );
 			});
 	}
 
 	reorderItems( indexes ) {
 		this.bows = this.common.reorderItems( this.bows, indexes );
 
-		this.common.SaveToStorage( Const.LABEL.BOWS, this.bows );
+		this.common.SaveToStorage( Const.LABEL.BOWS, this.bows )
+			.then( () => {
+				this.common.ShowToastSuccess( 'Saved!' );
+			});
 
-		this.common.ShowToastSuccess( 'Saved!' );
 	}
 
 }

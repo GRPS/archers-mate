@@ -69,7 +69,8 @@ export class RoundPage {
 
 			this.round = this.roundService.CalculateValues( this.round );
 
-		}		
+		}
+
 	}
 
 	private SetupForm() {
@@ -80,7 +81,7 @@ export class RoundPage {
 
 	Back() {
 		this.navCtrl.pop();
-	}
+	}	
 
 	Edit() {
 		this.isEditMode = !this.isEditMode;
@@ -142,12 +143,16 @@ export class RoundPage {
 		let index: number = this.common.GetIndexOfObjectIdInArray( Global.rounds, this.round.id );
 		Global.rounds[ index ] = this.round;
 
-		this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds );
-
+		this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds )
+			.then( () => {
+				this.common.ShowToastSuccess( 'Saved!' );
+			});
 	}
 
 	reorderItems( indexes ) {
 		this.round.targets = this.common.reorderItems( this.round.targets, indexes );
+
+		this.UpdateGlobal();
 	}
 
 }

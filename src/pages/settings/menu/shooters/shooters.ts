@@ -56,18 +56,20 @@ export class ShootersPage {
 				slidingItem.close(); 
 				this.Init();
 
-				this.common.SaveToStorage( Const.LABEL.SHOOTERS, this.shooters );
-
-				this.common.ShowToastSuccess( 'Deleted!' );
+				this.common.SaveToStorage( Const.LABEL.SHOOTERS, this.shooters )
+					.then( () => {
+						this.common.ShowToastSuccess( 'Deleted!' );
+					});
 			});
 	}
 
 	reorderItems( indexes ) {
 		this.shooters = this.common.reorderItems( this.shooters, indexes );
 
-		this.common.SaveToStorage( Const.LABEL.SHOOTERS, this.shooters );
-
-		this.common.ShowToastSuccess( 'Saved!' );
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, this.shooters )
+			.then( () => {
+				this.common.ShowToastSuccess( 'Saved!' );
+			});
 	}
 
 }

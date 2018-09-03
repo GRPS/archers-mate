@@ -9,6 +9,13 @@
 		<ion-title>Rounds</ion-title>
 	</ion-navbar>
 
+	<ion-toolbar>
+		<ion-segment color="archers-heading" [(ngModel)]="selectedType">
+			<ion-segment-button value="standard">Standard</ion-segment-button>
+			<ion-segment-button value="custom">Custom</ion-segment-button>
+		</ion-segment>
+	</ion-toolbar>
+
 </ion-header>
 
 <ion-content no-bounce>
@@ -16,7 +23,7 @@
 		<ion-list no-lines>
 
 			<ion-item-divider color="archers-light-blue">
-				Rounds <ion-badge color="archers-heading">{{ rounds?.length }}</ion-badge>
+				Rounds <ion-badge color="archers-heading">{{ rounds | roundTypeCount:selectedType}}</ion-badge>
 				<button ion-button item-right clear color="dark" (click)="CreateRound()">Add</button>
 			</ion-item-divider>
 	
@@ -24,16 +31,23 @@
 				<note [message]="'None available'"></note>
 			</ion-item>
 	
-			<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-				<ion-item-sliding #slidingItem *ngFor="let round of rounds">
-					<button ion-item (click)="UpdateRound(round)" color="{{round?.targets.length == 0?'archers-danger':''}}">        
-						{{round?.name}}
-						<p *ngIf="round?.targets.length == 0"><b><small>Not usable until targets added!</small></b></p>
-					</button>
-					<ion-item-options side="right">
-						<button ion-button color="danger" (click)="DeleteRound(slidingItem, round)">Delete</button>
-					</ion-item-options> 
-				</ion-item-sliding>
+			<ion-item-group *ngFor="let organisation of ( rounds | roundOrganisation:selectedType ); let i_o = index">
+				<ion-item-group *ngFor="let season of ( rounds | roundSeason:selectedType:organisation ); let i_s = index">
+			
+					<ion-item-divider color="archers-faint-blue" (click)="ShowSeason(organisation, season);">
+						<strong *ngIf="selectedType!='Custom'">{{ organisation | properCase }} </strong><strong>{{ season | properCase }}</strong>
+					</ion-item-divider>
+			
+					<ion-item-sliding #slidingItem *ngFor="let round of ( rounds | round:selectedType:organisation:season )" reorder="true" (ionItemReorder)="reorderItems($event)">
+						<button ion-item (click)="UpdateRound(round)" (press)="info(round)" color="{{round?.targets.length == 0?'archers-light-danger':''}}">        
+								{{ round.name }}
+						</button>
+						<ion-item-options side="right">
+								<button ion-button color="danger" (click)="DeleteRound(slidingItem, round)"><ion-icon name="trash"></ion-icon>Delete</button>
+						</ion-item-options> 
+					</ion-item-sliding>
+			
+				</ion-item-group>
 			</ion-item-group>
 			
 		</ion-list>

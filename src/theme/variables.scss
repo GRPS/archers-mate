@@ -49,7 +49,8 @@ $colors: (
   archers-note: (base: green, contrast: red ),
   archers-help: (base: rgb(207, 207, 207), contrast: red ),
   archers-text: (base: #4a4a4a, contrast: red ),
-  archers-danger: (base: rgb(255, 203, 203), contrast: red ),
+  archers-danger: (base: rgb(216, 60, 60), contrast: red ),
+  archers-light-danger: (base: rgba(216, 60, 60, 0.5), contrast: red ),
 
 );
 

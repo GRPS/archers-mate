@@ -78,9 +78,11 @@ export class HomePage {
 							this.bowService.LoadAll()
 								.subscribe( (bows) => {								
 									Global.bows = bows;
-									this.common.SaveToStorage( Const.LABEL.BOWS, Global.bows );
-									this.haveLoadedBows = true;
-									this.CheckIfReadyNow();
+									this.common.SaveToStorage( Const.LABEL.BOWS, Global.bows )
+										.then( () => {
+											this.haveLoadedBows = true;
+											this.CheckIfReadyNow();
+										});									
 								}),
 								err => this.common.AddWarning( err );
 						} else {							
@@ -104,9 +106,11 @@ export class HomePage {
 										newRounds.push( this.roundService.CalculateValues( round ) );
 									}
 									Global.rounds = newRounds;
-									this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds );
-									this.haveLoadedRounds = true;
-									this.CheckIfReadyNow();
+									this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds )
+										.then( () => {
+											this.haveLoadedRounds = true;
+											this.CheckIfReadyNow();
+										});
 								}),
 								err => this.common.AddWarning( err );
 						} else {							
@@ -128,9 +132,11 @@ export class HomePage {
 									Global.shooters = shooters;
 									Global.shooter = this.shooterService.GetDefault( shooters );
 									
-									this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
-									this.haveLoadedShooters = true;
-									this.CheckIfReadyNow();				
+									this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
+										.then( () => {
+											this.haveLoadedShooters = true;
+											this.CheckIfReadyNow();	
+										});												
 								}),
 								err => this.common.AddWarning( err );
 						} else {								
@@ -155,9 +161,11 @@ export class HomePage {
 									showToastOnSave: true
 								});
 
-								this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting );
-								this.haveLoadedSettings = true;
-								this.CheckIfReadyNow();	
+								this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )
+									.then( () => {
+										this.haveLoadedSettings = true;
+										this.CheckIfReadyNow();	
+									});
 
 							} else {
 								Global.setting = res;

@@ -47,8 +47,8 @@ export class RoundService {
 			.catch( this.common.HttpCatchError );
 	}
 
-	Create() {
-		this.navCtrl.push( Const.PAGES.ROUND_EDIT );
+	Create( callBack ) {
+		this.navCtrl.push( Const.PAGES.ROUND_EDIT, { callBack: callBack } );
 	}
 
 	Update( round: RoundClass ) {

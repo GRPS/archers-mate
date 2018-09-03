@@ -147,7 +147,11 @@ export class ShooterPage {
 			let index: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, this.shooter.id );
 			Global.shooters[ index ] = this.shooter;
 		}
-		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters );
+		this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
+			.then( () => {
+				this.common.ShowToastSuccess( 'Saved!' );
+			});
+
 	}
 
 	reorderItems( indexes ) {

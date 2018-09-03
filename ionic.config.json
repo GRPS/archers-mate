@@ -2,7 +2,5 @@
   "name": "Archers Mate",
   "integrations": {
     "cordova": {}
-  },
-  "type": "ionic-angular",
-  "pro_id": "f9afd6b6"
+  }
 }
