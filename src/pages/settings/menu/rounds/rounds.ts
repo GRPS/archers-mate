@@ -18,8 +18,10 @@ export class RoundsPage {
 
 	selectedType: string = '';
 	selectedOrganisation: string = '';
-	  selectedSeason: string = '';
-	  rememberType: string = 'custom';
+	selectedSeason: string = '';
+	rememberType: string = 'custom';
+
+	isModal: boolean = false; // Is this page loading in a modal window?
 
 	constructor(
 				public navCtrl: NavController, 
@@ -28,7 +30,7 @@ export class RoundsPage {
 				public common: CommonProvider,
 				public roundService: RoundService
 				) {
-
+		this.GetPassedData();
 	}
 
 	//Do before page becomes active.
@@ -41,6 +43,12 @@ export class RoundsPage {
 	Init() {
 		this.rounds = Global.rounds;
 		this.selectedType = this.rememberType;
+	}
+
+	GetPassedData() {
+		if( this.navParams.get( 'isModal' ) != undefined ) {	
+			this.isModal = this.navParams.get( 'isModal' );
+		}
 	}
 
 	Back() {
@@ -60,6 +68,10 @@ export class RoundsPage {
 
 	UpdateRound( round: RoundClass) {
 		this.roundService.Update( round );
+	}
+
+	SelectRound( round: RoundClass ) {
+		this.viewCtrl.dismiss( { round: round } );
 	}
 
 	DeleteRound( slidingItem, round: RoundClass ) {

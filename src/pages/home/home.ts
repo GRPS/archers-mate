@@ -11,6 +11,7 @@ import { RoundClass } from '../../models/round-class';
 import { BowClass } from '../../models/bow-class';
 import { ShooterClass } from '../../models/shooter-class';
 import { SettingClass } from '../../models/setting-class';
+import { ScoreCardClass } from '../../models/score-card-class';
 
 @IonicPage()
 @Component({
@@ -24,7 +25,7 @@ export class HomePage {
 	haveLoadedRounds: boolean = false;
 	haveLoadedShooters: boolean = false;
 	haveLoadedSettings: boolean = false;
-
+	haveLoadedScoreCards: boolean = false;
 
 	constructor(
 				private actionCtrl: ActionSheetController,
@@ -175,6 +176,27 @@ export class HomePage {
 							
 						});
 
+						this.common.GetFromStorage( Const.LABEL.SCORE_CARDS )
+						.then( res => {
+							
+							if( res == null ) {
+
+								Global.scoreCards = <ScoreCardClass[]>[];
+
+								this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
+									.then( () => {
+										this.haveLoadedScoreCards = true;
+										this.CheckIfReadyNow();	
+									});
+
+							} else {
+								Global.scoreCards = res;
+								this.haveLoadedScoreCards = true;
+								this.CheckIfReadyNow();	
+							}
+							
+						});
+
 		} else {
 						
 		}
@@ -182,18 +204,18 @@ export class HomePage {
 	}
 
 	CheckIfReadyNow() {
-		if( this.haveLoadedRounds && this.haveLoadedBows && this.haveLoadedShooters && this.haveLoadedSettings ) {
+		if( this.haveLoadedRounds && this.haveLoadedBows && this.haveLoadedShooters && this.haveLoadedSettings && this.haveLoadedScoreCards ) {
 			this.loading.dismiss();
 			this.common.AddLog( Global );      
 		}
 	}
 
 	GotoScore() {
-		// this.navCtrl.push( ScorePage );
+		this.navCtrl.push( Const.PAGES.SCORE_CARD_SETUP );
 	}
 
 	GotoHistory() {
-		// this.navCtrl.push( HistoryPage );
+		this.navCtrl.push( Const.PAGES.SCORE_CARDS );
 	}
 
 	GotoSettings() {

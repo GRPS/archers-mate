@@ -18,7 +18,15 @@ export const Const = {
 		SHOOTERS: 'shooters',
 		BOWS: 'bows',
 		ROUNDS: 'rounds',
-		SETTINGS: 'settings'
+		SETTINGS: 'settings',
+		SCORE_CARDS: 'score-cards',
+		SHOW_BUTTON_CREATE_ROUND: 'showButtonCreateRound'
+	},
+
+	SCORE_CARD_STATUS: {
+		ONGOING: 'ongoing',
+		COMPLETED: 'completed',
+		DELETED: 'deleted'
 	},
 
 	PAGES: {
@@ -36,6 +44,8 @@ export const Const = {
 		TARGET_EDIT: 'TargetPage',
 		SIGHT_MARK_EDIT: 'SightMarkPage',
 		SHOOTER_BOW_EDIT: 'ShooterBowPage',
+		SCORE_CARD_SETUP: 'ScoreCardSetupPage',
+		SCORE_CARDS: 'ScoreCardsPage'
 	},
 
 	TOAST: {

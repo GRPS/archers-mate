@@ -1,0 +1,108 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>Score Card{{ isNew ? ' Setup ' : '' }} </ion-title>
+		<ion-buttons right>
+			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
+			<button ion-button *ngIf="!isEditMode && scoreCard.status=='ongoing'" (click)="Edit()">Edit</button>
+		</ion-buttons>
+	</ion-navbar>
+
+</ion-header>
+
+<ion-content no-bounce>
+
+	<ion-list no-lines *ngIf="!isEditMode">
+		<field [label]="'Round'" [value]="scoreCard.round.name"></field>
+		<field [label]="'Name'" [value]="scoreCard.name"></field>
+		<field-date [label]="'Date'" [value]="scoreCard.dt"></field-date>
+		<field [label]="'Notes'" [value]="scoreCard.notes"></field>
+
+		<ion-item-divider color="archers-light-blue">
+			Shooters
+			<ion-badge color="archers-heading">{{ scoreCard.shooters?.length == 0 ? 0 : scoreCard.shooters?.length }}</ion-badge>
+		</ion-item-divider>
+
+		<ion-item *ngIf="scoreCard.shooters?.length==0">
+			<note [message]="'None available'"></note>
+		</ion-item>
+
+		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)" *ngIf="scoreCard.status=='ongoing'">
+			<ion-item-sliding #slidingItem *ngFor="let shooter of scoreCard.shooters">
+				<ion-item>
+					<p>{{ shooter.name }}</p>
+				</ion-item>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="DeleteScoreCardShooter(slidingItem, shooter)">Delete</button>
+				</ion-item-options> 
+			</ion-item-sliding>
+		</ion-item-group>
+
+		<div *ngIf="scoreCard.status=='deleted'">
+			<ion-item *ngFor="let shooter of scoreCard.shooters">
+				<p>{{ shooter.name }}</p>
+			</ion-item>
+		</div>
+		
+		<ion-item *ngIf="scoreCard.status=='ongoing'">
+			<ion-grid>
+				<ion-row>
+					<ion-col>
+						<button ion-button clear full (click)="AddShooterGuest()">Add Guest</button>
+					</ion-col>
+					<ion-col>
+						<button ion-button clear full (click)="AddShooter()" *ngIf="showButtonAddShooter">Add Shooter</button>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</ion-item>
+
+	</ion-list>
+
+	<ion-list no-lines *ngIf="isEditMode">
+
+		<form [formGroup]="formValidation">
+
+			<ion-item>
+				<ion-label fixed>Round</ion-label>
+				<ion-input type="text" (focus)="AddRound()" [(ngModel)]="scoreCard.round.name" placeholder="--Select --" [formControl]="formValidation.controls['round']" [ngClass]="{'validator-error': !formValidation.controls.round.valid && formValidation.controls.round.dirty}" readonly></ion-input>
+			</ion-item>
+			<help text="Required"></help>
+
+			<ion-item>
+				<ion-label fixed>Name</ion-label>
+				<ion-input type="text" maxlength="30" [(ngModel)]="scoreCard.name" placeholder="Practive round" [formControl]="formValidation.controls['name']" [ngClass]="{'validator-error': !formValidation.controls.name.valid && formValidation.controls.name.dirty}"></ion-input>
+			</ion-item>
+			<help text="Between 2 and 30 characters."></help>
+
+			<ion-item>
+				<ion-label fixed>Date</ion-label>
+				<ion-datetime displayFormat="DDDD D MMM YYYY" [(ngModel)]="scoreCard.dt" [ngModelOptions]="{standalone: true}"></ion-datetime>
+			</ion-item>
+
+		  		  
+			<ion-item>
+				<ion-label fixed>Notes</ion-label>
+				<ion-textarea rows="5" type="text" [(ngModel)]="scoreCard.notes" [ngModelOptions]="{standalone: true}"></ion-textarea>
+			</ion-item>
+
+		</form>
+
+	</ion-list>
+
+</ion-content>
+
+<ion-footer *ngIf="!isEditMode">
+	<ion-grid>
+		<ion-row>
+			<ion-col>
+				<button ion-button full color="archers-heading" (click)="Start()" *ngIf="scoreCard.status!='deleted'">Goto Score Input</button>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-footer>

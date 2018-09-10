@@ -6,6 +6,7 @@ import { RoundSeasonPipe } from './round-season';
 import { RoundOrganisationPipe } from './round-organisation';
 import { RoundTypeCountPipe } from './round-type-count';
 import { ProperCasePipe } from './proper-case';
+import { ScoreCardTypePipe } from './score-card-type';
 
 export const pipes = [
 	ShooterInitialsPipe,
@@ -14,7 +15,8 @@ export const pipes = [
     RoundSeasonPipe,
     RoundOrganisationPipe,
     RoundTypeCountPipe,
-    ProperCasePipe
+    ProperCasePipe,
+    ScoreCardTypePipe
 ];
 
 @NgModule({

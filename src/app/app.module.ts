@@ -17,6 +17,7 @@ import { TargetService } from '../providers/target-service';
 import { CommonProvider } from '../providers/common-provider';
 import { SightMarkService } from '../providers/sight-mark-service';
 import { ShooterBowService } from '../providers/shooter-bow-service';
+import { ScoreCardService } from '../providers/score-card-service';
 
 @NgModule({
 	declarations: [
@@ -53,7 +54,8 @@ import { ShooterBowService } from '../providers/shooter-bow-service';
 		TargetService,
 		ShooterService,
 		SightMarkService,
-		ShooterBowService
+		ShooterBowService,
+		ScoreCardService
 	]
 })
 export class AppModule {}

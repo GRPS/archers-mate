@@ -6,4 +6,5 @@ export const Global: IGlobal = {
 	shooter: null,
 	shooters: null,
 	setting: null,
+	scoreCards: null
 };

@@ -1,0 +1,40 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>Score Cards</ion-title>
+	</ion-navbar>
+
+	<ion-toolbar>
+		<ion-segment color="archers-heading" [(ngModel)]="scoreCardType">
+			<ion-segment-button value="ongoing">Ongoing <ion-badge color="archers-heading">{{ countOngoing }}</ion-badge></ion-segment-button>
+			<ion-segment-button value="completed">Completed <ion-badge color="archers-heading">{{ countCompleted }}</ion-badge></ion-segment-button>
+			<ion-segment-button value="deleted">Deleted <ion-badge color="archers-heading">{{ countDeleted }}</ion-badge></ion-segment-button>
+		</ion-segment>
+	</ion-toolbar>
+
+</ion-header>
+
+<ion-content no-bounce>
+	
+	<ion-list no-lines>
+
+		<ion-item-sliding #slidingItem *ngFor="let scoreCard of ( scoreCards | scoreCardType:scoreCardType )">
+			<button ion-item (click)="UpdateScoreCard(scoreCard)">        
+				<strong>{{ scoreCard?.name }}</strong>
+				<p>Date: {{ scoreCard.dt  | date: 'EEEE d LLLL, yyyy' }}</p>
+				<p>Round: {{ scoreCard.round.name }}</p>
+				<p>{{ scoreCard.notes }}</p>
+			</button>
+			<ion-item-options side="right">
+				<button ion-button color="danger" (click)="DeleteScoreCard(slidingItem, scoreCard)">Delete</button>
+			</ion-item-options> 
+		</ion-item-sliding>
+
+	</ion-list>
+
+</ion-content>
