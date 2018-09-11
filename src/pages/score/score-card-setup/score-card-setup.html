@@ -6,7 +6,7 @@
 				<ion-icon name="ios-arrow-back"></ion-icon>
 			</button>
 		</ion-buttons>
-		<ion-title>Score Card{{ isNew ? ' Setup ' : '' }} </ion-title>
+		<ion-title>Score Card Setup</ion-title>
 		<ion-buttons right>
 			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
 			<button ion-button *ngIf="!isEditMode && scoreCard.status=='ongoing'" (click)="Edit()">Edit</button>
@@ -18,7 +18,7 @@
 <ion-content no-bounce>
 
 	<ion-list no-lines *ngIf="!isEditMode">
-		<field [label]="'Round'" [value]="scoreCard.round.name"></field>
+		<field [label]="'Round'" [value]="scoreCard.round?.name"></field>
 		<field [label]="'Name'" [value]="scoreCard.name"></field>
 		<field-date [label]="'Date'" [value]="scoreCard.dt"></field-date>
 		<field [label]="'Notes'" [value]="scoreCard.notes"></field>
@@ -101,7 +101,7 @@
 	<ion-grid>
 		<ion-row>
 			<ion-col>
-				<button ion-button full color="archers-heading" (click)="Start()" *ngIf="scoreCard.status!='deleted'">Goto Score Input</button>
+				<button ion-button full color="archers-heading" (click)="GotoScores()" *ngIf="scoreCard.status!='deleted'">Goto Scores</button>
 			</ion-col>
 		</ion-row>
 	</ion-grid>

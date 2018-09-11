@@ -20,6 +20,8 @@ export const Const = {
 		ROUNDS: 'rounds',
 		SETTINGS: 'settings',
 		SCORE_CARDS: 'score-cards',
+		SCORE_CARD: 'score-card',
+		SHOOTER_POPOVER: 'ShooterPopoverPage',
 		SHOW_BUTTON_CREATE_ROUND: 'showButtonCreateRound'
 	},
 
@@ -45,7 +47,8 @@ export const Const = {
 		SIGHT_MARK_EDIT: 'SightMarkPage',
 		SHOOTER_BOW_EDIT: 'ShooterBowPage',
 		SCORE_CARD_SETUP: 'ScoreCardSetupPage',
-		SCORE_CARDS: 'ScoreCardsPage'
+		SCORE_CARDS: 'ScoreCardsPage',
+		SCORE_CARD: 'ScoreCardPage'
 	},
 
 	TOAST: {

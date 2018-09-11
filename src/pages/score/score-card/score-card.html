@@ -1,0 +1,55 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-buttons left>
+			<button ion-button icon-only (click)="Back()">
+				<ion-icon name="ios-arrow-back"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>Score Card</ion-title>
+		<ion-buttons right>
+			<button ion-button icon-only clear (click)="ChangeShooter($event)"><ion-icon name="man"></ion-icon></button>
+		</ion-buttons>
+	</ion-navbar>
+
+	<ion-toolbar text-center *ngIf="maxShooters > 0">
+		<button ion-button clear (click)="prev()" *ngIf="shooter_p.initials != shooter_n.initials">
+			{{ shooter_p.initials }} <ion-icon name="md-arrow-back"></ion-icon>
+		</button>
+		<button ion-button outline>{{ shooter.initials }}</button>
+		<button ion-button clear (click)="next()">
+			<ion-icon name="md-arrow-forward"></ion-icon> {{ shooter_n.initials }}
+		</button>
+	</ion-toolbar>
+
+</ion-header>
+
+<ion-content no-bounce>
+
+	<ion-list no-lines>
+
+		<div *ngFor="let target of scoreCard.round?.targets; let t = index">
+
+			<ion-item-divider color="archers-light-blue">
+				Target {{ t + 1 }} <span style="color:#eeeeee; font-size:75%;">({{ target.distance }} {{ scoreCard.round.distance }}, {{ target.size }}{{ scoreCard.round.unit }})</span>
+			</ion-item-divider>
+
+			<ion-item>
+				<p>Put headers arrows for each end for this target here.</p>
+				<p>Put placeholders for arrow score here. Colour when score applied.</p>
+				<p>Click target area to score next empty row.</p>
+				<p>Swipe row to edit scores, clear scores, photo?!.</p>
+				<p>After each target show avg, Xs, 10s etc, but show grand total of this at end of target list.</p>
+			</ion-item>
+
+		</div>
+
+	</ion-list>
+
+	<pre>
+		{{ shooter | json }}
+		<hr>
+		{{ score | json }}
+	</pre>
+
+</ion-content>

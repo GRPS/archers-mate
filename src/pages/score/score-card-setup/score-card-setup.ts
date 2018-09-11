@@ -184,4 +184,12 @@ export class ScoreCardSetupPage {
 		roundModal.present();
 	}
 
+	GotoScores() {
+		let roundModal = this.modalCtrl.create( Const.PAGES.SCORE_CARD, { 'score-card': this.scoreCard } );
+		roundModal.onDidDismiss( newScoreCard => {	
+			// this.scoreCard = newScoreCard;
+		});
+		roundModal.present();
+	}
+	
 }

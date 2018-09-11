@@ -159,7 +159,8 @@ export class HomePage {
 							if( res == null ) {
 
 								Global.setting = new SettingClass( {
-									showToastOnSave: true
+									showToastOnSave: true,
+									showToastOnScoreInput: true
 								});
 
 								this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )

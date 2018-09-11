@@ -76,7 +76,7 @@ export class CommonProvider {
 	}
 
 	ShowToastSuccess( message: string, forceShow: boolean = false ) {
-		if( forceShow || Global.setting.showToastOnSave ) {
+		if( forceShow || Global.setting.showToastOnSave || Global.setting.showToastOnScoreInput ) {
 			this.ShowToast( message, Const.TOAST.SUCCESS, 1000, false, '', 'bottom' );
 		}
 	}

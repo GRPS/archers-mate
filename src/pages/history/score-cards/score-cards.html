@@ -26,9 +26,9 @@
 		<ion-item-sliding #slidingItem *ngFor="let scoreCard of ( scoreCards | scoreCardType:scoreCardType )">
 			<button ion-item (click)="UpdateScoreCard(scoreCard)">        
 				<strong>{{ scoreCard?.name }}</strong>
-				<p>Date: {{ scoreCard.dt  | date: 'EEEE d LLLL, yyyy' }}</p>
-				<p>Round: {{ scoreCard.round.name }}</p>
-				<p>{{ scoreCard.notes }}</p>
+				<p>Date: {{ scoreCard?.dt  | date: 'EEEE d LLLL, yyyy' }}</p>
+				<p>Round: {{ scoreCard.round?.name }}</p>
+				<p>{{ scoreCard?.notes }}</p>
 			</button>
 			<ion-item-options side="right">
 				<button ion-button color="danger" (click)="DeleteScoreCard(slidingItem, scoreCard)">Delete</button>
