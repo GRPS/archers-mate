@@ -1,0 +1,32 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+		<ion-title>Score Entry</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+<ion-content no-bounce>
+
+	<ion-list no-lies>
+		<ion-item>
+			<ion-label fixed>Scores</ion-label>
+				<ion-input type="text" [(ngModel)]="scores"></ion-input>
+		</ion-item>
+	</ion-list>
+
+</ion-content>
+
+<ion-footer>
+
+	<ion-grid>
+
+		<ion-row>
+			<ion-col>
+				<button ion-button full (click)="Back()">Enter</button>
+			</ion-col>
+		</ion-row>
+
+	</ion-grid>
+
+</ion-footer>
