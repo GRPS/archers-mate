@@ -48,7 +48,8 @@ export const Const = {
 		SHOOTER_BOW_EDIT: 'ShooterBowPage',
 		SCORE_CARD_SETUP: 'ScoreCardSetupPage',
 		SCORE_CARDS: 'ScoreCardsPage',
-		SCORE_CARD: 'ScoreCardPage'
+		SCORE_CARD: 'ScoreCardPage',
+		SCORE_ENTRY: 'ScoreEntryPage',
 	},
 
 	TOAST: {

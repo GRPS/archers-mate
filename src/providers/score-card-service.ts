@@ -95,7 +95,8 @@ export class ScoreCardService {
 				generder: 'male',
 				age: 21,
 				isDefault: false,
-				bows: []
+				bows: [],
+				score: null
 			}));
 		});
 	}

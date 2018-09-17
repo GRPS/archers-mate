@@ -1,4 +1,5 @@
 import { BowClass } from './bow-class';
+import { ScoreClass } from './score-class';
 
 export class ShooterClass {
 
@@ -9,6 +10,7 @@ export class ShooterClass {
 	age:		number;
 	isDefault:	boolean;
 	bows:       BowClass[] = [];
+	score:		ScoreClass;
 
 	constructor(values: Object = {}) {
         Object.assign(this, values);

@@ -1,1 +1,1 @@
-[{"id": 1,"name":"Joe Public","initials":"JP","gender":"male","age":48,"isDefault":true,"bows":[]},{"id": 2,"name":"Guest One","initials":"G1","gender":"male","age":28,"isDefault":false,"bows":[]}]
+[{"id": 1,"name":"Joe Public","initials":"JP","gender":"male","age":48,"isDefault":true,"bows":[],"score":null},{"id": 2,"name":"Mary Public","initials":"MP","gender":"female","age":28,"isDefault":false,"bows":[],"score":null}]

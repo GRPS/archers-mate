@@ -34,22 +34,108 @@
 				Target {{ t + 1 }} <span style="color:#eeeeee; font-size:75%;">({{ target.distance }} {{ scoreCard.round.distance }}, {{ target.size }}{{ scoreCard.round.unit }})</span>
 			</ion-item-divider>
 
-			<ion-item>
-				<p>Put headers arrows for each end for this target here.</p>
-				<p>Put placeholders for arrow score here. Colour when score applied.</p>
-				<p>Click target area to score next empty row.</p>
-				<p>Swipe row to edit scores, clear scores, photo?!.</p>
-				<p>After each target show avg, Xs, 10s etc, but show grand total of this at end of target list.</p>
-			</ion-item>
+			<div class="card" (click)="EnterScore(target)">
+				<ion-item class="tbl-heading">
+					<ion-grid>
+						<ion-row>
+								<ion-col>End</ion-col>
+								<ion-col></ion-col>
+								<ion-col></ion-col>
+								<ion-col></ion-col>
+								<ion-col></ion-col>
+								<ion-col></ion-col>
+								<ion-col></ion-col>
+								<ion-col>E.T.</ion-col>
+								<ion-col>R.T.</ion-col>
+						</ion-row>
+					</ion-grid>
+				</ion-item>
 
+				<ion-item class="tbl-scores" *ngFor="let end of ( target.ends | numberInc ); let e = index" (press)="EditScore(target, e)">
+					<ion-grid>
+						<ion-row>
+							<ion-col class="bgcolor-heading bdr">{{ e + 1}}</ion-col>
+							<ion-col [ngClass]="{'bdr':scoreCard.round.arrows>=(a+1)}" *ngFor="let arrow of ( 6 | numberInc ); let a = index">{{ a>shooter.score.targets[t].ends[e].end.length-1?'':shooter.score.targets[t].ends[e].end[a] }}</ion-col>
+							<ion-col class="bgcolor-heading tr bdr">{{ a>shooter.score.targets[t].ends[e].end.length-1?'':shooter.score.targets[t].ends[e].total_et }}</ion-col>
+							<ion-col class="bgcolor-heading tr bdr">{{ a>shooter.score.targets[t].ends[e].end.length-1?'':shooter.score.targets[t].ends[e].total_rt }}</ion-col>
+						</ion-row>
+					</ion-grid>
+				</ion-item>	
+
+				<ion-item class="end-total">
+					<ion-grid>
+						<ion-row>
+							<ion-col>&nbsp;</ion-col>
+							<ion-col></ion-col>
+							<ion-col></ion-col>
+							<ion-col></ion-col>
+							<ion-col></ion-col>
+							<ion-col></ion-col>
+							<ion-col></ion-col>
+							<ion-col class="bgcolor-heading bdr tr">{{ shooter.score.targets[t].total_et }}</ion-col>
+							<ion-col class="bgcolor-heading bdr tr">{{ shooter.score.targets[t].total_rt }}</ion-col>
+						</ion-row>
+					</ion-grid>
+				</ion-item>	
+
+				<ion-item class="end-stats">
+					<ion-grid>
+						<ion-row>
+							<ion-col class=""></ion-col>
+							<ion-col class=""></ion-col>
+							<ion-col class=""></ion-col>
+							<ion-col class="bdr">Hits</ion-col>
+							<ion-col class="bdr">Avg</ion-col>
+							<ion-col class="bdr">Xs</ion-col>
+							<ion-col class="bdr">10s</ion-col>
+							<ion-col class="bdr">9s</ion-col>
+							<ion-col class="bdr">Ms</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col class="">&nbsp;</ion-col>
+							<ion-col class=""></ion-col>
+							<ion-col class=""></ion-col>
+							<ion-col class="bdr">{{ shooter.score.targets[t].statHits }}</ion-col>
+							<ion-col class="bdr">{{ shooter.score.targets[t].statAvg }}</ion-col>
+							<ion-col class="bdr">{{ shooter.score.targets[t].statXs }}</ion-col>
+							<ion-col class="bdr">{{ shooter.score.targets[t].stat10s }}</ion-col>
+							<ion-col class="bdr">{{ shooter.score.targets[t].stat9s }}</ion-col>
+							<ion-col class="bdr">{{ shooter.score.targets[t].statMs }}</ion-col>
+						</ion-row>
+					</ion-grid>
+				</ion-item>	
+				
+			</div>
+			
 		</div>
 
-	</ion-list>
+		<ion-item class="end-stats">
+			<ion-grid>
+				<ion-row>
+					<ion-col class=""></ion-col>
+					<ion-col class=""></ion-col>
+					<ion-col class=""></ion-col>
+					<ion-col class="bdr">Hits</ion-col>
+					<ion-col class="bdr">Avg</ion-col>
+					<ion-col class="bdr">Xs</ion-col>
+					<ion-col class="bdr">10s</ion-col>
+					<ion-col class="bdr">9s</ion-col>
+					<ion-col class="bdr">Ms</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col class="">&nbsp;</ion-col>
+					<ion-col class=""></ion-col>
+					<ion-col class=""></ion-col>
+					<ion-col class="bdr">{{ shooter.score.statHits }}</ion-col>
+					<ion-col class="bdr">{{ shooter.score.statAvg }}</ion-col>
+					<ion-col class="bdr">{{ shooter.score.statXs }}</ion-col>
+					<ion-col class="bdr">{{ shooter.score.stat10s }}</ion-col>
+					<ion-col class="bdr">{{ shooter.score.stat9s }}</ion-col>
+					<ion-col class="bdr">{{ shooter.score.statMs }}</ion-col>
+				</ion-row>
+			</ion-grid>
+		</ion-item>	
 
-	<pre>
-		{{ shooter | json }}
-		<hr>
-		{{ score | json }}
-	</pre>
+	</ion-list>
 
 </ion-content>

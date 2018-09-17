@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, PopoverController, ViewController } from 'ionic-angular';
 
 import { Const } from '../../../providers/constants';
 import { ScoreCardClass } from '../../../models/score-card-class';
 import { ShooterClass } from '../../../models/shooter-class';
+import { TargetClass } from '../../../models/target-class';
 import { CommonProvider } from '../../../providers/common-provider';
+
+import { ScoreClass, ScoreTargetClass, ScoreEndClass } from '../../../models/score-class';
 
 import * as _ from 'underscore';
 
@@ -16,6 +19,7 @@ import * as _ from 'underscore';
 export class ScoreCardPage {
 
 	scoreCard: ScoreCardClass;
+	allEnds = [1,2,3,4,5,6];
 
 	maxShooters: number = 0;
 	shooters: ShooterClass[] = [];
@@ -29,7 +33,9 @@ export class ScoreCardPage {
 	constructor(
 				public navCtrl: NavController, 
 				public navParams: NavParams,
+				public modalCtrl: ModalController,
 				public popoverCtrl: PopoverController,
+				public viewCtrl: ViewController,
 				public common: CommonProvider
 			) {
 
@@ -53,9 +59,48 @@ export class ScoreCardPage {
 			this.maxShooters = this.shooters.length;
 			this.shooter = this.shooters[ this.shooterIndex ];
 			this.SetShooterNextPrevious();
+			this.PrepareShooterScore();
 		} else {
 			this.Back();
 		}
+	}
+
+	PrepareShooterScore() {
+
+		for( let shooter of this.shooters ) {
+			if( shooter.score == null ) {
+
+				let score = new ScoreClass();
+				score.targets = [];
+
+				for( let target of this.scoreCard.round.targets) {
+
+					let scoreTarget: ScoreTargetClass = new ScoreTargetClass();
+					scoreTarget.ends = [];
+					scoreTarget.target_id = target.id;
+
+					for ( let i = 0; i < target.ends; i++ ) {	
+						
+						let scoreEnd: ScoreEndClass = new ScoreEndClass();
+						scoreEnd.end = [];
+
+						//Set placeholder for arrow scores for each end.
+						for ( let a = 0; a < this.scoreCard.round.arrows; a++ ) {
+							scoreEnd.end.push( '' );
+						}				
+						scoreTarget.ends.push( scoreEnd );
+
+					}
+					
+					score.targets.push( scoreTarget );
+					
+				}
+				
+				shooter.score = score;
+				
+			}
+		}
+		console.log( this.shooters );
 	}
 
 	SetShooterNextPrevious() {
@@ -72,43 +117,230 @@ export class ScoreCardPage {
 	}
 
 	Back() {
-		this.navCtrl.pop();
+		this.viewCtrl.dismiss( this.scoreCard );
+		// this.navCtrl.pop();
 	}
 
 	ChangeShooter( myEvent ) {
 		let popover = this.popoverCtrl.create( Const.LABEL.SHOOTER_POPOVER, { shooters: this.scoreCard.shooters, selectedShooter: this.shooter } );
 		popover.present({
-		  ev: myEvent
+			ev: myEvent
 		});
 		popover.onWillDismiss( shooter => {
-		  if ( shooter != null ) {
-			this.shooter = shooter;
-			this.shooterIndex = this.getShooterIndex( shooter );
-			this.SetShooterNextPrevious();
-		  }
+			if ( shooter != null ) {
+				this.shooter = shooter;
+				this.shooterIndex = this.getShooterIndex( shooter );
+				this.SetShooterNextPrevious();
+			}
 		});
-	  }
+	}
 	
-	  getShooterIndex( shooter ) {
+	getShooterIndex( shooter ) {
 		return _.findIndex(this.scoreCard.shooters, function(item) { return item.initials == shooter.initials })
-	  }
+	}
 	
-	  prev() {
+	prev() {
 		this.shooterIndex--;
 		if ( this.shooterIndex < 0 ) {
-		  this.shooterIndex = this.maxShooters - 1;
+			this.shooterIndex = this.maxShooters - 1;
 		}
 		this.shooter = this.scoreCard.shooters[ this.shooterIndex ];
 		this.SetShooterNextPrevious();
-	  }
+	}
 	
-	  next() {
+	next() {
 		this.shooterIndex++;
 		if ( this.shooterIndex >= this.maxShooters ) {
-		  this.shooterIndex = 0;
+			this.shooterIndex = 0;
 		}
 		this.shooter = this.scoreCard.shooters[ this.shooterIndex ];
 		this.SetShooterNextPrevious();
-	  }
+	}
+		
+	FindTargetInTargets( target: TargetClass ) {
+		return _.findIndex( this.shooter.score.targets, { target_id: target.id } );
+	}
+	GetNextEndToScore( target: TargetClass ) {
+		let index_t = this.FindTargetInTargets( target );
+		for( let i = 0; i < this.shooter.score.targets[ index_t ].ends.length; i++ ) {
+			if( this.shooter.score.targets[ index_t ].ends[ i ].end[ 0 ] == '' ) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	CalculateEndStats( scoreEnd: ScoreEndClass ) {
+
+		let total = 0;
+		let total_hits = 0;
+		let total_x = 0;
+		let total_10 = 0;
+		let total_9 = 0;
+		let total_M = 0;
+		
+		for( let i = 0; i < scoreEnd.end.length; i++ ) {
+			let str_num: any = scoreEnd.end[ i ];
+			total_hits++;
+			switch( str_num ) {
+				case 'X':
+					str_num = '10';
+					total_x++;
+					break;
+				case '10':
+					total_10++;
+					break;
+				case '9':
+					total_9++;
+					break;
+				case 'M':
+					str_num = '0';
+					total_hits--;
+					total_M++;
+					break;
+			}
+
+			total += Number( str_num );
+
+		}
+
+		scoreEnd.statHits = (total == 0 ? 0 : total_hits );
+		scoreEnd.total_et = total;
+		scoreEnd.total_rt = total;
+		scoreEnd.statAvg = Math.round( (total / scoreEnd.end.length) * 100 ) / 100;
+		scoreEnd.statXs = total_x;
+		scoreEnd.stat10s = total_10;
+		scoreEnd.stat9s = total_9;
+		scoreEnd.statMs = total_M;
+			
+		return scoreEnd;
+
+	}
+
+	CalculateStats( scoreCard: ScoreClass ) {
+
+		let total = 0;
+		let total_hits = 0;
+		let total_avg = 0;
+		let total_x = 0;
+		let total_10 = 0;
+		let total_9 = 0;
+		let total_M = 0;
+		let endCount: number = 0;
+		let end_prev: ScoreEndClass;
+
+		for( let target of scoreCard.targets ) {
+
+			let t_total = 0;
+			let t_total_hits = 0;
+			let t_total_avg = 0;
+			let t_total_x = 0;
+			let t_total_10 = 0;
+			let t_total_9 = 0;
+			let t_total_M = 0;
+
+			let targetEndsScored = 0;
+
+			for( let end of target.ends ) {
+				if( end.total_et == 0 ) {
+					end = this.CalculateEndStats( end );
+				}
+				if( endCount == 0 ) {
+					end.total_rt = end.total_et;
+				} else if( end.total_et != 0 ) {
+					end.total_rt = end.total_et + end_prev.total_rt;
+				}
+
+				if( end.statHits + end.statMs > 0 ){
+					targetEndsScored++;
+					if( end.total_rt == 0 && end_prev ) {
+						end.total_rt = end_prev.total_rt;
+					}
+				}
+								
+				t_total += end.total_et;
+				t_total_hits += end.statHits;
+				t_total_avg += end.statAvg;
+				t_total_x += end.statXs;
+				t_total_10 += end.stat10s;
+				t_total_9 += end.stat9s;
+				t_total_M += end.statMs;
+
+				end_prev = end;
+				endCount++;
+
+			}
+
+			if( t_total > 0 ) {
+				target.statHits = t_total_hits;
+				target.statAvg = Math.round( ( t_total_avg / targetEndsScored ) * 100 ) / 100;
+				target.total_et = t_total;
+				target.total_rt = end_prev.total_rt;
+				target.statXs = t_total_x;
+				target.stat10s = t_total_10;
+				target.stat9s = t_total_9;
+				target.statMs = t_total_M;
+			}
+
+			total_hits += t_total_hits;
+			total_avg += target.statAvg;
+			total_x += t_total_x;
+			total_10 += t_total_10;
+			total_9 += t_total_9;
+			total_M += t_total_M;
+
+		}
+
+		if( end_prev.total_rt > 0 ) {
+
+			scoreCard.isComplete = true;
+			scoreCard.statHits = total_hits;
+			scoreCard.total_et = total;
+			scoreCard.total_rt = end_prev.total_rt;
+			scoreCard.statAvg = Math.round( ( total_avg / scoreCard.targets.length ) * 100 ) / 100;
+			scoreCard.statXs = total_x;
+			scoreCard.stat10s = total_10;
+			scoreCard.stat9s = total_9;
+			scoreCard.statMs = total_M;
+
+		}
+
+		return scoreCard;
+	}
+
+	EnterScore( target: TargetClass ) {
+
+		//Find next available end.
+		let index_t = this.FindTargetInTargets( target );
+		let index_e = this.GetNextEndToScore( target );
+
+		if( index_e == -1 ) {
+			alert('Nothing to score on this target.')
+		} else {
+
+			let scoreModal = this.modalCtrl.create( Const.PAGES.SCORE_ENTRY );
+			scoreModal.onDidDismiss(data => {
+				this.shooter.score.targets[ index_t ].ends[ index_e ].end = data;
+				this.shooter.score = this.CalculateStats( this.shooter.score );			
+			});
+			scoreModal.present();			
+		}
+
+	}
+
+	EditScore( target: TargetClass, endIndex: number ) {
+
+		let scoreModal = this.modalCtrl.create( Const.PAGES.SCORE_ENTRY, {scores: target.ends[ endIndex ] } );
+		scoreModal.onDidDismiss(data => {
+			let index_t = this.FindTargetInTargets( target );
+			this.shooter.score.targets[ index_t ].ends[ endIndex ].end = data;
+			this.shooter.score.targets[ index_t ].ends[ endIndex ].total_et = 0;
+			this.shooter.score.targets[ index_t ].ends[ endIndex ].total_rt = 0;
+			this.shooter.score = this.CalculateStats( this.shooter.score );	
+		});
+		scoreModal.present();
+		
+	}
+
 	
 }

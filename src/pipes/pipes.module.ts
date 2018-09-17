@@ -7,6 +7,7 @@ import { RoundOrganisationPipe } from './round-organisation';
 import { RoundTypeCountPipe } from './round-type-count';
 import { ProperCasePipe } from './proper-case';
 import { ScoreCardTypePipe } from './score-card-type';
+import { NumberIncPipe } from './number-inc';
 
 export const pipes = [
 	ShooterInitialsPipe,
@@ -16,7 +17,8 @@ export const pipes = [
     RoundOrganisationPipe,
     RoundTypeCountPipe,
     ProperCasePipe,
-    ScoreCardTypePipe
+    ScoreCardTypePipe,
+    NumberIncPipe
 ];
 
 @NgModule({

@@ -187,7 +187,9 @@ export class ScoreCardSetupPage {
 	GotoScores() {
 		let roundModal = this.modalCtrl.create( Const.PAGES.SCORE_CARD, { 'score-card': this.scoreCard } );
 		roundModal.onDidDismiss( newScoreCard => {	
-			// this.scoreCard = newScoreCard;
+			this.scoreCard = newScoreCard;
+			console.log( this.scoreCard );
+			// Check if all shooters have filled in the scorecard (scoreCard.shooter[?].score.isComplete) and if so, set status to complete
 		});
 		roundModal.present();
 	}
