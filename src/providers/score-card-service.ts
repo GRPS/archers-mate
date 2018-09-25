@@ -174,4 +174,28 @@ export class ScoreCardService {
 				});
 		});
 	} 
+
+	IsComplete( scoreCard: ScoreCardClass ) {
+		var notCompleteShooterScoreCard: ShooterClass = _.find( scoreCard.shooters, function( obj ){ return obj.score.isComplete == false; });
+		return ( notCompleteShooterScoreCard == undefined ? true : false );
+	}
+
+	IsScoreCardComplete( scoreCard: ScoreCardClass ): Promise<boolean> {
+
+		return new Promise( ( resolve, reject ) => {
+			
+			if( this.IsComplete( scoreCard) ) {
+
+				this.common.ConfirmUser( 'Score Card Complete', 'All shooters have a completed score card. Stay to edit or go for stats?', 'Stay', 'Leave' )
+					.then( result => {
+						if( result ) {
+							resolve(); //Leave
+						} else {
+							reject(); //Stay					
+						}
+					});
+			}
+		});		
+
+	}
 }

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionic.archers-mate" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Archers Mate</name>
-    <description>An awesome archery app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <description>This is an archery scoring app where multiple shooters can be scored at once.</description>
+    <author email="grahamsimmons@hotmail.co.uk" href="http://ionicframework.com/">Graham Simmons</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -90,5 +90,6 @@
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-clipboard" spec="^1.2.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
+    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
     <engine name="android" spec="~7.0.0" />
 </widget>

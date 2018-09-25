@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { ShooterClass } from '../../../models/shooter-class';
+import { CommonProvider } from '../../../providers/common-provider';
 
 @IonicPage()
 @Component({
@@ -16,7 +17,8 @@ export class ShooterPopoverPage {
 	constructor(
 				public navCtrl: NavController, 
 				public navParams: NavParams, 
-				public viewCtrl: ViewController
+				public viewCtrl: ViewController,
+				public common: CommonProvider
 			) {
 		this.shooters = this.navParams.data.shooters;
 		this.selectedShooter = this.navParams.data.selectedShooter;
@@ -31,6 +33,12 @@ export class ShooterPopoverPage {
 
 	close( shooter ) {
 		this.viewCtrl.dismiss( shooter );
+	}
+
+	info( shooter ) {
+		if( shooter.score.isComplete ) {
+			this.common.ShowAlert( "Score Card Complete", "This score card is now complete." );
+		}
 	}
 
 }

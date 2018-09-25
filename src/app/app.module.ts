@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
@@ -28,7 +29,7 @@ import { ScoreCardService } from '../providers/score-card-service';
 		IonicModule.forRoot(MyApp, {
 			mode: 'md',
 			spinner: 'ios',
-			swipeBackEnabled: true
+			swipeBackEnabled: false
 		}),
 		IonicStorageModule.forRoot({
 			name: '__archers-mate',
@@ -45,6 +46,7 @@ import { ScoreCardService } from '../providers/score-card-service';
 	providers: [
 		StatusBar,
 		SplashScreen,
+		ScreenOrientation,
 		{provide: ErrorHandler, useClass: IonicErrorHandler},
 		AppVersion,
 		Clipboard,

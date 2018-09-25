@@ -12,6 +12,7 @@ export const Const = {
 	MISC: {
 		CURRENT_PAGE: '',
 		CORDOVA: "cordova",
+		SCORE_END_EMPTY: " ",
 	},
 
 	LABEL: {
@@ -50,6 +51,7 @@ export const Const = {
 		SCORE_CARDS: 'ScoreCardsPage',
 		SCORE_CARD: 'ScoreCardPage',
 		SCORE_ENTRY: 'ScoreEntryPage',
+		STATS: 'StatsPage'
 	},
 
 	TOAST: {

@@ -15,7 +15,7 @@ export class ScoreClass extends ScoreStatsClass {
 }
 
 export class ScoreTargetClass extends ScoreStatsClass {
-	target_id:	number;
+	id:	number;
 	ends:		ScoreEndClass[];
 }
 

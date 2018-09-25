@@ -47,13 +47,13 @@ page-score-card {
     }
 
     .bgcolor-heading {
-        background-color: #dbdada;
+        background-color: #dbdada !important;
     }
     .bgcolor-et {
-        background-color: #9e9e9e;
+        background-color: #9e9e9e !important;
     }
     .bgcolor-rt {
-        background-color: #5e5e5e;
+        background-color: #5e5e5e !important;
     }
     .bgcolor-none {
         background-color: transparent !important;
@@ -80,5 +80,28 @@ page-score-card {
     .tr {
         text-align: right;
     }
+
+    .score-yellow {
+        background-color: #e0eb3d;
+        color: #41414141;
+    }
+    .score-red {
+        background-color: #eb3d3d;
+        color: #ffffff;
+    }
+    .score-blue {
+        background-color: #3d5deb;
+        color: #ffffff;
+    }
+    .score-black {
+        background-color: #4b4b49;
+        color: #ffffff;
+    }
+    .score-white {
+        background-color: #ffffff;
+        color: #41414141;
+    }
+
+    
 
 }

@@ -1,6 +1,6 @@
 <ion-list>
 	<ion-list-header>Shooters</ion-list-header>
-	<button ion-item (click)="close(shooter)" *ngFor="let shooter of shooters" [color]="selectedShooter==shooter?'light':''">
+	<button ion-item (click)="close(shooter)" (press)="info(shooter);" [color]="shooter.score.isComplete?'secondary':''" *ngFor="let shooter of shooters" [color]="selectedShooter==shooter?'light':''">
 		{{ shooter.initials }}: {{ shooter.name }}
 	</button>
 </ion-list>

@@ -218,6 +218,10 @@ export class HomePage {
 	GotoHistory() {
 		this.navCtrl.push( Const.PAGES.SCORE_CARDS );
 	}
+	
+	GotoStats() {
+		this.navCtrl.push( Const.PAGES.STATS );
+	}
 
 	GotoSettings() {
 		this.actionCtrl.create({

@@ -9,6 +9,8 @@ import { ShooterClass } from '../../../models/shooter-class';
 import { ScoreCardClass } from '../../../models/score-card-class';
 import { ScoreCardService } from '../../../providers/score-card-service';
 
+import * as _ from 'underscore';
+
 @IonicPage()
 @Component({
 	selector: 'page-score-card-setup',
@@ -57,10 +59,12 @@ export class ScoreCardSetupPage {
 				round: {},
 				status: Const.SCORE_CARD_STATUS.ONGOING
 			});
+			this.scoreCard.shooters[ 0 ].score = null;
 		}
 
 		if( this.scoreCard.status != Const.SCORE_CARD_STATUS.ONGOING ) {
 			this.reOrder = false;
+			
 		}
 
 	}
@@ -188,10 +192,37 @@ export class ScoreCardSetupPage {
 		let roundModal = this.modalCtrl.create( Const.PAGES.SCORE_CARD, { 'score-card': this.scoreCard } );
 		roundModal.onDidDismiss( newScoreCard => {	
 			this.scoreCard = newScoreCard;
-			console.log( this.scoreCard );
-			// Check if all shooters have filled in the scorecard (scoreCard.shooter[?].score.isComplete) and if so, set status to complete
+
+			if( this.scoreCard.status == Const.SCORE_CARD_STATUS.ONGOING ) {
+				
+				if( this.scoreCardService.IsComplete( this.scoreCard) ) {
+					this.scoreCard.status = Const.SCORE_CARD_STATUS.COMPLETED;
+
+					let ids: any[] = [];
+					for( let shooter of this.scoreCard.shooters ) {
+						ids.push( { id: shooter.id, total: shooter.score.total_rt} );
+					}
+					let sortedIds: any[] =_.sortBy( ids, 'total' ).reverse();
+					let newShooters: ShooterClass[] = [];
+					let shooters: ShooterClass[] = this.scoreCard.shooters;
+					for( let tmp of sortedIds ) { 
+						newShooters.push( _.find( shooters, function( obj ){ return obj.id == tmp.id; }) );
+					}
+					this.scoreCard.shooters = newShooters;
+				}
+
+				//Update global scorecards with this scorecard
+				let index = _.findIndex( Global.scoreCards, { id: this.scoreCard.id } );
+				Global.scoreCards[ index ] = this.scoreCard;
+
+				this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
+					.then( () => {
+						this.common.ShowToastSuccess( 'Saved!' );	
+					});
+			}
+
 		});
 		roundModal.present();
 	}
-	
+
 }

@@ -155,4 +155,36 @@ export class CommonProvider {
 		});
 	}
 
+	ConfirmUser( title: string, message: string, btnStopLabel: string, btnContinueLabel: string ) {
+
+		return new Promise( ( resolve, reject ) => {
+	
+		  let prompt = this.alertCtrl.create({
+			title: title,
+			message: message,
+			buttons: [
+			  {
+				text: btnStopLabel,
+				role: 'cancel',
+				cssClass: 'alertStop',
+				handler: () => {
+				  resolve( false );
+				}
+			  },
+			  {
+				text: btnContinueLabel,
+				cssClass: 'alertContinue',
+				handler: () => {
+				  resolve( true );
+				}
+			  }
+			]
+		  });
+		  
+		  prompt.present();
+	
+		});
+	
+	  }
+
 }

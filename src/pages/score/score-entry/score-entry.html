@@ -8,12 +8,72 @@
 
 <ion-content no-bounce>
 
-	<ion-list no-lies>
-		<ion-item>
-			<ion-label fixed>Scores</ion-label>
-				<ion-input type="text" [(ngModel)]="scores"></ion-input>
-		</ion-item>
-	</ion-list>
+	<ion-grid>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col *ngFor="let a of ( 6 | numberInc )">
+				<button *ngIf="arrows>a" ion-button block color="light">{{ endScore.end[ a ] }}</button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row class="small">
+			<ion-col col-2 offset-9>
+				<button ion-button clear (click)="Clear();">Clear</button>
+			</ion-col>
+		</ion-row>
+		
+		<ion-row justify-content-center align-items-center>
+			<ion-col>
+				<button ion-button full (click)="AddScore('X');" color="archers-light-blue">X</button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col>
+				<button ion-button full (click)="AddScore('10');" [disabled]="CanUse('10')" color="archers-light-blue">10</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('9');" [disabled]="CanUse('9')" color="archers-light-blue">9</button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col>
+				<button ion-button full (click)="AddScore('8');" [disabled]="CanUse('8')" color="archers-light-blue">8</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('7');" [disabled]="CanUse('7')" color="archers-light-blue">7</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('6');" [disabled]="CanUse('6')" color="archers-light-blue">6</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('5');" [disabled]="CanUse('5')" color="archers-light-blue">5</button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col>
+				<button ion-button full (click)="AddScore('4');" [disabled]="CanUse('4')" color="archers-light-blue">4</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('3');" [disabled]="CanUse('3')" color="archers-light-blue">3</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('2');" [disabled]="CanUse('2')" color="archers-light-blue">2</button>
+			</ion-col>
+			<ion-col>
+				<button ion-button full (click)="AddScore('1');" [disabled]="CanUse('1')" color="archers-light-blue">1</button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row justify-content-center align-items-center>
+			<ion-col>
+				<button ion-button full (click)="AddScore('M');" color="archers-light-blue">Miss</button>
+			</ion-col>
+		</ion-row>
+
+	</ion-grid>
 
 </ion-content>
 
@@ -23,7 +83,7 @@
 
 		<ion-row>
 			<ion-col>
-				<button ion-button full (click)="Back()">Enter</button>
+				<button ion-button full (click)="Back()" color="archers-heading">Enter</button>
 			</ion-col>
 		</ion-row>
 

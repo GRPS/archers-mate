@@ -6,4 +6,30 @@ page-score-entry {
         border-radius: 8px;
     }
 
+    scroll-content {
+        height: 100%; 
+        display: flex;  
+    }
+ 
+    ion-grid {
+        margin-top: 20px;
+        padding: 0 !important;
+        height: 100%;
+
+        ion-row.small {
+            flex: 1;
+        }
+
+        ion-row {
+            flex: 2;
+
+            ion-col {
+                button {
+                    height: 5rem !important;
+                }
+            }
+        }
+
+    }
+
 }

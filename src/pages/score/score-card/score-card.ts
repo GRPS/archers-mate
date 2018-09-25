@@ -6,7 +6,7 @@ import { ScoreCardClass } from '../../../models/score-card-class';
 import { ShooterClass } from '../../../models/shooter-class';
 import { TargetClass } from '../../../models/target-class';
 import { CommonProvider } from '../../../providers/common-provider';
-
+import { ScoreCardService } from '../../../providers/score-card-service';
 import { ScoreClass, ScoreTargetClass, ScoreEndClass } from '../../../models/score-class';
 
 import * as _ from 'underscore';
@@ -36,7 +36,8 @@ export class ScoreCardPage {
 				public modalCtrl: ModalController,
 				public popoverCtrl: PopoverController,
 				public viewCtrl: ViewController,
-				public common: CommonProvider
+				public common: CommonProvider,
+				public scoreCardService: ScoreCardService
 			) {
 
 		this.GetPassedScoreCard();
@@ -77,7 +78,7 @@ export class ScoreCardPage {
 
 					let scoreTarget: ScoreTargetClass = new ScoreTargetClass();
 					scoreTarget.ends = [];
-					scoreTarget.target_id = target.id;
+					scoreTarget.id = target.id;
 
 					for ( let i = 0; i < target.ends; i++ ) {	
 						
@@ -86,7 +87,7 @@ export class ScoreCardPage {
 
 						//Set placeholder for arrow scores for each end.
 						for ( let a = 0; a < this.scoreCard.round.arrows; a++ ) {
-							scoreEnd.end.push( '' );
+							scoreEnd.end.push( Const.MISC.SCORE_END_EMPTY );
 						}				
 						scoreTarget.ends.push( scoreEnd );
 
@@ -139,6 +140,14 @@ export class ScoreCardPage {
 		return _.findIndex(this.scoreCard.shooters, function(item) { return item.initials == shooter.initials })
 	}
 	
+	SwipeShooter( $event ) {
+		if( $event.offsetDirection == 4 ){
+			this.next();
+		} else if( $event.offsetDirection == 2 ){
+			this.prev();
+		}
+	}
+
 	prev() {
 		this.shooterIndex--;
 		if ( this.shooterIndex < 0 ) {
@@ -158,12 +167,13 @@ export class ScoreCardPage {
 	}
 		
 	FindTargetInTargets( target: TargetClass ) {
-		return _.findIndex( this.shooter.score.targets, { target_id: target.id } );
+		return _.findIndex( this.shooter.score.targets, { id: target.id } );
 	}
 	GetNextEndToScore( target: TargetClass ) {
 		let index_t = this.FindTargetInTargets( target );
 		for( let i = 0; i < this.shooter.score.targets[ index_t ].ends.length; i++ ) {
-			if( this.shooter.score.targets[ index_t ].ends[ i ].end[ 0 ] == '' ) {
+			let arr: string[] = this.shooter.score.targets[ index_t ].ends[ i ].end.filter( v => v != Const.MISC.SCORE_END_EMPTY );
+			if( arr.length < this.scoreCard.round.arrows ) {
 				return i;
 			}
 		}
@@ -315,13 +325,31 @@ export class ScoreCardPage {
 		let index_e = this.GetNextEndToScore( target );
 
 		if( index_e == -1 ) {
-			alert('Nothing to score on this target.')
+			if( this.scoreCard.status == Const.SCORE_CARD_STATUS.COMPLETED ) {
+				this.common.ShowAlert( "Notice", "Score card is already complete." );
+			} else {
+				this.common.ShowAlert( "Notice", "Target has been scored. A long press will edit the target's scores." );
+			}
 		} else {
 
-			let scoreModal = this.modalCtrl.create( Const.PAGES.SCORE_ENTRY );
+			let scoreModal = this.modalCtrl.create( Const.PAGES.SCORE_ENTRY, { end: this.shooter.score.targets[ index_t ].ends[ index_e ], arrows: this.scoreCard.round.arrows, scoring: this.scoreCard.round.scoring } );
 			scoreModal.onDidDismiss(data => {
 				this.shooter.score.targets[ index_t ].ends[ index_e ].end = data;
-				this.shooter.score = this.CalculateStats( this.shooter.score );			
+				this.shooter.score = this.CalculateStats( this.shooter.score );
+				
+				this.scoreCardService.IsScoreCardComplete( this.scoreCard )
+				 	.then( result => {
+						 //Leave
+						//this.scoreCard.status = ( this.scoreCardService.IsComplete( this.scoreCard ) ? Const.SCORE_CARD_STATUS.COMPLETED : this.scoreCard.status );
+						this.Back();
+					 },
+					 ( error ) => {
+						//Stay
+					 })
+					 .catch( (error) => {
+						 this.common.ShowToastFail( JSON.stringify( error ) );
+					 });
+				 
 			});
 			scoreModal.present();			
 		}
@@ -330,16 +358,54 @@ export class ScoreCardPage {
 
 	EditScore( target: TargetClass, endIndex: number ) {
 
-		let scoreModal = this.modalCtrl.create( Const.PAGES.SCORE_ENTRY, {scores: target.ends[ endIndex ] } );
-		scoreModal.onDidDismiss(data => {
+		if( this.scoreCard.status == Const.SCORE_CARD_STATUS.ONGOING ) {
+
 			let index_t = this.FindTargetInTargets( target );
-			this.shooter.score.targets[ index_t ].ends[ endIndex ].end = data;
-			this.shooter.score.targets[ index_t ].ends[ endIndex ].total_et = 0;
-			this.shooter.score.targets[ index_t ].ends[ endIndex ].total_rt = 0;
-			this.shooter.score = this.CalculateStats( this.shooter.score );	
-		});
-		scoreModal.present();
+
+			let scoreModal = this.modalCtrl.create( Const.PAGES.SCORE_ENTRY, { end: this.shooter.score.targets[ index_t ].ends[ endIndex ], arrows: this.scoreCard.round.arrows, scoring: this.scoreCard.round.scoring } );
+			scoreModal.onDidDismiss(data => {
+				let index_t = this.FindTargetInTargets( target );
+				this.shooter.score.targets[ index_t ].ends[ endIndex ].end = data;
+				this.shooter.score.targets[ index_t ].ends[ endIndex ].total_et = 0;
+				this.shooter.score.targets[ index_t ].ends[ endIndex ].total_rt = 0;
+				this.shooter.score = this.CalculateStats( this.shooter.score );	
+			});
+			scoreModal.present();
+
+		}
 		
+	}
+
+	GetColor( value: string ) {
+		return '';
+		// switch ( value ) {
+		// 	case '1':
+		// 	case'2' :
+		// 		return 'score-white';
+		// 		break;
+		// 	case '3':
+		// 	case'4' :
+		// 		return 'score-black';
+		// 		break;
+		// 	case '5':
+		// 	case'6' :
+		// 		return 'score-blue';
+		// 		break;
+		// 	case '7':
+		// 	case'8' :
+		// 		return 'score-red';
+		// 		break;
+		// 	case '9':
+		// 	case'10' :
+		// 		return 'score-yellow';
+		// 		break;
+		// 	case'X' :
+		// 		return 'score-yellow';
+		// 		break;
+		// 	case'M' :
+		// 		return '';
+		// 		break;
+		// }
 	}
 
 	
