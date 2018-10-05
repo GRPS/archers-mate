@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppVersion } from '@ionic-native/app-version';
 import { Clipboard } from '@ionic-native/clipboard';
 import { IonicStorageModule } from '@ionic/storage';
+import { File } from '@ionic-native/file';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { MyApp } from './app.component';
 
@@ -50,6 +52,8 @@ import { ScoreCardService } from '../providers/score-card-service';
 		{provide: ErrorHandler, useClass: IonicErrorHandler},
 		AppVersion,
 		Clipboard,
+		File,
+		AndroidPermissions,
 		CommonProvider,
 		BowService,
 		RoundService,

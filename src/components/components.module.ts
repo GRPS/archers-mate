@@ -7,7 +7,8 @@ import { NoteComponent } from './note/note';
 import { HelpComponent } from './help/help';
 import { FieldComponent } from './field/field';
 import { FieldDateComponent } from './field-date/field-date';
-import { SettingFooterComponent } from './setting-footer/setting-footer';
+import { ShooterScorecardComponent } from './shooter-scorecard/shooter-scorecard';
+import { ScorecardSummaryComponent } from './scorecard-summary/scorecard-summary';
 
 export const components = [
 	ShooterComponent,
@@ -15,12 +16,13 @@ export const components = [
 	HelpComponent,
 	FieldComponent,
 	FieldDateComponent,
-	SettingFooterComponent
+	ShooterScorecardComponent,
+	ScorecardSummaryComponent
 ];
 
 @NgModule({
 	declarations: [ components ],
 	imports: [ CommonModule, IonicModule ],
-	exports: [ components],
+	exports: [ components ],
 })
 export class ComponentsModule {}

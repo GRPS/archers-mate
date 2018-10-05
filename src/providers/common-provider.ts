@@ -187,4 +187,41 @@ export class CommonProvider {
 	
 	  }
 
+	  PromptUser( title: string = "Title", placeHolder: string = "", type: string = "text", value: any ="" ) {
+
+		return new Promise( ( resolve, reject ) => {
+	
+		  let alert = this.alertCtrl.create({
+			title: title,
+			inputs: [
+			  {
+				name: 'Code',
+				placeholder: placeHolder,
+				type: type,
+				value: value
+			  }
+			],
+			buttons: [
+			  {
+				text: 'Cancel',
+				role: 'cancel',
+				handler: data => {
+				  reject( false );
+				}
+			  },
+			  {
+				text: 'Create',
+				handler: data => {
+				  resolve( data.Code );
+				}
+			  }
+			]
+		  });
+	
+		  alert.present();      
+	
+		});
+	
+	  };
+
 }

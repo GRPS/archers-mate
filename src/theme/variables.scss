@@ -52,8 +52,13 @@ $colors: (
   archers-danger: (base: rgb(216, 60, 60), contrast: red ),
   archers-light-danger: (base: rgba(216, 60, 60, 0.5), contrast: red ),
 
-);
+  archers-score-yellow: (base: rgba( 255, 255, 0, 1), contrast: #000000 ),
+  archers-score-red: (base: rgba( 255, 0, 0, 1 ), contrast: #FFFFFF ),
+  archers-score-blue: (base: rgba( 0,4,255, 1 ), contrast: #FFFFFF ),
+  archers-score-black: (base: rgba( 0, 0, 0, 1 ), contrast: #FFFFFF ),
+  archers-score-white: (base: rgba( 255, 255, 255, 1), contrast: #000000 ),
 
+);
 
 // App iOS Variables
 // --------------------------------------------------

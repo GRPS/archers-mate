@@ -3,6 +3,7 @@ import { App, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { Const } from '../providers/constants';
 import { CommonProvider } from '../providers/common-provider';
@@ -16,6 +17,7 @@ export class MyApp {
 
 	constructor(
 				public app: App, 
+				public androidPermissions: AndroidPermissions,
 				public platform: Platform, 
 				public screenOrientation: ScreenOrientation,
 				public statusBar: StatusBar, 
@@ -33,12 +35,30 @@ export class MyApp {
 			if( this.platform.is( Const.MISC.CORDOVA ) ) {
 				Const.IS_CORDOVA = true;
 				this.screenOrientation.lock( screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY );
-			}			
+			}		
+			
+			this.androidPermissions.requestPermissions(
+				[
+				  this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
+				]
+			  );
 
-			 // Handle Android back button
-			 this.platform.registerBackButtonAction( () => {
-				 this.common.ShowAlert( "Notice", "The Android back button is disabled.");
-			 });
+			//Handle Android hardware back button.
+			//If the active page has a function called AndroidBackButton then it it called instead.
+			platform.registerBackButtonAction(() => {
+
+				let nav = app.getActiveNavs()[ 0 ];
+				let activeView = nav.getActive();
+		 
+				if( activeView != null ){
+					if ( typeof activeView.instance.AndroidBackButton === 'function' ) {
+						activeView.instance.AndroidBackButton();
+					} else if( nav.canGoBack() ) {
+						nav.pop();
+					}
+				}
+
+			});
 
     	});
 	}

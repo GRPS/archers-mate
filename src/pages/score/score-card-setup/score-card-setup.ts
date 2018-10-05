@@ -33,7 +33,7 @@ export class ScoreCardSetupPage {
 				public common: CommonProvider,
 				public scoreCardService: ScoreCardService
 			) {
-
+			
 		this.GetPassedScoreCard();
 		this.SetupForm();
 	}
@@ -76,6 +76,9 @@ export class ScoreCardSetupPage {
 		});
 	}
 
+	AndroidBackButton() {
+        this.Back();
+    }
 	Back() {
 		this.navCtrl.pop();
 	}
@@ -139,17 +142,17 @@ export class ScoreCardSetupPage {
 				} else {
 		
 					this.scoreCardService.GetShooter( leftOvers )
-					.then( shooters => {
-						if( shooters ) {
-							let newShooters: ShooterClass[] = this.scoreCard.shooters;
-							for( let shooter of shooters ) {
-								newShooters.push( new ShooterClass( shooter ) );
-							}
-							this.scoreCard.shooters = newShooters;
-							this.SaveScoreCardShooters();
-						}				
-					},
-					err => {});
+						.then( shooters => {
+							if( shooters ) {
+								let newShooters: ShooterClass[] = this.scoreCard.shooters;
+								for( let shooter of shooters ) {
+									newShooters.push( new ShooterClass( shooter ) );
+								}
+								this.scoreCard.shooters = newShooters;
+								this.SaveScoreCardShooters();
+							}				
+						},
+						err => {});
 				}
 			});
 

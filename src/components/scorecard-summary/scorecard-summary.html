@@ -1,0 +1,5 @@
+<h2>{{ scoreCard?.name }}</h2>
+<p>Date: {{ scoreCard?.dt  | date: 'EEEE d LLLL, yyyy' }}</p>
+<p>Round: {{ scoreCard.round?.name }}</p>
+<p>{{ scoreCard?.notes }}</p>
+<p>{{ scoreCard.shooters?.length }} Shooters</p>

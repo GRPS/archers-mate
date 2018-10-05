@@ -55,7 +55,9 @@ export class ShooterPage {
 			this.isNew = true;
 			this.isEditMode = true;
 			this.shooter = new ShooterClass({
-				gender: 'male'
+				gender: 'male',
+				isDefault: false,
+				isGuest: false
 			});
 		}
 	}

@@ -6,6 +6,10 @@ import { Const } from './constants';
 import { Global } from './globals';
 import { CommonProvider } from './common-provider';
 import { ShooterClass } from '../models/shooter-class';
+import { ScoreClass } from '../models/score-class';
+import { ScoreTargetClass } from '../models/score-class';
+import { TargetClass } from '../models/target-class';
+import { ScoreEndClass } from '../models/score-class';
 import { ScoreCardClass } from '../models/score-card-class';
 import { ShooterService } from '../providers/shooter-service';
 
@@ -95,6 +99,7 @@ export class ScoreCardService {
 				generder: 'male',
 				age: 21,
 				isDefault: false,
+				isGuest: true,
 				bows: [],
 				score: null
 			}));
@@ -198,4 +203,201 @@ export class ScoreCardService {
 		});		
 
 	}
+
+	GenerateShooterDefaultScore( targets: TargetClass[], arrows: number ) {
+
+		let score = new ScoreClass();
+		score.targets = [];
+
+		for( let target of targets) {
+
+			let scoreTarget: ScoreTargetClass = new ScoreTargetClass();
+			scoreTarget.ends = [];
+			scoreTarget.id = target.id;
+
+			for ( let i = 0; i < target.ends; i++ ) {	
+				
+				let scoreEnd: ScoreEndClass = new ScoreEndClass();
+				scoreEnd.end = [];
+
+				//Set placeholder for arrow scores for each end.
+				for ( let a = 0; a < arrows; a++ ) {
+					scoreEnd.end.push( Const.MISC.SCORE_END_EMPTY );
+				}				
+				scoreTarget.ends.push( scoreEnd );
+
+			}
+			
+			score.targets.push( scoreTarget );
+			
+		}
+
+		return score;
+
+	}
+
+	CalculateStats( scoreCard: ScoreClass ) {
+
+		let total = 0;
+		let total_hits = 0;
+		let total_avg = 0;
+		let total_x = 0;
+		let total_10 = 0;
+		let total_9 = 0;
+		let total_M = 0;
+		let endCount: number = 0;
+		let end_prev: ScoreEndClass;
+
+		for( let target of scoreCard.targets ) {
+
+			let t_total = 0;
+			let t_total_hits = 0;
+			let t_total_avg = 0;
+			let t_total_x = 0;
+			let t_total_10 = 0;
+			let t_total_9 = 0;
+			let t_total_M = 0;
+
+			let targetEndsScored = 0;
+
+			for( let end of target.ends ) {
+				if( end.total_et == 0 ) {
+					end = this.CalculateEndStats( end );
+				}
+				if( endCount == 0 ) {
+					end.total_rt = end.total_et;
+				} else if( end.total_et != 0 ) {
+					end.total_rt = end.total_et + end_prev.total_rt;
+				}
+
+				if( end.statHits + end.statMs > 0 ){
+					targetEndsScored++;
+					if( end.total_rt == 0 && end_prev ) {
+						end.total_rt = end_prev.total_rt;
+					}
+				}
+								
+				t_total += end.total_et;
+				t_total_hits += end.statHits;
+				t_total_avg += end.statAvg;
+				t_total_x += end.statXs;
+				t_total_10 += end.stat10s;
+				t_total_9 += end.stat9s;
+				t_total_M += end.statMs;
+
+				end_prev = end;
+				endCount++;
+
+			}
+
+			if( t_total > 0 ) {
+				target.statHits = t_total_hits;
+				target.statAvg = Math.round( ( t_total_avg / targetEndsScored ) * 100 ) / 100;
+				target.total_et = t_total;
+				target.total_rt = end_prev.total_rt;
+				target.statXs = t_total_x;
+				target.stat10s = t_total_10;
+				target.stat9s = t_total_9;
+				target.statMs = t_total_M;
+			}
+
+			// total += target.total_rt;
+			total_hits += t_total_hits;
+			total_avg += target.statAvg;
+			total_x += t_total_x;
+			total_10 += t_total_10;
+			total_9 += t_total_9;
+			total_M += t_total_M;
+
+		}
+
+		if( end_prev.total_rt > 0 ) {
+
+			scoreCard.isComplete = true;
+			scoreCard.statHits = total_hits;
+			scoreCard.total_et = total;
+			scoreCard.total_rt = end_prev.total_rt;
+			scoreCard.statAvg = Math.round( ( total_avg / scoreCard.targets.length ) * 100 ) / 100;
+			scoreCard.statXs = total_x;
+			scoreCard.stat10s = total_10;
+			scoreCard.stat9s = total_9;
+			scoreCard.statMs = total_M;
+
+		}
+
+		return scoreCard;
+	}
+
+	CalculateEndStats( scoreEnd: ScoreEndClass ) {
+
+		let total = 0;
+		let total_hits = 0;
+		let total_x = 0;
+		let total_10 = 0;
+		let total_9 = 0;
+		let total_M = 0;
+		
+		for( let i = 0; i < scoreEnd.end.length; i++ ) {
+			let str_num: any = scoreEnd.end[ i ];
+			total_hits++;
+			switch( str_num ) {
+				case 'X':
+					str_num = '10';
+					total_x++;
+					break;
+				case '10':
+					total_10++;
+					break;
+				case '9':
+					total_9++;
+					break;
+				case 'M':
+					str_num = '0';
+					total_hits--;
+					total_M++;
+					break;
+			}
+
+			total += Number( str_num );
+
+		}
+
+		scoreEnd.statHits = (total == 0 ? 0 : total_hits );
+		scoreEnd.total_et = total;
+		scoreEnd.total_rt = total;
+		scoreEnd.statAvg = Math.round( (total / scoreEnd.end.length) * 100 ) / 100;
+		scoreEnd.statXs = total_x;
+		scoreEnd.stat10s = total_10;
+		scoreEnd.stat9s = total_9;
+		scoreEnd.statMs = total_M;
+			
+		return scoreEnd;
+
+	}
+
+	SortScores( scores: string[] ) {
+		let tmp: number[] = [];
+		for( let n of scores ) {
+			if( n == 'X' ) {
+				tmp.push( 11 );
+			} else if ( n == 'M' ) {
+				tmp.push( 0 );
+			} else {
+				tmp.push( Number(n) );
+			}
+		}
+		let tmp2 = _.sortBy( tmp, function( num ) { return num; }).reverse();
+		scores = [];
+		for( let n of tmp2 ) {
+			if( n == 11 ) {
+				scores.push( 'X' );
+			} else if ( n == 0 ) {
+				scores.push( 'M' );
+			} else {
+				scores.push( String(n) );
+			}
+		}
+		return scores;
+	}
+
 }

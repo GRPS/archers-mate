@@ -6,7 +6,7 @@
 				<ion-icon name="ios-arrow-back"></ion-icon>
 			</button>
 		</ion-buttons>
-		<ion-title>Score Card Setup</ion-title>
+		<ion-title>Score Card<span *ngIf="scoreCard.status=='ongoing'"> Setup</span></ion-title>
 		<ion-buttons right>
 			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
 			<button ion-button *ngIf="!isEditMode && scoreCard.status=='ongoing'" (click)="Edit()">Edit</button>
@@ -18,15 +18,16 @@
 <ion-content no-bounce>
 
 	<ion-list no-lines *ngIf="!isEditMode">
-		<field [label]="'Status'" [value]="scoreCard.status"></field>
+		<field [label]="'Status'" [value]="scoreCard.status | titlecase"></field>
 		<field [label]="'Round'" [value]="scoreCard.round?.name"></field>
 		<field [label]="'Name'" [value]="scoreCard.name"></field>
 		<field-date [label]="'Date'" [value]="scoreCard.dt"></field-date>
 		<field [label]="'Notes'" [value]="scoreCard.notes"></field>
 
 		<ion-item-divider color="archers-light-blue">
-			Shooters
-			<ion-badge *ngIf="scoreCard.status=='ongoing'" color="archers-heading">{{ scoreCard.shooters?.length == 0 ? 0 : scoreCard.shooters?.length }}</ion-badge>
+			<span *ngIf="scoreCard.status=='ongoing'">Shooters</span>
+			<span *ngIf="scoreCard.status=='completed'">Shooter Results</span>
+			<ion-badge color="archers-heading">{{ scoreCard.shooters?.length == 0 ? 0 : scoreCard.shooters?.length }}</ion-badge>
 		</ion-item-divider>
 
 		<ion-item *ngIf="scoreCard.shooters?.length==0">
@@ -36,7 +37,7 @@
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)" *ngIf="scoreCard.status=='ongoing'">
 			<ion-item-sliding #slidingItem *ngFor="let shooter of scoreCard.shooters">
 				<ion-item>
-					<p>{{ shooter.name }}</p>
+					<h2>{{ shooter.name }}</h2>
 				</ion-item>
 				<ion-item-options side="right">
 					<button ion-button color="danger" (click)="DeleteScoreCardShooter(slidingItem, shooter)">Delete</button>
@@ -45,16 +46,8 @@
 		</ion-item-group>
 
 		<div *ngIf="scoreCard.status!='ongoing'">
-			<ion-item *ngFor="let shooter of scoreCard.shooters">
-				<p>{{ shooter.name }}</p><span item-end>{{ shooter.score.total_rt }}</span>
-				<p *ngIf="shooter.score.isComplete">
-					<span class="stat">Hits:</span> {{ shooter.score?.statHits }}, 
-					<span class="stat">Avg:</span> {{ shooter.score?.statAvg }}, 
-					<span class="stat">Xs:</span> {{ shooter.score?.statXs }}, 
-					<span class="stat">10s:</span> {{ shooter.score?.stat10s }}, 
-					<span class="stat">9s:</span> {{ shooter.score?.stat9s }}, 
-					<span class="stat">Ms:</span> {{ shooter.score?.statMs }}
-				</p>
+			<ion-item *ngFor="let shooter of scoreCard.shooters; let i = index">
+				<shooter-scorecard [shooter]="shooter" [index]="i"></shooter-scorecard>
 			</ion-item>
 		</div>
 		
@@ -70,6 +63,8 @@
 				</ion-row>
 			</ion-grid>
 		</ion-item>
+
+		<ion-item>&nbsp;</ion-item>
 
 	</ion-list>
 

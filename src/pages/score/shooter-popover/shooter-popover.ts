@@ -31,11 +31,15 @@ export class ShooterPopoverPage {
 		console.log('ionViewDidLoad ShooterPopoverPage');
 	}
 
-	close( shooter ) {
+	AndroidBackButton() {
+        this.viewCtrl.dismiss(); //Cannot return shooter as user not selected one, so just close the popover.
+	}
+
+	Close( shooter ) {
 		this.viewCtrl.dismiss( shooter );
 	}
 
-	info( shooter ) {
+	Info( shooter ) {
 		if( shooter.score.isComplete ) {
 			this.common.ShowAlert( "Score Card Complete", "This score card is now complete." );
 		}

@@ -47,7 +47,7 @@ export class HomePage {
 	ionViewWillEnter() {
 		Const.MISC.CURRENT_PAGE = 'HomePage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
-		this.Init();
+		this.Init();				
 	}
 
 	//Do after page becomes active.
@@ -64,8 +64,11 @@ export class HomePage {
 	
 	Init() {
 
+		// Global.scoreCards = null;
+		// this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
+
 		//Load data if required.
-		if( Global.bows == null || Global.rounds == null || Global.shooters == null ) {
+		if( Global.bows == null || Global.rounds == null || Global.shooters == null || Global.scoreCards == null ) {
 
 			this.loading = this.loadingCtrl.create({
 				content: 'Initializing ...'
@@ -207,7 +210,7 @@ export class HomePage {
 	CheckIfReadyNow() {
 		if( this.haveLoadedRounds && this.haveLoadedBows && this.haveLoadedShooters && this.haveLoadedSettings && this.haveLoadedScoreCards ) {
 			this.loading.dismiss();
-			this.common.AddLog( Global );      
+			this.common.AddLog( Global );	
 		}
 	}
 

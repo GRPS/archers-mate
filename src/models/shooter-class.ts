@@ -9,6 +9,7 @@ export class ShooterClass {
 	gender:     string;
 	age:		number;
 	isDefault:	boolean;
+	isGuest:	boolean;
 	bows:       BowClass[] = [];
 	score:		ScoreClass;
 

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 
 import { ShooterClass } from '../../../models/shooter-class';
 import { ScoreEndClass } from '../../../models/score-class';
+import { ScoreCardService } from '../../../providers/score-card-service';
 
 import { Const } from '../../../providers/constants';
 
@@ -23,8 +24,10 @@ export class ScoreEntryPage {
 	constructor(
 				public navCtrl: NavController, 
 				public navParams: NavParams,
-				public viewCtrl: ViewController
+				public viewCtrl: ViewController,
+				public scoreCardService: ScoreCardService
 			) {
+
 		this.GetPassedData();
 	}
 
@@ -44,8 +47,14 @@ export class ScoreEntryPage {
 		}
 	}
 
+	AndroidBackButton() {
+        this.Back();
+	}
+	
 	Back() {
-		this.viewCtrl.dismiss( this.endScore.end.splice( 0, this.arrows ) );
+		let end: string[] = this.endScore.end.splice( 0, this.arrows );
+		this.endScore.end = this.scoreCardService.SortScores( this.endScore.end );
+		this.viewCtrl.dismiss( this.endScore.end );
 	}
 
 	CanUse( score: string ) {

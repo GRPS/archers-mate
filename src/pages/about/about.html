@@ -20,16 +20,43 @@
 			<field [label]="'Name'" [value]="app?.appName"></field>
 			<field [label]="'Version'" [value]="app?.versionNumber"></field>
 
+			<ion-item-divider color="archers-light-blue">Dummy Score Cards</ion-item-divider>
+
+			<ion-item>
+				<ion-grid>
+					<ion-row>
+						<ion-col>
+							<button ion-button item-right block (click)="DeleteAllDummyScoreCard()" color="danger">Delete all</button>
+						</ion-col>
+						<ion-col>
+							<button ion-button item-right block (click)="AskForAmountOfDummyScoreCards()" color="archers-heading">Create</button>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-item>
+
 			<ion-item-divider color="archers-light-blue">Application Data</ion-item-divider>
 
 			<ion-item>
 				<ion-grid>
 					<ion-row>
 						<ion-col>
-							<button ion-button item-right block (click)="ExportToClipboard()">Export to Clipboard</button>
+							<button col-6 ion-button item-right block (click)="ExportToFile()" color="archers-heading">Export to File</button>
+							<p>android/data/com.archers-mate/files</p>
 						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-item>
+
+			<ion-item-divider color="archers-light-blue">Factory Reset</ion-item-divider>
+
+			<ion-item>
+				<ion-grid>
+					<ion-row>
 						<ion-col>
-							
+							<button ion-button item-right (click)="FactoryReset()" color="danger">
+								<ion-icon name="ios-warning-outline"></ion-icon>
+							</button>
 						</ion-col>
 					</ion-row>
 				</ion-grid>
