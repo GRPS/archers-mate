@@ -1,3 +1,29 @@
 page-stats {
 
+    .shooter-section {
+        display: none;
+    }
+
+    .shooter {
+        background-color:color( $colors, archers-faint-blue ) !important;
+        padding:8px;
+        font-size: 1.5rem !important;
+        margin-top: 2px;
+    }
+    .score {
+        margin-right:10px; 
+        padding: 3px; 
+        border:1px solid #c4c4c4;
+        width: 30px;
+    }
+    .best {
+        background-color: color( $colors, archers-note ) !important;
+        color: #ffffff;
+    }
+
+    .worst {
+        background-color: color( $colors, archers-danger ) !important;
+        color: #ffffff;
+    }
+
 }

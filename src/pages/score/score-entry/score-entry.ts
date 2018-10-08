@@ -52,7 +52,6 @@ export class ScoreEntryPage {
 	}
 	
 	Back() {
-		let end: string[] = this.endScore.end.splice( 0, this.arrows );
 		this.endScore.end = this.scoreCardService.SortScores( this.endScore.end );
 		this.viewCtrl.dismiss( this.endScore.end );
 	}

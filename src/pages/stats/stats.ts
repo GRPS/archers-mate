@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Const } from '../../providers/constants';
 import { CommonProvider } from '../../providers/common-provider';
+import { StatsService } from '../../providers/stats-service';
+import { StatClass, StatDataClass } from '../../models/stat-class';
 
 // import * as _ from 'underscore';
 
@@ -13,10 +15,15 @@ import { CommonProvider } from '../../providers/common-provider';
 })
 export class StatsPage {
 
+	data: StatClass[];
+	dataByRound: StatDataClass[];
+	showSection: string = null;
+
 	constructor(
 				public navCtrl: NavController, 
 				public navParams: NavParams, 
-				public common: CommonProvider
+				public common: CommonProvider,
+				public statsService: StatsService
 				) {
 	}
 
@@ -28,16 +35,20 @@ export class StatsPage {
 	}
   
 	Init() {
-		// let scoreCards: ScoreCardClass = _.where( Global.scoreCards, {status: Const.SCORE_CARD_STATUS.COMPLETED } );
-		// console.log( scoreCards );
-		// let shooters: ShooterClass = _.pluck( scoreCards, 'shooters' );
-		// console.log( shooters );
-		// let shootersFlatten: ShooterClass = _.flatten( shooters, false );
-		// console.log( shootersFlatten );
+		this.data = this.statsService.GetData();
+		this.dataByRound = this.statsService.GetDataByRound( this.data );
 	}
 
   	Back() {
 		this.navCtrl.pop();
+	}
+
+	ShowSection( name ) {
+		if( name == this.showSection ) {
+			this.showSection = null;
+		} else {
+			this.showSection = name;
+		}
 	}
 
 }

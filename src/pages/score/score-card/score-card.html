@@ -30,6 +30,10 @@
 
 		<div *ngFor="let target of scoreCard.round?.targets; let t = index">
 
+			<ion-item-divider>
+				{{shooter.name }}
+			</ion-item-divider>
+
 			<ion-item-divider color="archers-light-blue">
 				Target {{ t + 1 }} <span style="color:#eeeeee; font-size:75%;">({{ target.distance }} {{ scoreCard.round.distance }}, {{ target.size }}{{ scoreCard.round.unit }})</span>
 			</ion-item-divider>

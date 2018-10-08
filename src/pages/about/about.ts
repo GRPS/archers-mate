@@ -102,8 +102,6 @@ export class AboutPage {
 		this.common.PromptUser( "How many?", "3", "number", 5 )
             .then( (number) => {
 
-				let msg: string = '';
-
 				this.loading = this.loadingCtrl.create({
 					content: 'Creating ...'
 				});
@@ -144,13 +142,10 @@ export class AboutPage {
 	GenerateDummyScoreCard(): Promise<ScoreCardClass> {
 
 		return new Promise( resolve => {
-			let numbRnd: number = 0;
-			do {
-				numbRnd = Math.floor( Math.random() * Global.shooters.length );
-			 } while ( numbRnd <= 1 );
+			let numbRnd: number = _.random( 0, ( Global.shooters.length - 1 ) );
 			let randomShooters: ShooterClass[] = _.sample( Global.shooters, numbRnd );
 
-			numbRnd = Math.floor( Math.random() * Global.rounds.length );
+			numbRnd = _.random( 0, ( Global.rounds.length - 1 ) );
 			let randomRound: RoundClass = Global.rounds[ numbRnd ];
 
 			if( randomRound ) {
