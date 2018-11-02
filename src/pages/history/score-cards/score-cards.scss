@@ -2,8 +2,12 @@ page-score-cards {
 
     ion-content {
         ion-label {
-            margin-bottom: 0px !important;
+            // margin-bottom: 0px !important;
         }
+    }
+
+    ion-content > .scroll-content {
+        padding-bottom: 56px;
     }
 
 }

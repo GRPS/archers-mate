@@ -47,12 +47,12 @@ export class RoundService {
 			.catch( this.common.HttpCatchError );
 	}
 
-	Create( callBack ) {
+	Create( callBack: any ) {
 		this.navCtrl.push( Const.PAGES.ROUND_EDIT, { callBack: callBack } );
 	}
 
-	Update( round: RoundClass ) {
-		this.navCtrl.push( Const.PAGES.ROUND_EDIT, { round: round } );
+	Update( callBack: any, round: RoundClass ) {
+		this.navCtrl.push( Const.PAGES.ROUND_EDIT, { callBack: callBack, round: round } );
 	}
 
 	Delete( round: RoundClass ) {

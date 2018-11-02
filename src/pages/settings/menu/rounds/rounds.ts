@@ -67,7 +67,9 @@ export class RoundsPage {
 	}
 
 	UpdateRound( round: RoundClass) {
-		this.roundService.Update( round );
+		this.rememberType = this.selectedType;
+		this.selectedType = '';
+		this.roundService.Update( this.Init, round );
 	}
 
 	SelectRound( round: RoundClass ) {

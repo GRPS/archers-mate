@@ -5,7 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 
-import { Const } from '../providers/constants';
 import { CommonProvider } from '../providers/common-provider';
 
 @Component({
@@ -28,20 +27,15 @@ export class MyApp {
 		platform.ready().then(() => {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
-			statusBar.backgroundColorByHexString( '#93b4d2' );
+			statusBar.backgroundColorByHexString( '#5B8DBB' );
 			// statusBar.styleDefault();
 			splashScreen.hide();
-
-			if( this.platform.is( Const.MISC.CORDOVA ) ) {
-				Const.IS_CORDOVA = true;
-				this.screenOrientation.lock( screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY );
-			}		
 			
 			this.androidPermissions.requestPermissions(
 				[
 				  this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
 				]
-			  );
+			);
 
 			//Handle Android hardware back button.
 			//If the active page has a function called AndroidBackButton then it it called instead.

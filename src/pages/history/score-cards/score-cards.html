@@ -10,10 +10,10 @@
 	</ion-navbar>
 
 	<ion-toolbar>
-		<ion-segment color="archers-heading" [(ngModel)]="scoreCardType">
-			<ion-segment-button value="ongoing">Ongoing <ion-badge color="archers-heading">{{ countOngoing }}</ion-badge></ion-segment-button>
-			<ion-segment-button value="completed">Completed <ion-badge color="archers-heading">{{ countCompleted }}</ion-badge></ion-segment-button>
-			<ion-segment-button value="deleted">Deleted <ion-badge color="archers-heading">{{ countDeleted }}</ion-badge></ion-segment-button>
+		<ion-segment color="archers-heading" [(ngModel)]="scoreCardType" (ionChange)="ScoreCardTypeChange()">
+			<ion-segment-button value="ongoing">Ongoing <ion-badge color="archers-heading">{{ countOngoing | number : fractionSize }}</ion-badge></ion-segment-button>
+			<ion-segment-button value="completed">Completed <ion-badge color="archers-heading">{{ countCompleted | number : fractionSize }}</ion-badge></ion-segment-button>
+			<ion-segment-button value="archived">Archived <ion-badge color="archers-heading">{{ countArchived | number : fractionSize }}</ion-badge></ion-segment-button>
 		</ion-segment>
 	</ion-toolbar>
 
@@ -23,15 +23,25 @@
 	
 	<ion-list no-lines>
 
-		<ion-item-sliding #slidingItem *ngFor="let scoreCard of ( scoreCards | scoreCardType:scoreCardType )">
-			<button ion-item (click)="UpdateScoreCard(scoreCard)">        
+		<ion-item-sliding #slidingItem *ngFor="let scoreCard of ( scoreCards | scoreCardType:scoreCardType ); let i = index;">
+			<button ion-item (click)="UpdateScoreCard(scoreCard)" [ngClass]="i%2 != 0 ? 'evenRow' : ''">        
 				<scorecard-summary [scoreCard]="scoreCard"></scorecard-summary>
 			</button>
 			<ion-item-options side="right">
+				<button ion-button color="light" *ngIf="scoreCard.status!='archived'" (click)="ArchiveScoreCard(slidingItem, scoreCard)">Archive</button>
+				<button ion-button color="light" *ngIf="scoreCard.status=='archived'" (click)="UnarchiveScoreCard(slidingItem, scoreCard)">Unarchive</button>
 				<button ion-button color="danger" (click)="DeleteScoreCard(slidingItem, scoreCard)">Delete</button>
 			</ion-item-options> 
 		</ion-item-sliding>
-
 	</ion-list>
 
 </ion-content>
+
+<ion-footer *ngIf="canShowGetNext">
+	<ion-toolbar>
+		<ion-buttons>
+			<button float-left ion-button clear disabled>Loaded {{ currentCount | number : fractionSize }}/{{ count | number : fractionSize }}</button>
+			<button float-right ion-button outline color="archers-heading" (click)="GetNext()">Load Next {{ perPage }}</button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

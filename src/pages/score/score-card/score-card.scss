@@ -46,6 +46,14 @@ page-score-card {
         margin: 3px !important;
     }
 
+    ion-toolbar p {
+        margin: 0px !important;
+    }
+
+    ion-toolbar.names button {
+        font-size:80% !important;
+    }
+
     .bgcolor-heading {
         background-color: #dbdada !important;
     }
@@ -75,10 +83,17 @@ page-score-card {
         border: 1px solid #c4c4c4 !important;
     }
 
-
-
     .tr {
         text-align: right;
     }
 
+    ion-item-divider  {
+        span, button {
+            height:35px;
+            line-height: 35px;
+        }
+        button {
+            margin-top: 9px !important;
+        }
+    }
 }

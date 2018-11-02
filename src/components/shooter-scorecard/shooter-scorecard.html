@@ -1,11 +1,14 @@
-<h2><small>{{ placeMe(index+1) }}</small>{{ shooter.name }}<span float-right>{{ shooter.score.total_rt }}</span></h2>
-
+<h2>
+  <small>{{ placeMe(index+1) }}</small>
+  {{ shooter.name }}
+  <span float-right>{{ shooter.score.total_rt }}</span>
+</h2>
 <p *ngIf="shooter.score.isComplete">
-  <small></small>
-  <span class="stat">Hits:</span> {{ shooter.score?.statHits }}, 
-  <span class="stat">Avg:</span> {{ shooter.score?.statAvg }}, 
-  <span class="stat">Xs:</span> {{ shooter.score?.statXs }}, 
-  <span class="stat">10s:</span> {{ shooter.score?.stat10s }}, 
-  <span class="stat">9s:</span> {{ shooter.score?.stat9s }}, 
-  <span class="stat">Ms:</span> {{ shooter.score?.statMs }}
+  <small style="margin-left:40px;"></small>
+  <span class="stat">Hits:</span><strong>{{ shooter.score?.statHits }}</strong>, 
+  <span class="stat">Avg:</span><strong>{{ shooter.score?.statAvg }}</strong>, 
+  <span class="stat">Xs</span><strong>{{ shooter.score?.statXs }}</strong>, 
+  <span class="stat">10s</span><strong>{{ shooter.score?.stat10s }}</strong>, 
+  <span class="stat">9s</span><strong>{{ shooter.score?.stat9s }}</strong>, 
+  <span class="stat">Ms</span><strong>{{ shooter.score?.statMs }}</strong>
 </p>

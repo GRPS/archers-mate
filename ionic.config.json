@@ -1,6 +1,7 @@
 {
-  "name": "Archers Mate",
+  "name": "archers-mate",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic-angular"
 }

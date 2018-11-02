@@ -1,25 +1,31 @@
 import { Injectable } from '@angular/core';
-import { AlertController, App, NavController, ToastController } from 'ionic-angular';
+import { AlertController, App, LoadingController, NavController, ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { AppVersion } from '@ionic-native/app-version';
 import { Storage } from '@ionic/storage';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { File } from '@ionic-native/file';
+import { HttpClient } from '@angular/common/http';
 
 import { Const } from './constants';
 import { Global } from './globals';
 import { AppClass } from '../models/app-class';
 
 import * as _ from 'underscore';
-// import { resolveDefinition } from '../../node_modules/@angular/core/src/view/util';
-// import { resolveDefinition } from '../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
 export class CommonProvider {
 
 	navCtrl: NavController;
+	loading;
 
 	constructor(
 				public alertCtrl: AlertController,
+				public screenOrientation: ScreenOrientation,
+				public loadingCtrl: LoadingController,
 				app: App,
+				public file: File,
+				public http: HttpClient,
 				public appVersion: AppVersion,
 				private storage: Storage,
 				private toastCtrl: ToastController,
@@ -54,7 +60,14 @@ export class CommonProvider {
 
 	GetRandomNumber() {
 		let dt = new Date();
-		return dt.getTime();
+		return dt.getTime() + "-" + _.random(0, 10000);
+	}
+
+	GetRandomDate( startDate, endDate, startHour, endHour ) {
+		var date = new Date( + startDate + Math.random() * ( endDate - startDate ) );
+		var hour = startHour + Math.random() * (endHour - startHour) | 0;
+		date.setHours(hour);
+		return date;
 	}
 		
 	Back( rootPage: string = '', forceBack: boolean = false ) {
@@ -133,26 +146,152 @@ export class CommonProvider {
 
 	}
 
+	SaveToFile( label: string, data: any, msg: string = "Saving ..." ): Promise<any> {
+
+		return new Promise( resolve => {
+			this.file.writeFile( this.file.dataDirectory  , "archers-mate-" + label + ".json", data, { replace: true } )
+					.then( () => {
+						resolve();
+					});
+		});	
+	}
+
+	GetFromFile( label: string, msg: string = "Loading ..." ): Promise<any> {
+
+		return new Promise( resolve => {
+			this.file.resolveDirectoryUrl( this.file.dataDirectory )
+				.then( rootDir => {
+					return this.file.readAsText( rootDir.nativeURL, "archers-mate-" + label + ".json" )
+						.then( data  => {
+							resolve( JSON.parse( data ) );
+						});
+				});
+		});
+	}
+
+	GetStorageKeys( label: string ): Promise<any> {
+		return new Promise( resolve => {
+			let ourKeys = [];
+			this.storage.keys()
+				.then( keys => {
+					for( let key of keys ) {
+						if( key.startsWith( label ) ) {
+							ourKeys.push( key );
+						}
+					}
+					resolve( ourKeys );
+				});
+
+		});
+	}
+
+	LoadStorageKeys( keys ): Promise<any> {
+		return new Promise( resolve => {
+			//Loop keys and get data from each entry and append together into Global.Score-Cards
+			let promise_arr3 = [];
+			let newData = [];
+			for( let i = 0; i < keys.length; i++ ) {
+				promise_arr3.push(
+					this.storage.get( keys[ i ] ) 
+						.then( data => {
+							newData = newData.concat( data );
+						})
+					);
+			}
+			Promise.all(promise_arr3).then( results => {
+				resolve( newData );
+			});
+		});
+	}
+
+	RemoveStorageKeys( label: string, keys ): Promise<any> {
+		return new Promise( resolve => {
+			//remove ALL the keys
+			let promise_arr1 = [];
+
+			for( let i = 0; i < keys.length; i++ ) {
+				promise_arr1.push(this.storage.remove( label + "-" + i ) );
+			}
+
+			Promise.all(promise_arr1).then( results => {
+				resolve();
+			});
+		});
+	}
+
+	SaveStorageKeys( label: string, data ): Promise<any> {
+		return new Promise( resolve => {
+
+			let promise_arr2 = [];
+
+			for( let i = 0; i < data.length; i++ ) {
+				promise_arr2.push(this.storage.set( label + "-" + i, data[ i ] ) );
+			}
+
+			Promise.all(promise_arr2).then( results => {
+				resolve();
+			});
+
+		});
+	}
+
 	SaveToStorage( label: string, data: any ): Promise<any> {
 		return new Promise( resolve => {
-			this.storage.remove( label )
-				.then( () => {
-					this.storage.set( label, data )
-						.then( () => {
-							console.log('SaveToStorage: ' + label);													
-							resolve();
-						});
-				});		
+
+			if( label == Const.LABEL.SCORE_CARDS ) {
+
+				return this.GetStorageKeys( label )
+					.then( keys => {
+						return this.RemoveStorageKeys( label, keys )
+							.then( () => {
+								return this.SaveStorageKeys( label, _.chunk( data, Const.MISC.SCORE_CARDS_PER_STORAGE ) )
+									.then( () => {
+										resolve();
+									});
+							});
+
+					});
+
+			} else {
+
+				this.storage.remove( label )
+					.then( () => {
+						this.storage.set( label, data )
+							.then( () => {											
+								resolve();
+							});
+					});	
+
+			}
+	
 		});				
 	}
 	
 	GetFromStorage( label: string ): Promise<any> {
+
 		return new Promise( resolve => {
-			this.storage.get( label )
-				.then( res => {									
-					resolve( res );
-				});			
+			
+			if( label == Const.LABEL.SCORE_CARDS ) {
+
+				return this.GetStorageKeys( label )
+					.then( keys => {
+						return this.LoadStorageKeys( keys )
+							.then( res => {
+								resolve( res );
+							});
+					});
+
+			} else {
+
+				this.storage.get( label )
+					.then( res => {				
+						resolve( res );
+					});		
+
+			}
+
 		});
+
 	}
 
 	ConfirmUser( title: string, message: string, btnStopLabel: string, btnContinueLabel: string ) {
@@ -222,6 +361,14 @@ export class CommonProvider {
 	
 		});
 	
-	  };
+		};
+		
+		UnlockScreen() {
+			this.screenOrientation.unlock();
+		}
+
+		LockScreen() {
+			this.screenOrientation.lock( this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY );
+		}
 
 }

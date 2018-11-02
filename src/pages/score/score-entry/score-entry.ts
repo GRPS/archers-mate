@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { ShooterClass } from '../../../models/shooter-class';
 import { ScoreEndClass } from '../../../models/score-class';
 import { ScoreCardService } from '../../../providers/score-card-service';
-
+import { CommonProvider } from '../../../providers/common-provider';
 import { Const } from '../../../providers/constants';
 
 import * as _ from 'underscore';
@@ -25,15 +25,19 @@ export class ScoreEntryPage {
 				public navCtrl: NavController, 
 				public navParams: NavParams,
 				public viewCtrl: ViewController,
+				public common: CommonProvider,
 				public scoreCardService: ScoreCardService
 			) {
 
 		this.GetPassedData();
 	}
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad ScoreEntryPage');
+	//Do before page becomes active.
+	ionViewWillEnter() {
+		Const.MISC.CURRENT_PAGE = 'ScoreEntryPage';
+		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 	}
+
 
 	GetPassedData() {
 		if( this.navParams.get( 'arrows' ) != undefined ) {

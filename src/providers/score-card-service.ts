@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { AlertController, App, NavController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 
+// import 'rxjs/add/operator/catch';
+// import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/do';
+
 import { Const } from './constants';
 import { Global } from './globals';
 import { CommonProvider } from './common-provider';
@@ -43,15 +47,29 @@ export class ScoreCardService {
 
 	DeleteScoreCards( scoreCards: ScoreCardClass[], scoreCard: ScoreCardClass ) {
 		return new Promise( resolve => {
-			if( scoreCard.status == Const.SCORE_CARD_STATUS.DELETED ) {
-				let newScoreCards: ScoreCardClass[] = _.filter( scoreCards, function( obj ) { return obj != scoreCard });
-				scoreCards = newScoreCards;
-			} else {
-				let index = _.findIndex( scoreCards, { id: scoreCard.id } );
-				scoreCards[ index ].status = Const.SCORE_CARD_STATUS.DELETED;				
-			}
+			let newScoreCards: ScoreCardClass[] = _.filter( scoreCards, function( obj ) { return obj.id != scoreCard.id });		
+			resolve( newScoreCards );
+		});
+	}
+
+	ArchiveScoreCards( scoreCards: ScoreCardClass[], scoreCard: ScoreCardClass ) {
+		return new Promise( resolve => {			
+			let index = _.findIndex( scoreCards, { id: scoreCard.id } );
+			scoreCards[ index ].status = Const.SCORE_CARD_STATUS.ARCHIVED;	
 			resolve( scoreCards );
 		});
+	}
+	UnarchiveScoreCards( scoreCards: ScoreCardClass[], scoreCard: ScoreCardClass ) {
+		return new Promise( resolve => {			
+			let index = _.findIndex( scoreCards, { id: scoreCard.id } );
+			let inCompleteShooters: ShooterClass[] = _.filter( scoreCards[ index ].shooters, function( obj: ShooterClass ) { return !obj.score.isComplete });	
+			scoreCards[ index ].status = (inCompleteShooters.length == 0 ? Const.SCORE_CARD_STATUS.COMPLETED : Const.SCORE_CARD_STATUS.ONGOING );
+			resolve( scoreCards );
+		});
+	}
+
+	OrderScoreCards() {
+		Global.scoreCards = _.sortBy( Global.scoreCards, function( sc: ScoreCardClass ) { return new Date( sc.dt ); }).reverse();
 	}
 
 	Save( scoreCard: ScoreCardClass, isNew: boolean ): Promise<boolean> {
@@ -68,6 +86,7 @@ export class ScoreCardService {
 					Global.scoreCards[ index ] = scoreCard;
 				}
 			}
+			this.OrderScoreCards();
 
 			this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
 				.then( () => {
@@ -159,12 +178,12 @@ export class ScoreCardService {
 		});
 	}
 	
-	GetSegmentCounts(): Promise<number[]> {
+	GetSegmentScoreCards(): Promise<any[]> {
 		return new Promise( ( resolve, reject ) => {
 			resolve( [
-				_.filter( Global.scoreCards, { status: Const.SCORE_CARD_STATUS.ONGOING } ).length,
-				_.filter( Global.scoreCards, { status: Const.SCORE_CARD_STATUS.COMPLETED } ).length,
-				_.filter( Global.scoreCards, { status: Const.SCORE_CARD_STATUS.DELETED } ).length,
+				_.filter( Global.scoreCards, { status: Const.SCORE_CARD_STATUS.ONGOING } ),
+				_.filter( Global.scoreCards, { status: Const.SCORE_CARD_STATUS.COMPLETED } ),
+				_.filter( Global.scoreCards, { status: Const.SCORE_CARD_STATUS.ARCHIVED } ),
 			] );
 		});
 	}

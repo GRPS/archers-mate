@@ -1,0 +1,110 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+	<ion-buttons left>
+		<button ion-button icon-only (click)="Back()">
+			<ion-icon name="ios-arrow-back"></ion-icon>
+		</button>
+	</ion-buttons>
+	<ion-title>Statistics By Round</ion-title>
+	</ion-navbar>
+</ion-header>
+	
+<ion-content no-bounce>
+
+	<ion-list no-lines>
+		<ion-item-divider color="archers-light-blue">Filters</ion-item-divider>
+
+		<ion-item>
+			<ion-label>Date Range</ion-label>
+			<ion-note item-end color="dark">{{ dtFrom | date:'dd MMM yyyy' }} to {{ dtTo | date:'dd MMM yyyy' }}</ion-note>
+		</ion-item>
+
+		<ion-item>
+			<ion-label>Score cards loaded</ion-label>
+			<ion-note item-end color="dark">{{ dataCount | number : fractionSize }}</ion-note>
+		</ion-item>
+
+		<ion-item-divider color="archers-light-blue">Results</ion-item-divider>
+
+	</ion-list>		
+	
+	<ion-list no-lines item *ngIf="data?.length==0">
+		<ion-item>
+			<note [message]="'No stats available'"></note>
+		</ion-item>
+	</ion-list>
+
+	<div *ngFor="let round of data; let roundIndex = index;">
+		<ion-item-divider color="archers-faint-blue" (click)="ShowSection(round.name);">
+			{{ round.name }}
+			<ion-icon *ngIf="showSection == round.name" float-right name="ios-arrow-down"></ion-icon>
+			<ion-icon *ngIf="showSection != round.name" float-right name="ios-arrow-up"></ion-icon>
+		</ion-item-divider>
+		<div *ngIf="showSection == round.name">
+			<p style="padding-left:15px;">Scores for this round range from <span class="worst-text">{{ round.shooterWorst.score.total_rt }}</span> to <span class="best-text">{{ round.shooterBest.score.total_rt }}</span>.</p>
+			<ion-grid>
+				<ion-row class="header">
+					<ion-col col-5 text-left (click)="SortShootersBy(roundIndex, 'name')" style="padding-left:10px;">
+						<p>
+							<ion-icon *ngIf="sortBy=='name'&&sortAsc" name="ios-arrow-down"></ion-icon> 
+							<ion-icon *ngIf="sortBy=='name'&&!sortAsc" name="ios-arrow-up"></ion-icon> 
+							Shooter
+						</p>
+					</ion-col>
+					<ion-col col-2 text-right (click)="SortShootersBy(roundIndex, 'best')">
+						<p>
+							<ion-icon *ngIf="sortBy=='best'&&sortAsc" name="ios-arrow-down"></ion-icon> 
+							<ion-icon *ngIf="sortBy=='best'&&!sortAsc" name="ios-arrow-up"></ion-icon> 
+							Best
+						</p>
+					</ion-col>
+					<ion-col col-2 text-right (click)="SortShootersBy(roundIndex, 'worst')">
+						<p>
+							<ion-icon *ngIf="sortBy=='worst'&&sortAsc" name="ios-arrow-down"></ion-icon> 
+							<ion-icon *ngIf="sortBy=='worst'&&!sortAsc" name="ios-arrow-up"></ion-icon> 
+							Worst
+						</p>
+					</ion-col>
+					<ion-col col-2 text-right (click)="SortShootersBy(roundIndex, 'avg')">
+						<p>
+							<ion-icon *ngIf="sortBy=='avg'&&sortAsc" name="ios-arrow-down"></ion-icon> 
+							<ion-icon *ngIf="sortBy=='avg'&&!sortAsc" name="ios-arrow-up"></ion-icon> 
+							Avg
+						</p>
+					</ion-col>
+					<ion-col col-1></ion-col>
+				</ion-row>
+			</ion-grid>
+			<div *ngFor="let shooter of round.data; let i = index;">
+				<ion-grid [ngClass]="i%2 != 0 ? 'evenRow' : ''">
+					<ion-row>
+						<ion-col col-5>
+							<span class="shooter" (click)="ShowShooterSection(shooter.name)">
+								{{ shooter.name }}<small color="light"> - {{ shooter.scores.length }}</small>
+							</span>
+						</ion-col>
+						<ion-col col-2 class="best-text" text-right>{{ shooter.best }}</ion-col>
+						<ion-col col-2 class="worst-text" text-right>{{ shooter.worst }}</ion-col>
+						<ion-col col-2 text-right>{{ shooter.avg }}</ion-col>
+						<ion-col col-1 (click)="ShowShooterSection(shooter.name)">
+								<ion-icon *ngIf="showSection == round.name && showShooterSection == shooter.name" float-right name="ios-arrow-down"></ion-icon>
+								<ion-icon *ngIf="showSection != round.name || (showSection == round.name && showShooterSection != shooter.name)" float-right name="ios-arrow-up"></ion-icon>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+				<div *ngIf="showSection == round.name && showShooterSection == shooter.name">
+					<ion-grid>
+						<ion-row>
+							<ion-col col-2 *ngFor="let sc of shooter.scores" [class.worst]="sc.isWorst&&shooter.scores.length>1" [class.best]="sc.isBest" style="text-align:center; margin-right:10px; margin-bottom:5px; padding:3px; border:1px solid #c4c4c4;">
+								<span (click)="InformUser()" (press)="OpenScoreCard(sc.scoreCardId)">{{ sc.score }}</span>
+							</ion-col>
+						</ion-row>
+					</ion-grid>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+</ion-content>

@@ -28,8 +28,8 @@
 		</ion-item>
 
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-			<ion-item-sliding #slidingItem *ngFor="let sightmark of bow.sightMarks">
-				<button ion-item (click)="UpdateBowSightMark(sightmark)">
+			<ion-item-sliding #slidingItem *ngFor="let sightmark of bow.sightMarks; let i = index">
+				<button ion-item (click)="UpdateBowSightMark(sightmark)" [ngClass]="i%2 != 0 ? 'evenRow' : ''">
 						{{ sightmark.distance }} {{ sightmark.unit }}
 						<p><small>Notch: {{ sightmark.notch }}, Position: {{ sightmark.position }}</small></p>
 						<p><small>Notes: {{ sightmark.note }}</small></p>

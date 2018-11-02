@@ -41,8 +41,8 @@
 		</ion-item>
 
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-			<ion-item-sliding #slidingItem *ngFor="let target of round.targets">
-				<button ion-item (click)="UpdateRoundTarget(target)">
+			<ion-item-sliding #slidingItem *ngFor="let target of round.targets; let i = index">
+				<button ion-item (click)="UpdateRoundTarget(target)" [ngClass]="i%2 != 0 ? 'evenRow' : ''">
 					<p>Distance: {{ target?.distance }} {{ round?.distance }}s, Size: {{ target?.size }} {{ round?.unit }}</p>
 					<p>Ends: {{ target?.ends }}, Arrows: {{ target?.totalArrows }}, Max Score: {{ target?.maxScore }}</p>
 				</button>

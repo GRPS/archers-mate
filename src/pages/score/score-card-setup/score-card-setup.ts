@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 import { Const } from '../../../providers/constants';
 import { Global } from '../../../providers/globals';
@@ -26,7 +27,8 @@ export class ScoreCardSetupPage {
 	showButtonAddShooter: boolean = true;
 
 	constructor(
-				private formBuilder: FormBuilder,
+				public emailComposer: EmailComposer,
+				public formBuilder: FormBuilder,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
 				public modalCtrl: ModalController,
@@ -85,6 +87,77 @@ export class ScoreCardSetupPage {
 
 	Edit() {
 		this.isEditMode = !this.isEditMode;
+	}
+
+	Email() {
+
+		// this.emailComposer.isAvailable().then( ( available: boolean ) => {
+		// 	if( available ) {
+		// 	  alert('Good to send email');
+		// 	} else {
+		// 		this.common.ShowAlert( "Warning", "Sending of emails is not supported on this device." );
+		// 	}
+		// });
+
+		let dt = new Date( this.scoreCard.dt );
+		let msg: string = "";
+
+		msg += this.AddLine( "<h3>Score Card</h3>" );
+		msg += this.AddLine( "<b>Date: </b>" + dt.toLocaleDateString() );
+		msg += this.AddLine( "<b>Round: </b>" + this.scoreCard.round.name, 2 );
+
+		msg += this.AddLine( "<h3>Score Summary</h3>" );
+		for( let shooter of this.scoreCard.shooters ) {
+			msg += this.AddLine( shooter.name + " (" + shooter.initials + ") total score is " + shooter.score.total_rt );
+		}
+
+		msg += this.AddLine( "<h3>Shooter's Scores</h3>" );
+		for( let shooter of this.scoreCard.shooters ) {
+			msg += this.AddLine( "<b>" + shooter.name + " (" + shooter.initials + ")</b>" );
+			for( let t=0; t < shooter.score.targets.length; t++ ) {
+				msg += this.AddLine( "<b>Target " + ( t + 1 ) + "</b>");
+				for( let e=0; e < shooter.score.targets[ t ].ends.length; e++ ) {
+					msg += this.AddLine( "<b>End " + ( e + 1 ) + " =</b>" + shooter.score.targets[ t ].ends[ e ].end );
+				}
+			}
+			msg += this.AddLine( "" );
+		}
+
+		msg += this.AddLine( "<h3>Shooter's Scores CSV Format</h3>" );
+
+		msg += this.AddLine( "<p>This CSV output can be loaded into Excel by copying the email CSV data to the clipboard and pasting it into an Excel spreadsheet. If you repeat this process for many score cards, each pasting it below the other you can then copy all the data to the clipboard and paste into another worksheet and then select 'Data\\Text to columns' and then select all column and select 'Data\\Filter'. Now you can filter your data on any shooter, date etc.</p>", 2 );
+
+		msg += this.AddLine( "Date,Round Name,Shooter Name,Shooter Initials,Target,End,Arrow 1,Arrow 2,Arrow 3,Arrow 4,Arrow 5,Arrow 6,Total" );
+		for( let shooter of this.scoreCard.shooters ) {
+			for( let t=0; t < shooter.score.targets.length; t++ ) {
+				for( let e=0; e < shooter.score.targets[ t ].ends.length; e++ ) {
+					msg += this.AddLine( dt.toLocaleDateString() + "," + this.scoreCard.round.name + "," + shooter.name + "," + shooter.initials + "," + t + "," + e + "," + shooter.score.targets[ t ].ends[ e ].end + this.MissingScores( this.scoreCard.round.arrows ) + "," + shooter.score.targets[ t ].ends[ e ].total_et );
+				}
+			}
+		}
+
+		let email = {
+			to: 'grahamsimmons@hotmail.co.uk',
+			subject: 'Archers Mate Score Card - ' + dt.toLocaleDateString(),
+			body: msg,
+			isHtml: true
+		  };
+		  
+		// Send a text message using default options
+		this.emailComposer.open(email);
+
+	}
+
+	AddLine( msg:string, numLines: number = 1 ) {
+		let lines = "";
+		for(let i=0; i < numLines; i++) { lines += "<br>";}
+		return msg + lines;
+	}
+
+	MissingScores( current: number ) {
+		let lines = "";
+		for(let i=0; i < (6 - current ); i++) { lines += ",";}
+		return lines;
 	}
 
 	Save() {
@@ -192,8 +265,11 @@ export class ScoreCardSetupPage {
 	}
 
 	GotoScores() {
-		let roundModal = this.modalCtrl.create( Const.PAGES.SCORE_CARD, { 'score-card': this.scoreCard } );
-		roundModal.onDidDismiss( newScoreCard => {	
+		this.navCtrl.push( Const.PAGES.SCORE_CARD, { callBack: this.GetNewScoreCard, 'score-card': this.scoreCard } );
+	}
+
+	GetNewScoreCard = ( newScoreCard: ScoreCardClass ) => {
+		return new Promise( resolve => {
 			this.scoreCard = newScoreCard;
 
 			if( this.scoreCard.status == Const.SCORE_CARD_STATUS.ONGOING ) {
@@ -220,12 +296,13 @@ export class ScoreCardSetupPage {
 
 				this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
 					.then( () => {
+						resolve();
 						this.common.ShowToastSuccess( 'Saved!' );	
 					});
+			} else {
+				resolve();
 			}
-
 		});
-		roundModal.present();
 	}
 
 }

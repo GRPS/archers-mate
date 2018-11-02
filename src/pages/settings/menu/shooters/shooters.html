@@ -31,8 +31,8 @@
 		</ion-item>
 
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-			<ion-item-sliding #slidingItem *ngFor="let shooter of shooters" >
-				<button ion-item (click)="UpdateShooter(shooter)" *ngIf="!shooter.isDefault">        
+			<ion-item-sliding #slidingItem *ngFor="let shooter of shooters; let i = index">
+				<button ion-item (click)="UpdateShooter(shooter)" *ngIf="!shooter.isDefault" [ngClass]="i%2 != 0 ? 'evenRow' : ''">        
 					<shooter [shooter]="shooter"></shooter>
 				</button>
 				<ion-item-options side="right">

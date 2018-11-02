@@ -1,6 +1,6 @@
 export class TargetClass {
 
-	id: 		  number;
+	id: 		  string;
 	distance:     number;
 	size:         number;
 	ends:         number;

@@ -2,6 +2,7 @@ export const Const = {
 
 	LOGGING: true,
 	IS_CORDOVA: false,
+	IS_TABLET: false,
 	
 	URL: {
 		BOWS: './assets/files/bows.json',
@@ -12,7 +13,12 @@ export const Const = {
 	MISC: {
 		CURRENT_PAGE: '',
 		CORDOVA: "cordova",
-		SCORE_END_EMPTY: " ",
+		SCORE_END_EMPTY: " ", 
+		MAX_SCORE_CARDS_BEFORE_WE_SHOW_LOADING_MESSAGE: 100,
+		TEST_SCORE_CARD_LABEL: "Test",
+		MIN_DATE: '01/01/2010',
+		SCORE_CARDS_PER_STORAGE: 1000,
+		MAX_SCORE_CARDS: 10000
 	},
 
 	LABEL: {
@@ -29,7 +35,8 @@ export const Const = {
 	SCORE_CARD_STATUS: {
 		ONGOING: 'ongoing',
 		COMPLETED: 'completed',
-		DELETED: 'deleted'
+		DELETED: 'deleted',
+		ARCHIVED: 'archived'
 	},
 
 	PAGES: {
@@ -51,7 +58,8 @@ export const Const = {
 		SCORE_CARDS: 'ScoreCardsPage',
 		SCORE_CARD: 'ScoreCardPage',
 		SCORE_ENTRY: 'ScoreEntryPage',
-		STATS: 'StatsPage'
+		STATS: 'StatsPage',
+		STATS_BEGIN: 'StatsBeginPage'
 	},
 
 	TOAST: {

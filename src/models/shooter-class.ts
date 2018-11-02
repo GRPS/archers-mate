@@ -3,7 +3,7 @@ import { ScoreClass } from './score-class';
 
 export class ShooterClass {
 
-	id: 		number;
+	id: 		string;
 	name:		string;
 	initials:   string;
 	gender:     string;

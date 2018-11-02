@@ -1,0 +1,36 @@
+<ion-header>
+
+	<ion-navbar color="archers-heading" hideBackButton>
+	<ion-buttons left>
+		<button ion-button icon-only (click)="Back()">
+			<ion-icon name="ios-arrow-back"></ion-icon>
+		</button>
+	</ion-buttons>
+	<ion-title>Statistics</ion-title>
+	</ion-navbar>
+	
+</ion-header>
+	
+<ion-content no-bounce>
+
+  <ion-list no-lines>
+
+    <ion-item-divider color="archers-light-blue">Filters</ion-item-divider>
+
+    <ion-item>
+      <ion-label fixed>Date From</ion-label>
+      <ion-datetime displayFormat="D MMM YYYY" min="{{ dtMin }}" max="{{ dtMax }}" [(ngModel)]="dtFrom"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label fixed>Date To</ion-label>
+      <ion-datetime displayFormat="D MMM YYYY" [(ngModel)]="dtTo"></ion-datetime>
+    </ion-item>
+
+    <ion-item-divider color="archers-light-blue">Select Report</ion-item-divider>
+
+    <button ion-item (click)="ByRound()">By Round</button>
+
+  </ion-list>
+
+</ion-content>

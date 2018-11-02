@@ -3,7 +3,7 @@ import { RoundClass } from './round-class';
 
 export class ScoreCardClass {
 
-	id: 		number;
+	id: 		string;
 	dt: 		string;
 	name:		string;
 	notes:		string;

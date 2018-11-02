@@ -9,6 +9,7 @@ import { CommonProvider } from '../../../providers/common-provider';
 import { ScoreCardService } from '../../../providers/score-card-service';
 
 import * as _ from 'underscore';
+import { SightMarkClass } from '../../../models/sight-mark-class';
 
 @IonicPage()
 @Component({
@@ -16,6 +17,8 @@ import * as _ from 'underscore';
 	templateUrl: 'score-card.html',
 })
 export class ScoreCardPage {
+
+	callBack: any;
 
 	scoreCard: ScoreCardClass;
 	allEnds = [1,2,3,4,5,6];
@@ -28,6 +31,10 @@ export class ScoreCardPage {
 	shooter: ShooterClass;
 	shooter_n: ShooterClass;
 	shooter_p: ShooterClass;
+
+	sm_data: any[] = [];
+
+	shooterSightMarks: SightMarkClass[];
 	
 	constructor(
 				public navCtrl: NavController, 
@@ -40,6 +47,7 @@ export class ScoreCardPage {
 			) {
 
 		this.GetPassedScoreCard();
+		this.GenerateShooterSightMarkData();
 
 	}
 
@@ -51,6 +59,11 @@ export class ScoreCardPage {
 	}
 
 	GetPassedScoreCard() {
+
+		if( this.navParams.get('callBack') != undefined ) {
+			this.callBack = this.navParams.data.callBack;	
+		}
+
 		if( this.navParams.get( Const.LABEL.SCORE_CARD ) != undefined ) {		
 			this.scoreCard = <ScoreCardClass> this.navParams.get( Const.LABEL.SCORE_CARD );
 
@@ -92,7 +105,11 @@ export class ScoreCardPage {
 	}
 	
 	Back() {
-		this.viewCtrl.dismiss( this.scoreCard );
+		// this.viewCtrl.dismiss( this.scoreCard );
+		this.callBack( this.scoreCard )
+			.then( () => {
+				this.navCtrl.pop();
+			});	
 	}
 
 	ChangeShooter( myEvent ) {
@@ -115,9 +132,9 @@ export class ScoreCardPage {
 	
 	SwipeShooter( $event ) {
 		if( $event.offsetDirection == 4 ){
-			this.next();
-		} else if( $event.offsetDirection == 2 ){
 			this.prev();
+		} else if( $event.offsetDirection == 2 ){
+			this.next();
 		}
 	}
 
@@ -246,5 +263,31 @@ export class ScoreCardPage {
 		// }
 	}
 
-	
+	GenerateShooterSightMarkData() {
+
+		for( let shooter of this.shooters ) {
+			for( let bow of shooter.bows ) {
+				for( let sightMark of bow.sightMarks ) {
+					this.sm_data[ shooter.name + "-" + sightMark.distance + "-" + sightMark.unit ] = this.sm_data[ shooter.name + "-" + sightMark.distance + "-" + sightMark.unit ] || [];
+					this.sm_data[ shooter.name + "-" + sightMark.distance + "-" + sightMark.unit ].push( "<table class='bow-table'><tbody><tr><td colspan='2' class='bow-detail'>" + bow.name + "</td</tr><tr><td>Notch: </td><td>" + sightMark.notch + "</td></tr><tr><td>Position: </td><td>" + sightMark.position + "</td></tr><tr><td>Notes: </td><td>" + sightMark.note + "</td></tr></tbody></table>" ); 
+				}
+			}
+		}
+		
+		console.log(this.sm_data);
+
+	}
+
+	ShowShooterSightMarks( target: TargetClass, shooter: ShooterClass ) {
+		let key: string = shooter.name + "-" + target.distance + "-" + this.scoreCard.round.distance;
+		if( this.sm_data[ key ] != undefined ) {
+			this.common.ShowAlert( "Sight Marks", this.sm_data[ key ].join('<br>') );
+		}
+	}
+
+	DoesHaveSightMarks( target: TargetClass, shooter: ShooterClass ) {
+		let key: string = shooter.name + "-" + target.distance + "-" + this.scoreCard.round.distance;
+		return this.sm_data[ key ] == undefined ? false: true;
+	}
+
 }

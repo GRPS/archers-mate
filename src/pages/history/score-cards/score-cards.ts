@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { ScoreCardClass } from '../../../models/score-card-class';
 import { CommonProvider } from '../../../providers/common-provider';
 import { Const } from '../../../providers/constants';
@@ -13,13 +13,24 @@ import { ScoreCardService } from '../../../providers/score-card-service';
 })
 export class ScoreCardsPage {
 
+	perPage: number = Const.MISC.MAX_SCORE_CARDS_BEFORE_WE_SHOW_LOADING_MESSAGE;
+	currentPage: number = 1;
+	canShowGetNext: boolean = true;
+
+	isTablet: boolean = false;
 	scoreCards: ScoreCardClass[];
 	scoreCardType: string = Const.SCORE_CARD_STATUS.ONGOING;
-	countOngoing: number;
-	countCompleted: number;
-	countDeleted: number;
+	scoreCardOngoing: ScoreCardClass[];
+	scoreCardCompleted: ScoreCardClass[];
+	scoreCardArchived: ScoreCardClass[];
+	countOngoing: number = 0;
+	countCompleted: number = 0;
+	countArchived: number = 0;
+	count: number = 0;
+	currentCount: number = 0;
 
 	constructor(
+				public loadingCtrl: LoadingController,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
 				public common: CommonProvider,
@@ -35,13 +46,21 @@ export class ScoreCardsPage {
 	}
 
 	Init() {
-		this.scoreCards = Global.scoreCards;
 		
-		this.scoreCardService.GetSegmentCounts()
-			.then( counts => {
-				this.countOngoing = counts[ 0 ];
-				this.countCompleted = counts[ 1 ];
-				this.countDeleted = counts[ 2 ];
+		this.isTablet = Const.IS_TABLET;
+
+		this.scoreCardService.GetSegmentScoreCards()
+			.then( scoreCards => {
+				this.scoreCardOngoing = <ScoreCardClass[]> scoreCards[ 0 ];
+				this.scoreCardCompleted = <ScoreCardClass[]> scoreCards[ 1 ];
+				this.scoreCardArchived = <ScoreCardClass[]> scoreCards[ 2 ];
+
+				this.countOngoing = this.scoreCardOngoing.length;
+				this.countCompleted = this.scoreCardCompleted.length;
+				this.countArchived = this.scoreCardArchived.length;
+
+				this.PaginateScoreCards();
+
 			});		
 
 	}
@@ -54,26 +73,96 @@ export class ScoreCardsPage {
 		this.scoreCardService.Update( scoreCard );
 	}
 
-	DeleteScoreCard( slidingItem, scoreCard ) {
-		this.scoreCardService.DeleteScoreCards( this.scoreCards, scoreCard )
+	ArchiveScoreCard( slidingItem, scoreCard ) {
+		this.scoreCardService.ArchiveScoreCards( Global.scoreCards, scoreCard )
 			.then( scoreCards => {
 				this.scoreCards = <ScoreCardClass[]> scoreCards;
-				this.UpdateGlobal();
-
+				this.UpdateGlobal( false );
 				slidingItem.close(); 
-
-				this.common.ShowToastSuccess( 'Deleted!' );
+				this.common.ShowToastSuccess( 'Archived!' );
 			});
 	}
 
-	UpdateGlobal() {
+	UnarchiveScoreCard( slidingItem, scoreCard ) {
+		this.scoreCardService.UnarchiveScoreCards( Global.scoreCards, scoreCard )
+			.then( scoreCards => {
+				this.scoreCards = <ScoreCardClass[]> scoreCards;
+				this.UpdateGlobal( false );
+				slidingItem.close(); 
+				this.common.ShowToastSuccess( 'Unarchived!' );
+			});
+	}
+
+	DeleteScoreCard( slidingItem, scoreCard ) {
+		this.common.ConfirmUser( 'Delete Score Card', 'Are you sure?', 'No', 'Yes' )
+			.then( result => {
+				if( result ) {
+					this.scoreCardService.DeleteScoreCards( Global.scoreCards, scoreCard )
+						.then( scoreCards => {
+							this.scoreCards = <ScoreCardClass[]> scoreCards;
+							this.UpdateGlobal( false );
+							slidingItem.close(); 
+							this.common.ShowToastSuccess( 'Deleted!' );
+						});
+				} else {
+					slidingItem.close(); 				
+				}
+			});
+	}
+
+	UpdateGlobal( showSave: boolean = true ) {
 		Global.scoreCards = this.scoreCards;
 		this.Init();
 
 		this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
 			.then( () => {
-				this.common.ShowToastSuccess( 'Saved!' );
+				if( showSave ) {
+					this.common.ShowToastSuccess( 'Saved!' );
+				}
 			});
+	}
+
+	ScoreCardTypeChange() {
+		this.currentPage = 1;
+		this.PaginateScoreCards();
+	}
+
+	PaginateScoreCards() {
+
+		let toLoad: number = this.perPage * this.currentPage;
+
+		switch ( this.scoreCardType ) {
+			case Const.SCORE_CARD_STATUS.ONGOING:
+				this.count = this.countOngoing;
+				this.scoreCards =  this.scoreCardOngoing.slice( 0, this.CheckMax( toLoad, this.countOngoing ) );
+				break;
+			case Const.SCORE_CARD_STATUS.COMPLETED:
+				this.count = this.countCompleted;
+				this.scoreCards =  this.scoreCardCompleted.slice( 0, this.CheckMax( toLoad, this.countCompleted ) );
+				break;
+			case Const.SCORE_CARD_STATUS.ARCHIVED:
+				this.count = this.countArchived;
+				this.scoreCards =  this.scoreCardArchived.slice( 0, this.CheckMax( toLoad, this.countArchived ) );	
+				break;
+		}
+
+	}
+
+	CheckMax( toLoad: number, total: number ) {
+		if( toLoad >= total ) {
+			this.canShowGetNext = false;
+			this.currentCount = total;
+			return total;
+		} else {
+			this.canShowGetNext = true;
+			this.currentCount = toLoad;
+			return toLoad;
+		}
+	}
+
+	GetNext() {
+		this.currentPage++;
+		this.PaginateScoreCards();
 	}
 
 }

@@ -1,7 +1,14 @@
 shooter-scorecard {
-    small {
-        display: inline-block;
-        width: 40px !important;
-        color: color( $colors, archers-heading );
+    h2 {
+        small {
+            display: inline-block;
+            width: 40px !important;
+            color: color( $colors, archers-heading );
+        }
+    }
+
+    span.stat {
+        color: color( $colors, archers-light-blue );
+        margin-right:8px;
     }
 }

@@ -7,20 +7,26 @@
 			</button>
 		</ion-buttons>
 		<ion-title>Score Card</ion-title>
-		<ion-buttons right>
-			<button ion-button icon-only clear (click)="ChangeShooter($event)"><ion-icon name="man"></ion-icon></button>
+		<ion-buttons right *ngIf="maxShooters > 1">
+			<button ion-button icon-only clear (click)="ChangeShooter($event)"><ion-icon name="body"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
 
-	<ion-toolbar text-center *ngIf="maxShooters > 0">
-		<button ion-button clear (click)="prev()" [color]="shooter_p.score.isComplete?'secondary':''" *ngIf="shooter_p.initials != shooter_n.initials">
-			{{ shooter_p.initials }} <ion-icon name="md-arrow-back"></ion-icon>
-		</button>
-		<button ion-button outline [color]="shooter.score.isComplete?'secondary':''">{{ shooter.initials }}</button>
-		<button ion-button clear (click)="next()" [color]="shooter_n.score.isComplete?'secondary':''">
-			<ion-icon name="md-arrow-forward"></ion-icon> {{ shooter_n.initials }}
-		</button>
+	<ion-toolbar class="names" *ngIf="maxShooters > 1" text-center>
+		<button ion-button clear (click)="prev()" [color]="shooter_p.score.isComplete?'secondary':'archers-light-blue'" *ngIf="shooter_p.initials != shooter_n.initials">
+			{{ shooter_p.initials }}
+		</button>	
+		<button ion-button outline [color]="shooter.score.isComplete?'secondary':''" style="margin-left:20px; margin-right:20px;">
+			{{ shooter.name }}
+		</button>	
+		<button ion-button clear (click)="next()" [color]="shooter_n.score.isComplete?'secondary':'archers-light-blue'">
+			{{ shooter_n.initials }}
+		</button>				
 	</ion-toolbar>
+
+	<!-- <ion-toolbar text-center style="min-height:30px;" color="light">
+		{{ shooter.name }}
+	</ion-toolbar> -->
 
 </ion-header>
 
@@ -30,12 +36,11 @@
 
 		<div *ngFor="let target of scoreCard.round?.targets; let t = index">
 
-			<ion-item-divider>
-				{{shooter.name }}
-			</ion-item-divider>
-
 			<ion-item-divider color="archers-light-blue">
-				Target {{ t + 1 }} <span style="color:#eeeeee; font-size:75%;">({{ target.distance }} {{ scoreCard.round.distance }}, {{ target.size }}{{ scoreCard.round.unit }})</span>
+				<span>Target {{ t + 1 }}</span> <span style="margin-left:10px; color:#eeeeee; font-size:75%;">({{ target.distance }} {{ scoreCard.round.distance }}, {{ target.size }}{{ scoreCard.round.unit }})</span>
+				<button *ngIf="DoesHaveSightMarks(target, shooter)" ion-button float-right clear color="dark" (click)="ShowShooterSightMarks(target, shooter)">
+					Sight Marks
+				</button>
 			</ion-item-divider>
 
 			<div class="card" (click)="EnterScore(target)">
@@ -124,7 +129,7 @@
 				<ion-row>
 					<ion-col class=""></ion-col>
 					<ion-col class=""></ion-col>
-					<ion-col class=""></ion-col>
+					<ion-col class="bgcolor-heading bdr">Total</ion-col>
 					<ion-col class="bgcolor-heading bdr">Hits</ion-col>
 					<ion-col class="bgcolor-heading bdr">Avg</ion-col>
 					<ion-col class="bgcolor-heading bdr">Xs</ion-col>
@@ -135,7 +140,7 @@
 				<ion-row>
 					<ion-col class="">&nbsp;</ion-col>
 					<ion-col class=""></ion-col>
-					<ion-col class=""></ion-col>
+					<ion-col class="bdr">{{ shooter.score.total_rt }}</ion-col>
 					<ion-col class="bdr">{{ shooter.score.statHits }}</ion-col>
 					<ion-col class="bdr">{{ shooter.score.statAvg }}</ion-col>
 					<ion-col class="bdr">{{ shooter.score.statXs }}</ion-col>

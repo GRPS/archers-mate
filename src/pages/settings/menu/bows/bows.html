@@ -25,8 +25,8 @@
 		</ion-item>
 
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-			<ion-item-sliding #slidingItem *ngFor="let bow of bows">
-				<button ion-item (click)="UpdateBow(bow)">        
+			<ion-item-sliding #slidingItem *ngFor="let bow of bows; let i = index">
+				<button ion-item (click)="UpdateBow(bow)" [ngClass]="i%2 != 0 ? 'evenRow' : ''">        
 					{{bow?.name}}
 				</button>
 				<ion-item-options side="right">

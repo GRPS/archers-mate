@@ -1,6 +1,6 @@
 export class SightMarkClass {
     
-    id:         number;
+    id:         string;
     distance:   number;
     unit:       string;
     notch:      string;

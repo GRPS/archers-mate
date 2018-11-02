@@ -8,6 +8,7 @@ import * as _ from 'underscore';
 	pure: false
 })
 export class ScoreCardTypePipe implements PipeTransform {
+
 	transform( items: any[], score_card_type: string ) {
 		let scoreCards: ScoreCardClass[] = _.filter( items,  function( item ) {
 						return item.status == score_card_type;

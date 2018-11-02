@@ -40,16 +40,16 @@
 					</ion-item-divider>
 			
 					<div *ngIf="isModal">
-						<ion-item *ngFor="let round of ( rounds | round:selectedType:organisation:season )" reorder="true" (ionItemReorder)="reorderItems($event)">
-							<button ion-item (click)="SelectRound(round)" (press)="info(round)" color="{{round?.targets.length == 0?'archers-light-danger':''}}">        
+						<ion-item *ngFor="let round of ( rounds | round:selectedType:organisation:season ); let i = index" reorder="false">
+							<button ion-item (click)="SelectRound(round)" (press)="info(round)" color="{{round?.targets.length == 0?'archers-light-danger':''}}" [ngClass]="i%2 != 0 ? 'evenRow' : ''">        
 								{{ round.name }}
 							</button>
 						</ion-item>
 					</div>
 
 					<div *ngIf="!isModal">
-						<ion-item-sliding #slidingItem *ngFor="let round of ( rounds | round:selectedType:organisation:season )" reorder="true" (ionItemReorder)="reorderItems($event)">
-							<button ion-item (click)="UpdateRound(round)" (press)="info(round)" color="{{round?.targets.length == 0?'archers-light-danger':''}}">        
+						<ion-item-sliding #slidingItem *ngFor="let round of ( rounds | round:selectedType:organisation:season ); let i = index" reorder="true" (ionItemReorder)="reorderItems($event)">
+							<button ion-item (click)="UpdateRound(round)" (press)="info(round)" color="{{round?.targets.length == 0?'archers-light-danger':''}}" [ngClass]="i%2 != 0 ? 'evenRow' : ''">        
 								{{ round.name }}
 							</button>
 							<ion-item-options side="right">

@@ -6,10 +6,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { AppVersion } from '@ionic-native/app-version';
-import { Clipboard } from '@ionic-native/clipboard';
 import { IonicStorageModule } from '@ionic/storage';
 import { File } from '@ionic-native/file';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 import { MyApp } from './app.component';
 
@@ -36,7 +36,7 @@ import { StatsService } from '../providers/stats-service';
 		}),
 		IonicStorageModule.forRoot({
 			name: '__archers-mate',
-			   driverOrder: ['indexeddb', 'sqlite', 'websql']
+			   driverOrder: [ 'sqlite', 'indexeddb', 'websql' ]
 		}),
 		HttpClientModule
 	],
@@ -52,9 +52,9 @@ import { StatsService } from '../providers/stats-service';
 		ScreenOrientation,
 		{provide: ErrorHandler, useClass: IonicErrorHandler},
 		AppVersion,
-		Clipboard,
 		File,
 		AndroidPermissions,
+		EmailComposer,
 		CommonProvider,
 		BowService,
 		RoundService,

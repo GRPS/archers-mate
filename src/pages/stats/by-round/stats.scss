@@ -1,0 +1,45 @@
+page-stats {
+
+    .header {
+        ion-col {
+            background-color: color( $colors, archers-faint-blue ) !important;
+            font-weight: bold;
+            p {
+                font-size: 1.3rem !important;
+            }
+        }
+    }
+    .shooter-section {
+        display: none;
+    }
+
+    .shooter {
+        padding:8px;
+        font-size: 1.5rem !important;
+        margin-top: 2px;
+    }
+    .score {
+        margin-right:10px; 
+        padding: 3px; 
+        border:1px solid #c4c4c4;
+        width: 30px;
+    }
+    .best {
+        background-color: color( $colors, archers-note ) !important;
+        color: #ffffff;
+    }
+
+    .worst {
+        background-color: color( $colors, archers-danger ) !important;
+        color: #ffffff;
+    }
+
+    .best-text {
+        color: color( $colors, archers-note ) !important;
+    }
+
+    .worst-text {
+        color: color( $colors, archers-danger ) !important;
+    }
+
+}

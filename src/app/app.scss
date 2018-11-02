@@ -102,4 +102,23 @@ form {
             }
         }
     }
+
+}
+
+.evenRow {
+    background-color: #f7f7f7 !important;
+}
+
+.bow-table {
+    width: 100%;
+    td:first-child {
+        width: 1px;
+    }
+    td {
+        padding: 5px;
+    }
+    .bow-detail {
+        background-color: #c4c4c4;
+        font-weight: bold;
+    }
 }

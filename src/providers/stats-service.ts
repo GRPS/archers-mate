@@ -4,7 +4,7 @@ import { Const } from './constants';
 import { Global } from './globals';
 import { CommonProvider } from './common-provider';
 import { ScoreCardClass } from '../models/score-card-class';
-import { ShooterClass } from '../models/shooter-class';
+// import { ShooterClass } from '../models/shooter-class';
 
 import * as _ from 'underscore';
 import { StatClass, StatDataClass, StatDataSubClass, StatScoreClass } from '../models/stat-class';
@@ -19,28 +19,40 @@ export class StatsService {
 		this.common.AddLog( 'StatsService loaded' );
 	}
 
-	GetData() {
-
-		let data: StatClass[] = [];
+	GetScoreCards( dtFrom: string, dtTo: string ) {
 
 		let scoreCards: ScoreCardClass[] = _.filter( Global.scoreCards,  function( item: ScoreCardClass ) {
-												return item.status == Const.SCORE_CARD_STATUS.COMPLETED;
+												let isInRange: boolean = false;
+												
+												if( new Date( item.dt ) >= new Date( dtFrom ) && new Date( item.dt ) <= new Date( dtTo ) )
+													isInRange = true;
+
+												return item.status == Const.SCORE_CARD_STATUS.COMPLETED && isInRange;
 											});
+
+		return scoreCards;
+
+	}
+
+	ConvertScoreCardsToStats( scoreCards: ScoreCardClass[] ) {
+
+		let data: StatClass[] = [];
 
 		for( let scoreCard of scoreCards ) {
 			for( let shooter of scoreCard.shooters ) {
 				if( !shooter.isGuest ) {
 					let stat = new StatClass;
+					stat.scoreCardId = scoreCard.id;
 					stat.round = scoreCard.round;
 					stat.shooter = shooter;
 					stat.score = shooter.score;
 					stat.dt = scoreCard.dt;
-
 					data.push( stat );
-
 				}
 			}
 		}
+
+		data = data.sort( ( a, b ) => 0 - ( a.round.name > b.round.name ? -1 : 1 ) );
 
 		return data;
 
@@ -61,13 +73,18 @@ export class StatsService {
 			if( stat.shooter.score.total_rt > dataRound[ stat.round.name ][ 'best' ].score.total_rt ) {
 				dataRound[ stat.round.name ][ 'best' ] = stat.shooter;
 			}
+
+			dataRound[ stat.round.name ][ 'worst' ] = dataRound[ stat.round.name ][ 'worst' ] || stat.shooter;
+			if( stat.shooter.score.total_rt < dataRound[ stat.round.name ][ 'worst' ].score.total_rt ) {
+				dataRound[ stat.round.name ][ 'worst' ] = stat.shooter;
+			}
 			
 			// Add shooter score to array.
-			dataRound[ stat.round.name ][ 'shooters' ][ stat.shooter.name].push( { date: stat.dt, score: stat.shooter.score.total_rt, isBest: false, isWorst: false } );
+			dataRound[ stat.round.name ][ 'shooters' ][ stat.shooter.name].push( { date: stat.dt, score: stat.shooter.score.total_rt, isBest: false, isWorst: false, scoreCardId: stat.scoreCardId } );
 			
 		}
 
-		// Set which shooters scres for the round are the best and worst.
+		// Set which shooters scores for the round are the best and worst.
 		for( let dr in dataRound ) {
 			for( let sh in dataRound[ dr ][ 'shooters' ] ) {
 				let tmp = _.sortBy( dataRound[ dr ][ 'shooters' ][ sh ], 'score' );
@@ -89,22 +106,33 @@ export class StatsService {
 			statData.type = "round";
 			statData.id = this.common.GetRandomNumber(); 
 			statData.name = roundKey;
-			statData.shooter = dataRound[ roundKey ][ 'best' ];
+			statData.shooterBest = dataRound[ roundKey ][ 'best' ];
+			statData.shooterWorst = dataRound[ roundKey ][ 'worst' ];
 			statData.data = [];
 			for( let shooterKey of Object.keys( dataRound[ roundKey ][ 'shooters' ] ) ) {
 				let statDataSub = new StatDataSubClass();
 				statDataSub.name = shooterKey;
 				statDataSub.scores = [];
 				let total: number = 0;
+				let best: number = 0;
+				let worst: number = 9999999999;
 				for( let sc of Object.keys( dataRound[ roundKey ][ 'shooters' ][ shooterKey ] ) ) {
-					total += dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].score;
+
+					let score = dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].score;
+					total += score;
+					best = ( score > best ? score : best );
+					worst = ( score < worst ? score : worst );
+					
 					let statScore = new StatScoreClass();
 					statScore.score = dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].score;
 					statScore.date = dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].date;
 					statScore.isBest = dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].isBest;
 					statScore.isWorst = dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].isWorst;
+					statScore.scoreCardId = dataRound[ roundKey ][ 'shooters' ][ shooterKey ][ sc ].scoreCardId;
 					statDataSub.scores.push( statScore ); 
-					statDataSub.avg = Math.round( ( total / dataRound[ roundKey ][ 'shooters' ][ shooterKey ].length ) * 100 ) / 100;
+					statDataSub.avg = ( Math.round( ( total / dataRound[ roundKey ][ 'shooters' ][ shooterKey ].length ) * 100 ) / 100 ).toFixed( 2 );
+					statDataSub.best = best;
+					statDataSub.worst = worst;
 				}
 				statData.data.push( statDataSub );
 			}
@@ -112,8 +140,6 @@ export class StatsService {
 			statDatas.push( statData );	
 		}
 
-		console.log(statDatas);
-		
 		return statDatas;
 
 	}

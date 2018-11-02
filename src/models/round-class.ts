@@ -2,7 +2,7 @@ import { TargetClass } from './target-class';
 
 export class RoundClass {
 	
-	id: 			number;
+	id: 			string;
 	type:			string;
     organisation:	string;
     name:			string;

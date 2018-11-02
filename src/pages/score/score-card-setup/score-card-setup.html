@@ -10,6 +10,7 @@
 		<ion-buttons right>
 			<button ion-button *ngIf="isEditMode" (click)="Save()">Save</button>
 			<button ion-button *ngIf="!isEditMode && scoreCard.status=='ongoing'" (click)="Edit()">Edit</button>
+			<button ion-button *ngIf="!isEditMode && scoreCard.status=='completed'" (click)="Email()">Email</button>
 		</ion-buttons>
 	</ion-navbar>
 
@@ -35,9 +36,9 @@
 		</ion-item>
 
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)" *ngIf="scoreCard.status=='ongoing'">
-			<ion-item-sliding #slidingItem *ngFor="let shooter of scoreCard.shooters">
-				<ion-item>
-					<h2>{{ shooter.name }}</h2>
+			<ion-item-sliding #slidingItem *ngFor="let shooter of scoreCard.shooters; let i = index;">
+				<ion-item [ngClass]="i%2 != 0 ? 'evenRow' : ''">
+					<h2>{{ shooter.initials }} : {{ shooter.name }}</h2>
 				</ion-item>
 				<ion-item-options side="right">
 					<button ion-button color="danger" (click)="DeleteScoreCardShooter(slidingItem, shooter)">Delete</button>
@@ -46,7 +47,7 @@
 		</ion-item-group>
 
 		<div *ngIf="scoreCard.status!='ongoing'">
-			<ion-item *ngFor="let shooter of scoreCard.shooters; let i = index">
+			<ion-item *ngFor="let shooter of scoreCard.shooters; let i = index" [ngClass]="i%2 != 0 ? 'evenRow' : ''">
 				<shooter-scorecard [shooter]="shooter" [index]="i"></shooter-scorecard>
 			</ion-item>
 		</div>
@@ -86,7 +87,7 @@
 
 			<ion-item>
 				<ion-label fixed>Date</ion-label>
-				<ion-datetime displayFormat="DDDD D MMM YYYY" [(ngModel)]="scoreCard.dt" [ngModelOptions]="{standalone: true}"></ion-datetime>
+				<ion-datetime displayFormat="D MMM YYYY" [(ngModel)]="scoreCard.dt" [ngModelOptions]="{standalone: true}"></ion-datetime>
 			</ion-item>
 
 		  		  
@@ -104,7 +105,7 @@
 <ion-footer *ngIf="!isEditMode">
 	<ion-grid>
 		<ion-row>
-			<ion-col *ngIf="scoreCard.status!='deleted'">
+			<ion-col *ngIf="scoreCard.status!='archived'">
 				<button ion-button full color="archers-heading" (click)="GotoScores()">Goto Scores</button>
 			</ion-col>
 		</ion-row>

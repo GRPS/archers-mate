@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActionSheetController , IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { ActionSheetController , IonicPage, LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
 
 import { Const } from '../../providers/constants';
 import { Global } from '../../providers/globals';
@@ -32,6 +32,7 @@ export class HomePage {
 				public navCtrl: NavController, 
 				public loadingCtrl: LoadingController,
 				public navParams: NavParams,
+				public platform: Platform,
 				public common: CommonProvider,
 				public bowService: BowService,
 				public roundService: RoundService,
@@ -45,6 +46,14 @@ export class HomePage {
 
 	//Do before page becomes active.
 	ionViewWillEnter() {
+
+		if( this.platform.is( Const.MISC.CORDOVA ) ) {
+			Const.IS_CORDOVA = true;
+			if( this.platform.is( 'tablet' ) ) {
+				Const.IS_TABLET = true;
+			}
+		}
+
 		Const.MISC.CURRENT_PAGE = 'HomePage';
 		this.common.AddLog( Const.MISC.CURRENT_PAGE + ': ionViewDidLoad' );
 		this.Init();				
@@ -77,129 +86,130 @@ export class HomePage {
 			this.loading.present();
 
 			this.common.GetFromStorage( Const.LABEL.BOWS )
-					.then( res => {
-						if( res == null ) {
-							this.bowService.LoadAll()
-								.subscribe( (bows) => {								
-									Global.bows = bows;
-									this.common.SaveToStorage( Const.LABEL.BOWS, Global.bows )
-										.then( () => {
-											this.haveLoadedBows = true;
-											this.CheckIfReadyNow();
-										});									
-								}),
-								err => this.common.AddWarning( err );
-						} else {							
-							let newBows: BowClass[] = [];
-							for( let bow of res ) {
-								newBows.push( new BowClass( bow ) );
-							}
-							Global.bows = newBows;		
-							this.haveLoadedBows = true;
-							this.CheckIfReadyNow();			
+				.then( res => {
+					if( res == null ) {
+						this.bowService.LoadAll()
+							.subscribe( (bows) => {								
+								Global.bows = bows;
+								this.common.SaveToStorage( Const.LABEL.BOWS, Global.bows )
+									.then( () => {
+										this.haveLoadedBows = true;
+										this.CheckIfReadyNow();
+									});									
+							}),
+							err => this.common.AddWarning( err );
+					} else {							
+						let newBows: BowClass[] = [];
+						for( let bow of res ) {
+							newBows.push( new BowClass( bow ) );
 						}
-					});
+						Global.bows = newBows;		
+						this.haveLoadedBows = true;
+						this.CheckIfReadyNow();			
+					}
+				});
 
-				this.common.GetFromStorage( Const.LABEL.ROUNDS )
-					.then( res => {
-						if( res == null ) {
-							this.roundService.LoadAll()
-								.subscribe( (rounds) => {
-									let newRounds: RoundClass[] = [];
-									for( let round of rounds ) {
-										newRounds.push( this.roundService.CalculateValues( round ) );
-									}
-									Global.rounds = newRounds;
-									this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds )
-										.then( () => {
-											this.haveLoadedRounds = true;
-											this.CheckIfReadyNow();
-										});
-								}),
-								err => this.common.AddWarning( err );
-						} else {							
-							let newRounds: RoundClass[] = [];
-							for( let round of res ) {
-								newRounds.push( new RoundClass( round ) );
-							}
-							Global.rounds = newRounds;		
-							this.haveLoadedRounds = true;
-							this.CheckIfReadyNow();			
+			this.common.GetFromStorage( Const.LABEL.ROUNDS )
+				.then( res => {
+					if( res == null ) {
+						this.roundService.LoadAll()
+							.subscribe( (rounds) => {
+								let newRounds: RoundClass[] = [];
+								for( let round of rounds ) {
+									newRounds.push( this.roundService.CalculateValues( round ) );
+								}
+								Global.rounds = newRounds;
+								this.common.SaveToStorage( Const.LABEL.ROUNDS, Global.rounds )
+									.then( () => {
+										this.haveLoadedRounds = true;
+										this.CheckIfReadyNow();
+									});
+							}),
+							err => this.common.AddWarning( err );
+					} else {							
+						let newRounds: RoundClass[] = [];
+						for( let round of res ) {
+							newRounds.push( new RoundClass( round ) );
 						}
-					});
+						Global.rounds = newRounds;		
+						this.haveLoadedRounds = true;
+						this.CheckIfReadyNow();			
+					}
+				});
 
-				this.common.GetFromStorage( Const.LABEL.SHOOTERS )
-					.then( res => {
-						if( res == null ) {
-							this.shooterService.LoadAll()
-								.subscribe( (shooters) => {
-									Global.shooters = shooters;
-									Global.shooter = this.shooterService.GetDefault( shooters );
-									
-									this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
-										.then( () => {
-											this.haveLoadedShooters = true;
-											this.CheckIfReadyNow();	
-										});												
-								}),
-								err => this.common.AddWarning( err );
-						} else {								
-							let newShooters: ShooterClass[] = [];
-							for( let shooter of res ) {
-								newShooters.push( new ShooterClass( shooter ) );
-							}
-							Global.shooters = newShooters;		
-							Global.shooter = this.shooterService.GetDefault( Global.shooters );
-
-							this.haveLoadedShooters = true;
-							this.CheckIfReadyNow();			
+			this.common.GetFromStorage( Const.LABEL.SHOOTERS )
+				.then( res => {
+					if( res == null ) {
+						this.shooterService.LoadAll()
+							.subscribe( (shooters) => {
+								Global.shooters = shooters;
+								Global.shooter = this.shooterService.GetDefault( shooters );
+								
+								this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
+									.then( () => {
+										this.haveLoadedShooters = true;
+										this.CheckIfReadyNow();	
+									});												
+							}),
+							err => this.common.AddWarning( err );
+					} else {								
+						let newShooters: ShooterClass[] = [];
+						for( let shooter of res ) {
+							newShooters.push( new ShooterClass( shooter ) );
 						}
-					});
+						Global.shooters = newShooters;		
+						Global.shooter = this.shooterService.GetDefault( Global.shooters );
 
-					this.common.GetFromStorage( Const.LABEL.SETTINGS )
-						.then( res => {
-							
-							if( res == null ) {
+						this.haveLoadedShooters = true;
+						this.CheckIfReadyNow();			
+					}
+				});
 
-								Global.setting = new SettingClass( {
-									showToastOnSave: true,
-									showToastOnScoreInput: true
+				this.common.GetFromStorage( Const.LABEL.SETTINGS )
+					.then( res => {
+						
+						if( res == null ) {
+
+							Global.setting = new SettingClass( {
+								showToastOnSave: true,
+								showToastOnScoreInput: true,
+								maxScoreCardsBeforWeShowLoadingMessage: Const.MISC.MAX_SCORE_CARDS_BEFORE_WE_SHOW_LOADING_MESSAGE
+							});
+
+							this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )
+								.then( () => {
+									this.haveLoadedSettings = true;
+									this.CheckIfReadyNow();	
 								});
 
-								this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )
-									.then( () => {
-										this.haveLoadedSettings = true;
-										this.CheckIfReadyNow();	
-									});
+						} else {
+							Global.setting = res;
+							this.haveLoadedSettings = true;
+							this.CheckIfReadyNow();	
+						}
+						
+					});
 
-							} else {
-								Global.setting = res;
-								this.haveLoadedSettings = true;
-								this.CheckIfReadyNow();	
-							}
-							
-						});
+					this.common.GetFromStorage( Const.LABEL.SCORE_CARDS )
+					.then( res => {
+						
+						if( res == null ) {
 
-						this.common.GetFromStorage( Const.LABEL.SCORE_CARDS )
-						.then( res => {
-							
-							if( res == null ) {
+							Global.scoreCards = <ScoreCardClass[]>[];
 
-								Global.scoreCards = <ScoreCardClass[]>[];
+							this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
+								.then( () => {
+									this.haveLoadedScoreCards = true;
+									this.CheckIfReadyNow();	
+								});
 
-								this.common.SaveToStorage( Const.LABEL.SCORE_CARDS, Global.scoreCards )
-									.then( () => {
-										this.haveLoadedScoreCards = true;
-										this.CheckIfReadyNow();	
-									});
-
-							} else {
-								Global.scoreCards = res;
-								this.haveLoadedScoreCards = true;
-								this.CheckIfReadyNow();	
-							}
-							
-						});
+						} else {
+							Global.scoreCards = res;
+							this.haveLoadedScoreCards = true;
+							this.CheckIfReadyNow();	
+						}
+						
+					});
 
 		} else {
 						
@@ -215,7 +225,11 @@ export class HomePage {
 	}
 
 	GotoScore() {
-		this.navCtrl.push( Const.PAGES.SCORE_CARD_SETUP );
+		if( Global.scoreCards.length == Const.MISC.MAX_SCORE_CARDS ) {
+			this.common.ShowAlert( "Warning", Const.MISC.MAX_SCORE_CARDS.toLocaleString() + " score cards already created. Please delete some to make space." );
+		} else {
+			this.navCtrl.push( Const.PAGES.SCORE_CARD_SETUP );
+		}
 	}
 
 	GotoHistory() {
@@ -223,7 +237,7 @@ export class HomePage {
 	}
 	
 	GotoStats() {
-		this.navCtrl.push( Const.PAGES.STATS );
+		this.navCtrl.push( Const.PAGES.STATS_BEGIN );
 	}
 
 	GotoSettings() {
@@ -274,5 +288,21 @@ export class HomePage {
 	LoadSettings( page: string ) {
 		this.navCtrl.push( page );
 	}
+
+	// a() {
+	// 	this.common.SaveToFile( Const.LABEL.SCORE_CARDS, Global.scoreCards )
+	// 		.then ( () => {
+	// 			this.common.ShowToastSuccess( 'Saved.', true );
+	// 		});
+	// }
+
+	// b() {
+	// 	this.common.GetFromFile( Const.LABEL.SCORE_CARDS )
+	// 	.then ( data => {
+	// 		console.log( data );
+	// 		console.log(Global.scoreCards);
+	// 		this.common.ShowToastSuccess( 'Loaded.', true );
+	// 	});
+	// }
 
 }
