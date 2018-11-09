@@ -69,7 +69,6 @@ export class ShooterService {
 	}
 
 	RefreshShooters( shooter: ShooterClass, isNew: boolean ) {
-		shooter.image.cache = null;
 		if( isNew ) {
 			shooter.id = this.common.GetRandomNumber();
 			Global.shooters.push( shooter );

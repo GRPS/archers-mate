@@ -65,7 +65,7 @@ export class ShooterPage {
 	private GetPassedShooter() {
 		if( this.navParams.get('shooter') != undefined ) {
 			this.shooter = new ShooterClass( this.navParams.data.shooter );
-			this.photo = this.shooter.image.default;
+			this.photo = this.shooter.image;
 		} else {			
 			this.isNew = true;
 			this.isEditMode = true;
@@ -89,7 +89,7 @@ export class ShooterPage {
 		if( this.isEditMode ) {
 			this.shooterService.RefreshShooters( this.shooter, this.isNew );
 		}
-		if( !this.hasSaved && this.photo != this.shooter.image.default ) {
+		if( !this.hasSaved && this.photo != this.shooter.image ) {
 			let currentDirectory = this.photo.substring(0, this.photo.lastIndexOf('/') + 1);
 			let currentFileName = this.photo.substring(this.photo.lastIndexOf('/') + 1, this.photo.length);
 			this.file.removeFile( currentDirectory, currentFileName );
@@ -107,13 +107,13 @@ export class ShooterPage {
 			this.hasSaved = true;
 
 			//Remove current default image here.
-			if( this.photo != null && this.shooter.image.default != null && this.photo != this.shooter.image.default ) {
-				let currentDirectory = this.shooter.image.default.substring(0, this.shooter.image.default.lastIndexOf('/') + 1);
-				let currentFileName = this.shooter.image.default.substring(this.shooter.image.default.lastIndexOf('/') + 1, this.shooter.image.default.length);
+			if( this.photo != null && this.shooter.image != null && this.photo != this.shooter.image ) {
+				let currentDirectory = this.shooter.image.substring(0, this.shooter.image.lastIndexOf('/') + 1);
+				let currentFileName = this.shooter.image.substring(this.shooter.image.lastIndexOf('/') + 1, this.shooter.image.length);
 				this.file.removeFile( currentDirectory, currentFileName );
 			}
 
-			this.shooter.image.default = this.photo;
+			this.shooter.image = this.photo;
 
 			this.shooterService.Save( this.shooter, this.isNew )
 				.then( () => {
@@ -144,7 +144,6 @@ export class ShooterPage {
 		
 		this.cameraService.GalleryPhoto( this.GetFilename(), this.camera.PictureSourceType.PHOTOLIBRARY )
 			.then( res =>{
-				// this.shooter.image.default = null;
 				this.photo = res.sourcePath;
 			}, (err) => {
 				this.common.ShowAlert( "Error", JSON.stringify( err ) );
@@ -156,7 +155,6 @@ export class ShooterPage {
 		
 		this.cameraService.GetPhoto( this.GetFilename(), this.camera.PictureSourceType.CAMERA )
 			.then( res =>{
-				// this.shooter.image.default = null;
 				this.photo = res.sourcePath;
 			}, (err) => {
 				this.common.ShowAlert( "Error", JSON.stringify( err ) );

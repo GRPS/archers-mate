@@ -39,8 +39,8 @@
 			<ion-item-sliding #slidingItem *ngFor="let shooter of scoreCard.shooters; let i = index;">
 				<ion-item [ngClass]="i%2 != 0 ? 'evenRow' : ''">
 						<ion-thumbnail item-start>
-							<img *ngIf="shooter?.image.default==null" src="assets/imgs/no-user-image.gif" />
-							<img *ngIf="shooter?.image.default!=null" src="{{ shooter?.image.default }}">
+							<img *ngIf="shooter?.image==null" src="assets/imgs/no-user-image.gif" />
+							<img *ngIf="shooter?.image!=null" src="{{ shooter?.image }}">
 						</ion-thumbnail>
 					<h2>{{ shooter.initials }} : {{ shooter.name }}</h2>
 				</ion-item>
@@ -53,8 +53,8 @@
 		<div *ngIf="scoreCard.status!='ongoing'">
 			<ion-item *ngFor="let shooter of scoreCard.shooters; let i = index" [ngClass]="i%2 != 0 ? 'evenRow' : ''">
 				<ion-thumbnail item-start>
-					<img *ngIf="shooter?.image.default==null" src="assets/imgs/no-user-image.gif" />
-					<img *ngIf="shooter?.image.default!=null" src="{{ shooter?.image.default }}">
+					<img *ngIf="shooter?.image==null" src="assets/imgs/no-user-image.gif" />
+					<img *ngIf="shooter?.image!=null" src="{{ shooter?.image }}">
 				</ion-thumbnail>
 				<shooter-scorecard [shooter]="shooter" [index]="i"></shooter-scorecard>
 			</ion-item>

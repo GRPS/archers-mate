@@ -1,6 +1,5 @@
 import { BowClass } from './bow-class';
 import { ScoreClass } from './score-class';
-import { ImageClass } from './image-class';
 
 export class ShooterClass {
 
@@ -13,7 +12,7 @@ export class ShooterClass {
 	isGuest:	boolean;
 	bows:       BowClass[] = [];
 	score:		ScoreClass;
-	image:		ImageClass;
+	image:		string;
 	prevImage:	string;
 
 	constructor(values: Object = {}) {
