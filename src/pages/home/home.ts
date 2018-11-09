@@ -173,7 +173,8 @@ export class HomePage {
 							Global.setting = new SettingClass( {
 								showToastOnSave: true,
 								showToastOnScoreInput: true,
-								maxScoreCardsBeforWeShowLoadingMessage: Const.MISC.MAX_SCORE_CARDS_BEFORE_WE_SHOW_LOADING_MESSAGE
+								maxScoreCardsBeforWeShowLoadingMessage: Const.MISC.MAX_SCORE_CARDS_BEFORE_WE_SHOW_LOADING_MESSAGE,
+								shooterImageQuality: Const.CAMERA.SHOOTER.QUALITY
 							});
 
 							this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )

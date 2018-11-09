@@ -31,6 +31,10 @@ export class GeneralPage {
 	}
 
 	ionViewWillLeave() {
+		Global.setting = this.setting;
+		// Global.setting.shooterImageQuality = this.setting.shooterImageQuality;
+		// Global.setting.showToastOnSave = this.setting.showToastOnSave;
+		// Global.setting.showToastOnScoreInput = this.setting.showToastOnScoreInput;
 		this.common.SaveToStorage( Const.LABEL.SETTINGS, Global.setting )
 			.then( () => {});	
 	}

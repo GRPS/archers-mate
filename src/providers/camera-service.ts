@@ -5,6 +5,7 @@ import { File } from '@ionic-native/file';
 
 import { Const } from '../providers/constants';
 import { CommonProvider } from '../providers/common-provider';
+import { Global } from './globals';
 
 @Injectable()
 export class CameraService {
@@ -20,14 +21,14 @@ export class CameraService {
 
 	GetCamerOptions( destinationType, sourceType ): CameraOptions {
 		return {
-			quality: Const.CAMERA.QUALITY,
+			quality: Global.setting.shooterImageQuality,
 			destinationType: destinationType,
 			encodingType: this.camera.EncodingType.JPEG,
 			mediaType: this.camera.MediaType.PICTURE,
 			sourceType: sourceType,
 			allowEdit: true,
-			targetWidth: Const.CAMERA.WIDTH,
-			targetHeight: Const.CAMERA.HEIGHT
+			targetWidth: Const.CAMERA.SHOOTER.WIDTH,
+			targetHeight: Const.CAMERA.SHOOTER.HEIGHT
 		}
 	}
 

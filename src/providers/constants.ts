@@ -17,9 +17,11 @@ export const Const = {
 	},
 
 	CAMERA: {
-		QUALITY: 75,
-		WIDTH: 200,
-		HEIGHT: 200
+		SHOOTER: {
+			QUALITY: 100,
+			WIDTH: 300,
+			HEIGHT: 300
+		}
 	},
 
 	MISC: {
