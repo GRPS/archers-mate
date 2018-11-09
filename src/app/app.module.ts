@@ -8,8 +8,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppVersion } from '@ionic-native/app-version';
 import { IonicStorageModule } from '@ionic/storage';
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { Camera } from '@ionic-native/camera';
 
 import { MyApp } from './app.component';
 
@@ -22,6 +24,7 @@ import { SightMarkService } from '../providers/sight-mark-service';
 import { ShooterBowService } from '../providers/shooter-bow-service';
 import { ScoreCardService } from '../providers/score-card-service';
 import { StatsService } from '../providers/stats-service';
+import { CameraService } from '../providers/camera-service';
 
 @NgModule({
 	declarations: [
@@ -53,8 +56,10 @@ import { StatsService } from '../providers/stats-service';
 		{provide: ErrorHandler, useClass: IonicErrorHandler},
 		AppVersion,
 		File,
+		FilePath,
 		AndroidPermissions,
 		EmailComposer,
+		Camera,
 		CommonProvider,
 		BowService,
 		RoundService,
@@ -63,7 +68,8 @@ import { StatsService } from '../providers/stats-service';
 		SightMarkService,
 		ShooterBowService,
 		ScoreCardService,
-		StatsService
+		StatsService,
+		CameraService
 	]
 })
 export class AppModule {}

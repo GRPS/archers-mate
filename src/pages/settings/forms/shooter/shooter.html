@@ -18,6 +18,10 @@
 <ion-content>
 
 	<ion-list no-lines *ngIf="!isEditMode">
+		<div class="face-wrapper">
+			<img *ngIf="photo==null" class="face" src="assets/imgs/no-user-image.gif" />
+			<img *ngIf="photo!=null" class="face" src="{{ photo }}" />
+		</div>
 		<field [label]="'Name'" [value]="shooter.name"></field>
 		<field [label]="'Initials'" [value]="shooter.initials"></field>
 		<field [label]="'Gender'" [value]="shooter.gender"></field>
@@ -45,6 +49,22 @@
 		</ion-item-group>
 
 	</ion-list>
+
+	<div *ngIf="isEditMode" class="face-wrapper">
+
+		<img *ngIf="photo==null" class="face" src="assets/imgs/no-user-image.gif" />
+		<img *ngIf="photo!=null" class="face" src="{{ photo }}" />
+
+		<button class="btn1" ion-button icon-only round (click)="GetPhoto()">
+			<ion-icon name="ios-camera-outline"></ion-icon>
+		</button>
+		<button class="btn2" ion-button icon-only round (click)="GetGalleryPhoto()">
+			<ion-icon name="ios-image-outline"></ion-icon>
+		</button>
+		<button class="btn3" ion-button icon-only round (click)="ResetPhoto()">
+			<ion-icon name="ios-undo-outline"></ion-icon>
+		</button>
+	</div>
 
 	<ion-list no-lines *ngIf="isEditMode">
 		

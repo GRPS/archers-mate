@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { AlertController, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+// import { DomSanitizer } from '@angular/platform-browser';
+import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
 
 import { Const } from '../../../../providers/constants';
 import { Global } from '../../../../providers/globals';
@@ -11,6 +14,7 @@ import { ShooterService } from '../../../../providers/shooter-service';
 import { BowService } from '../../../../providers/bow-service';
 import { SightMarkService } from '../../../../providers/sight-mark-service';
 import { ShooterBowService } from '../../../../providers/shooter-bow-service';
+import { CameraService } from '../../../../providers/camera-service';
 
 @IonicPage()
 @Component({
@@ -26,12 +30,22 @@ export class ShooterPage {
 	formValidation: FormGroup;
 	showButtonAdd: boolean = true;
 
+	sourceDirectory: string;
+	sourceFileName: string;
+
+	photo = null;
+	hasSaved: boolean = false;
+
 	constructor(
 				public alertCtrl: AlertController,
+				public camera: Camera,
+				// public sanitizer: DomSanitizer,
+				public file: File,
 				private formBuilder: FormBuilder,
 				public navCtrl: NavController, 
 				public navParams: NavParams,
 				public viewCtrl: ViewController,
+				public cameraService: CameraService,
 				public common: CommonProvider,
 				public shooterService: ShooterService,
 				public bowService: BowService,
@@ -50,7 +64,8 @@ export class ShooterPage {
 
 	private GetPassedShooter() {
 		if( this.navParams.get('shooter') != undefined ) {
-			this.shooter = new ShooterClass( this.navParams.data.shooter );		
+			this.shooter = new ShooterClass( this.navParams.data.shooter );
+			this.photo = this.shooter.image.default;
 		} else {			
 			this.isNew = true;
 			this.isEditMode = true;
@@ -71,6 +86,14 @@ export class ShooterPage {
 	}
 
 	Back() {
+		if( this.isEditMode ) {
+			this.shooterService.RefreshShooters( this.shooter, this.isNew );
+		}
+		if( !this.hasSaved && this.photo != this.shooter.image.default ) {
+			let currentDirectory = this.photo.substring(0, this.photo.lastIndexOf('/') + 1);
+			let currentFileName = this.photo.substring(this.photo.lastIndexOf('/') + 1, this.photo.length);
+			this.file.removeFile( currentDirectory, currentFileName );
+		}
 		this.navCtrl.pop();
 	}
 
@@ -80,6 +103,18 @@ export class ShooterPage {
 
 	Save() {
 		if( this.formValidation.valid ) {
+
+			this.hasSaved = true;
+
+			//Remove current default image here.
+			if( this.photo != null && this.shooter.image.default != null && this.photo != this.shooter.image.default ) {
+				let currentDirectory = this.shooter.image.default.substring(0, this.shooter.image.default.lastIndexOf('/') + 1);
+				let currentFileName = this.shooter.image.default.substring(this.shooter.image.default.lastIndexOf('/') + 1, this.shooter.image.default.length);
+				this.file.removeFile( currentDirectory, currentFileName );
+			}
+
+			this.shooter.image.default = this.photo;
+
 			this.shooterService.Save( this.shooter, this.isNew )
 				.then( () => {
 					this.navCtrl.pop();	
@@ -91,10 +126,42 @@ export class ShooterPage {
 				.catch( (error) => {
 					this.common.ShowToastFail( JSON.stringify( error ) );
 				});
-
+	
 		} else{
 			this.common.ShowToastFail( 'Cannot save form with errors!' );
 		}
+	}
+
+	ResetPhoto() {
+		this.photo = null;
+	}
+
+	GetFilename() {
+		return this.shooter.initials + "_" + this.shooter.name.split(' ').join('_') + "_" + this.common.GetRandomNumber() + ".jpg";
+	}
+
+	GetGalleryPhoto() {
+		
+		this.cameraService.GalleryPhoto( this.GetFilename(), this.camera.PictureSourceType.PHOTOLIBRARY )
+			.then( res =>{
+				// this.shooter.image.default = null;
+				this.photo = res.sourcePath;
+			}, (err) => {
+				this.common.ShowAlert( "Error", JSON.stringify( err ) );
+			});
+
+	}
+
+	GetPhoto() {
+		
+		this.cameraService.GetPhoto( this.GetFilename(), this.camera.PictureSourceType.CAMERA )
+			.then( res =>{
+				// this.shooter.image.default = null;
+				this.photo = res.sourcePath;
+			}, (err) => {
+				this.common.ShowAlert( "Error", JSON.stringify( err ) );
+			});
+
 	}
 
 	AddShooterBow() {

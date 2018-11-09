@@ -17,7 +17,11 @@
 
 		<ion-item-divider color="archers-light-blue">My Profile</ion-item-divider>
 
-		<button ion-item (click)="UpdateShooter(shooter)">        
+		<button ion-item (click)="UpdateShooter(shooter)"> 
+			<ion-thumbnail item-start>
+				<img *ngIf="shooter?.image?.default==null" src="assets/imgs/no-user-image.gif" />
+				<img *ngIf="shooter?.image?.default!=null" src="{{ shooter?.image?.default }}">
+			</ion-thumbnail>
 			<shooter [shooter]="shooter"></shooter>
 		</button>
 
@@ -33,6 +37,10 @@
 		<ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
 			<ion-item-sliding #slidingItem *ngFor="let shooter of shooters; let i = index">
 				<button ion-item (click)="UpdateShooter(shooter)" *ngIf="!shooter.isDefault" [ngClass]="i%2 != 0 ? 'evenRow' : ''">        
+					<ion-thumbnail item-start>
+						<img *ngIf="shooter?.image?.default==null" src="assets/imgs/no-user-image.gif" />
+						<img *ngIf="shooter?.image?.default!=null" src="{{ shooter.image?.default }}">
+					</ion-thumbnail>
 					<shooter [shooter]="shooter"></shooter>
 				</button>
 				<ion-item-options side="right">

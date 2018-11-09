@@ -4,7 +4,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { File } from '@ionic-native/file';
 
+import { Const } from '../providers/constants';
 import { CommonProvider } from '../providers/common-provider';
 
 @Component({
@@ -17,6 +19,7 @@ export class MyApp {
 	constructor(
 				public app: App, 
 				public androidPermissions: AndroidPermissions,
+				public file: File,
 				public platform: Platform, 
 				public screenOrientation: ScreenOrientation,
 				public statusBar: StatusBar, 
@@ -37,6 +40,12 @@ export class MyApp {
 				]
 			);
 
+			if( this.platform.is( 'android' ) ) {
+				Const.IS_ANDROID = true;
+				this.CreateFolder( Const.FOLDER.EXPORTS );
+				this.CreateFolder( Const.FOLDER.SHOOTERS );
+			}
+
 			//Handle Android hardware back button.
 			//If the active page has a function called AndroidBackButton then it it called instead.
 			platform.registerBackButtonAction(() => {
@@ -55,6 +64,16 @@ export class MyApp {
 			});
 
     	});
+	}
+
+	CreateFolder( name: string ) {
+		this.file.createDir( this.file.externalDataDirectory, name, false ).then( ( resolve ) => {
+			if (!resolve) {} 
+		}, (error) => {
+			if( error.code != 12 ) {
+				this.common.ShowAlert( "Error", "Create folder error: " + JSON.stringify( error ) );
+			}
+		});
 	}
 
 }

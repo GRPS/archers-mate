@@ -9,6 +9,7 @@ import { FieldComponent } from './field/field';
 import { FieldDateComponent } from './field-date/field-date';
 import { ShooterScorecardComponent } from './shooter-scorecard/shooter-scorecard';
 import { ScorecardSummaryComponent } from './scorecard-summary/scorecard-summary';
+import { FaceComponent } from './face/face';
 
 export const components = [
 	ShooterComponent,
@@ -17,7 +18,8 @@ export const components = [
 	FieldComponent,
 	FieldDateComponent,
 	ShooterScorecardComponent,
-	ScorecardSummaryComponent
+	ScorecardSummaryComponent,
+	FaceComponent
 ];
 
 @NgModule({

@@ -1,3 +1,44 @@
 page-shooter {
 
+    .face-wrapper {
+
+        margin-bottom: 30px;
+
+        .face {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            overflow: hidden;
+        }
+        button.btn1 {
+            height: 50px;
+            width: 50px;
+            float: right;
+            margin-right: 20px;
+            margin-top: -32px;
+            color: #ffffff;
+            background-color: color( $colors, archers-heading );
+        }
+        button.btn2 {
+            height: 50px;
+            width: 50px;
+            float: right;
+            margin-right: 20px;
+            margin-top: -32px;
+            color: #ffffff;
+            background-color: color( $colors, archers-heading );
+        }
+
+        button.btn3 {
+            height: 50px;
+            width: 50px;
+            float: right;
+            margin-right: 20px;
+            margin-top: -32px;
+            color: #ffffff;
+            background-color: color( $colors, archers-heading );
+        }
+
+    }
+
 }

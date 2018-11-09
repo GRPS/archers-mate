@@ -58,16 +58,7 @@ export class ShooterService {
 	Save( shooter: ShooterClass, isNew: boolean ): Promise<boolean> {
 		return new Promise( resolve => {
 
-			if( isNew ) {
-				shooter.id = this.common.GetRandomNumber();
-				Global.shooters.push( shooter );
-			} else {
-				let index: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, shooter.id );
-				Global.shooters[ index ] = shooter;
-				if( shooter.isDefault ) {
-					Global.shooter = shooter;
-				}
-			}
+			this.RefreshShooters( shooter, isNew );
 
 			this.common.SaveToStorage( Const.LABEL.SHOOTERS, Global.shooters )
 				.then( () => {
@@ -75,6 +66,20 @@ export class ShooterService {
 				});
 
 		});		
+	}
+
+	RefreshShooters( shooter: ShooterClass, isNew: boolean ) {
+		shooter.image.cache = null;
+		if( isNew ) {
+			shooter.id = this.common.GetRandomNumber();
+			Global.shooters.push( shooter );
+		} else {
+			let index: number = this.common.GetIndexOfObjectIdInArray( Global.shooters, shooter.id );
+			Global.shooters[ index ] = shooter;
+			if( shooter.isDefault ) {
+				Global.shooter = shooter;
+			}
+		}
 	}
 	
 }

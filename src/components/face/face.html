@@ -1,0 +1,4 @@
+<ion-thumbnail item-start>
+    <img *ngIf="shooter?.image.default==null" src="assets/imgs/no-user-image.gif" />
+    <img *ngIf="shooter?.image.default!=null" src="{{ shooter?.image.default }}">
+</ion-thumbnail>

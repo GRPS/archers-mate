@@ -99,9 +99,11 @@ export class AboutPage {
 
 		return new Promise( resolve => {
 
-			this.file.writeFile( this.file.externalDataDirectory  , "archers-mate-" + label + ".json", JSON.stringify( data ), { replace: true } )
+			this.file.writeFile( this.file.externalDataDirectory + Const.FOLDER.EXPORTS, label + ".json", JSON.stringify( data ), { replace: true } )
 				.then( () => {
 					resolve();
+				}, (error) => {
+					this.common.ShowAlert( "Error", "Export error: " + JSON.stringify(error) );
 				});
 
 		});

@@ -3,11 +3,23 @@ export const Const = {
 	LOGGING: true,
 	IS_CORDOVA: false,
 	IS_TABLET: false,
+	IS_ANDROID: false,
 	
 	URL: {
 		BOWS: './assets/files/bows.json',
 		ROUNDS: './assets/files/rounds.json',
 		SHOOTERS: './assets/files/shooters.json',
+	},
+
+	FOLDER: {
+		EXPORTS: 'exports',
+		SHOOTERS: 'shooters',
+	},
+
+	CAMERA: {
+		QUALITY: 75,
+		WIDTH: 200,
+		HEIGHT: 200
 	},
 
 	MISC: {
