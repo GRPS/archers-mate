@@ -68,7 +68,9 @@ export class ScoreEntryPage {
 		let arr: string[] = this.endScore.end.filter( v => v != Const.MISC.SCORE_END_EMPTY );
 		if( arr.length < this.arrows ) {
 			arr.push( score );
-			for( let i = 1; i <= ( this.arrows - arr.length ); i++ ) {
+			let missing: number = ( this.arrows - arr.length );
+			for( let i = 0; i < missing ; i++ ) {
+				console.log('adding missing score');
 				arr.push( Const.MISC.SCORE_END_EMPTY );
 			}
 		}
