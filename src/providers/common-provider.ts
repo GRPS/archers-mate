@@ -324,51 +324,51 @@ export class CommonProvider {
 	
 		});
 	
-	  }
+	}
 
-	  PromptUser( title: string = "Title", placeHolder: string = "", type: string = "text", value: any ="" ) {
+	PromptUser( title: string = "Title", placeHolder: string = "", type: string = "text", value: any ="" ) {
 
 		return new Promise( ( resolve, reject ) => {
-	
-		  let alert = this.alertCtrl.create({
+
+			let alert = this.alertCtrl.create({
 			title: title,
 			inputs: [
-			  {
+				{
 				name: 'Code',
 				placeholder: placeHolder,
 				type: type,
 				value: value
-			  }
+				}
 			],
 			buttons: [
-			  {
+				{
 				text: 'Cancel',
 				role: 'cancel',
 				handler: data => {
-				  reject( false );
+					reject( false );
 				}
-			  },
-			  {
+				},
+				{
 				text: 'Create',
 				handler: data => {
-				  resolve( data.Code );
+					resolve( data.Code );
 				}
-			  }
+				}
 			]
-		  });
-	
-		  alert.present();      
-	
-		});
-	
-		};
-		
-		UnlockScreen() {
-			this.screenOrientation.unlock();
-		}
+			});
 
-		LockScreen() {
-			this.screenOrientation.lock( this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY );
-		}
+			alert.present();      
+
+		});
+
+	};
+	
+	UnlockScreen() {
+		this.screenOrientation.unlock();
+	}
+
+	LockScreen() {
+		this.screenOrientation.lock( this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY );
+	}
 
 }

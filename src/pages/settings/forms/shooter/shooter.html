@@ -75,12 +75,14 @@
 				<ion-input type="text" maxlength="30" [(ngModel)]="shooter.name" placeholder="Joe Public" [formControl]="formValidation.controls['name']" [ngClass]="{'validator-error': !formValidation.controls.name.valid && formValidation.controls.name.dirty}"></ion-input>
 			</ion-item>
 			<help text="Between 2 and 30 characters."></help>
-			
+			<validation-error [fv]="formValidation" [messages]="validation_messages.name" fld="name"></validation-error>
+
 			<ion-item>
 				<ion-label fixed>Initials</ion-label>
-				<ion-input type="text" maxlength="3" [(ngModel)]="shooter.initials" placeholder="JP1" [formControl]="formValidation.controls['initials']" [ngClass]="{'validator-error': !formValidation.controls.initials.valid && formValidation.controls.initials.dirty}"></ion-input>				
+				<ion-input type="text" minlength="2" maxlength="5" [(ngModel)]="shooter.initials" placeholder="JP1" [formControl]="formValidation.controls['initials']" [ngClass]="{'validator-error': !formValidation.controls.initials.valid && formValidation.controls.initials.dirty}"></ion-input>				
 			</ion-item>
-			<help text="Between 2 and 3 characters."></help>
+			<help text="Between 2 and 5 characters."></help>
+			<validation-error [fv]="formValidation" [messages]="validation_messages.initials" fld="initials"></validation-error>
 
 			<ion-item>
 				<ion-label fixed>Gender</ion-label>

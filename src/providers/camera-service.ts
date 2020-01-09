@@ -19,6 +19,13 @@ export class CameraService {
 
 	}
 
+	/**
+	 * Get camera options.
+	 * 
+	 * @param destinationType This is the desination type.
+	 * @param sourceType This is the source type.
+	 * @returns returns an object of CameraOptions.
+	 */
 	GetCamerOptions( destinationType, sourceType ): CameraOptions {
 		return {
 			quality: Global.setting.shooterImageQuality,

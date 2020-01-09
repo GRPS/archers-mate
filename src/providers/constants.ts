@@ -4,6 +4,7 @@ export const Const = {
 	IS_CORDOVA: false,
 	IS_TABLET: false,
 	IS_ANDROID: false,
+	currentShooter: null,
 	
 	URL: {
 		BOWS: './assets/files/bows.json',

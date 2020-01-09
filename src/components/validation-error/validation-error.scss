@@ -1,0 +1,13 @@
+validation-error {
+
+    div.validation-errors {
+        margin-left: 125px !important;
+                
+        div.error {
+            font-style: italic;
+            color: color( $colors, archers-danger ) !important;
+        }
+
+    }
+    
+}

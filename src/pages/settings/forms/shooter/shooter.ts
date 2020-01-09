@@ -15,6 +15,8 @@ import { BowService } from '../../../../providers/bow-service';
 import { SightMarkService } from '../../../../providers/sight-mark-service';
 import { ShooterBowService } from '../../../../providers/shooter-bow-service';
 import { CameraService } from '../../../../providers/camera-service';
+import { InitialsValidator } from '../../../../validators/shooter/initials-validator';
+import { NameValidator } from '../../../../validators/shooter/name-validator';
 
 @IonicPage()
 @Component({
@@ -35,6 +37,15 @@ export class ShooterPage {
 
 	photo = null;
 	hasSaved: boolean = false;
+
+	validation_messages = {
+		name: [
+			{ type: "IsUnique", message: "Name is not unique." }
+		],
+		initials: [
+				{ type: "IsUnique", message: "Initials aren't unique." }
+			]
+		};
 
 	constructor(
 				public alertCtrl: AlertController,
@@ -75,12 +86,13 @@ export class ShooterPage {
 				isGuest: false
 			});
 		}
+		Const.currentShooter = this.shooter;
 	}
 
 	private SetupForm() {
 		this.formValidation = this.formBuilder.group({
-			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ],
-			initials: [ '', Validators.compose( [ Validators.required, Validators.minLength(2) ] ) ],
+			name: [ '', Validators.compose( [ Validators.required, Validators.minLength(2),NameValidator.IsUnique ] ) ],
+			initials: [ '', Validators.compose( [ Validators.required, Validators.minLength(2), Validators.maxLength(5), InitialsValidator.IsUnique ] ) ],
 			age: [ '', Validators.compose( [ Validators.required ] ) ]
 		});
 	}
